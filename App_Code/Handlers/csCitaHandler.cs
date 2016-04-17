@@ -93,6 +93,47 @@ public class csCitaHandler : ObjetoBase
         return Citas;
     }
 
+    public List<csCita> GetListCitaById(int IdUsuario)
+    {
+        List<csCita> listCita = new List<csCita>();
+
+        String ConnectionString = ConfigurationManager.ConnectionStrings["dbProyectoCoordinacion"].ConnectionString;
+        SqlConnection Connection = new SqlConnection(ConnectionString);
+        try
+        {
+            Connection.Open();
+            //String Query = "select * from tbCitas where IdAdministrador = @IdAdministrador and Disponible = 1;";
+            SqlParameter Data = new SqlParameter("@IdUsuario", IdUsuario);
+            Data.DbType = DbType.Int32;
+
+            String Query = "select * from tbCitas where IdUsuario = @IdUsuario order by FechaDisponible desc;";
+
+            SqlCommand Command = new SqlCommand(Query, Connection);
+            Command.Parameters.Add(Data);
+            SqlDataReader DataReader = Command.ExecuteReader();
+
+            while (DataReader.Read())
+            {
+                csCita Cita = new csCita();
+                Cita.LoadEventFromDataReader(DataReader);
+                listCita.Add(Cita);
+            }
+
+            DataReader.Close();
+        }
+        catch (Exception ex)
+        {
+            LogError(ex.Message + ex.StackTrace);
+        }
+        finally
+        {
+            Connection.Close();
+            Connection = null;
+        }
+
+        return listCita;
+    }
+
     public List<csCita> GetListCitas(int idCarrera)
     {
         List<csCita> listCita = new List<csCita>();
@@ -224,7 +265,7 @@ public class csCitaHandler : ObjetoBase
         return listCita;
     }
 
-    public int CheckCitaAndAddCitaMotivo(csCita Cita, int IdMotivo)
+    public int CheckCitaAndAddCita(csCita Cita)//CheckCitaAndAddCitaMotivo(csCita Cita, int IdMotivo)
     {
         int checkCita = 0; // 0 se la ganaron, 1 se agendo, 2 ya tiene una cita
         String ConnectionString = ConfigurationManager.ConnectionStrings["dbProyectoCoordinacion"].ConnectionString;
@@ -277,19 +318,19 @@ public class csCitaHandler : ObjetoBase
                     Command.Parameters.AddRange(_Data);
                     DataReader = Command.ExecuteReader();
 
-                    _Data = new SqlParameter[2];
-                    _Data[0] = new SqlParameter("@IdMotivo", IdMotivo);
-                    _Data[0].DbType = DbType.Int32;
-                    _Data[1] = new SqlParameter("@IdCita", Cita.IdCita);
-                    _Data[1].DbType = DbType.Int32;
+                    //_Data = new SqlParameter[2];
+                    //_Data[0] = new SqlParameter("@IdMotivo", IdMotivo);
+                    //_Data[0].DbType = DbType.Int32;
+                    //_Data[1] = new SqlParameter("@IdCita", Cita.IdCita);
+                    //_Data[1].DbType = DbType.Int32;
 
-                    DataReader.Dispose();
+                    //DataReader.Dispose();
 
-                    Query = "insert into tbRelacionMotivosCitas (IdCita, IdMotivo) values (@IdCita, @IdMotivo);";
+                    //Query = "insert into tbRelacionMotivosCitas (IdCita, IdMotivo) values (@IdCita, @IdMotivo);";
 
-                    Command = new SqlCommand(Query, Connection);
-                    Command.Parameters.AddRange(_Data);
-                    DataReader = Command.ExecuteReader();
+                    //Command = new SqlCommand(Query, Connection);
+                    //Command.Parameters.AddRange(_Data);
+                    //DataReader = Command.ExecuteReader();
 
                     DataReader.Dispose();
 
@@ -460,6 +501,7 @@ public class csCitaHandler : ObjetoBase
             Data[1] = new SqlParameter("@Estado", estadoCita);
             Data[1].DbType = DbType.Int32;
 
+            LogError(IdCita.ToString());
             String Query = "update tbCitas set Estado = @Estado where IdCita = @IdCita;";
 
             SqlCommand Command = new SqlCommand(Query, Connection);

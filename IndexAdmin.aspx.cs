@@ -18,47 +18,74 @@ public partial class IndexAdmin : System.Web.UI.Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
-        if (Request["Fecha"] == null)
+        List<csCita> listCita = new List<csCita>();
+
+        (new ObjetoBase()).LogError(txtNumControl.Text);
+        if (txtNumControl.Text == null)
         {
-            fechaInicio = Convert.ToDateTime(DateTime.Today.ToString("dd/MM/yyyy") + " 12:00:00 AM");
-            fechaFinal = Convert.ToDateTime(DateTime.Today.ToString("dd/MM/yyyy") + " 11:59:59 PM");
-            idCarrera = (new csUsuarioHandler()).GetUsuario(Convert.ToInt32(Session["IdUsuario"])).IdCarrera;
+            if (Request["Fecha"] == null)
+            {
+                fechaInicio = Convert.ToDateTime(DateTime.Today.ToString("dd/MM/yyyy") + " 12:00:00 AM");
+                fechaFinal = Convert.ToDateTime(DateTime.Today.ToString("dd/MM/yyyy") + " 11:59:59 PM");
+                idCarrera = (new csUsuarioHandler()).GetUsuario(Convert.ToInt32(Session["IdUsuario"])).IdCarrera;
+            }
+            else
+            {
+                if (Request["Fecha"].ToString() != "")
+                {
+                    fechaInicio = Convert.ToDateTime(Convert.ToDateTime(Request["Fecha"]).ToString("dd/MM/yyyy") + " 12:00:00 AM");
+                    fechaFinal = Convert.ToDateTime(Convert.ToDateTime(Request["Fecha"]).ToString("dd/MM/yyyy") + " 11:59:59 PM");
+                    idCarrera = (new csUsuarioHandler()).GetUsuario(Convert.ToInt32(Session["IdUsuario"])).IdCarrera;
+
+                    //(new ObjetoBase()).LogError(fechaInicio.ToString("dddd", new System.Globalization.CultureInfo("es-Es")));
+                }
+            }
+
+            listCita = (new csCitaHandler()).GetListCitas(idCarrera, fechaInicio, fechaFinal);
         }
         else
         {
-            try
-            { fechaInicio = Convert.ToDateTime(Convert.ToDateTime(Request["Fecha"]).ToString("dd/MM/yyyy") + " 12:00:00 AM");
-
-                fechaFinal = Convert.ToDateTime(Convert.ToDateTime(Request["Fecha"]).ToString("dd/MM/yyyy") + " 11:59:59 PM");
-                idCarrera = (new csUsuarioHandler()).GetUsuario(Convert.ToInt32(Session["IdUsuario"])).IdCarrera;
-            }
-            catch(Exception ex)
-            {
-
-            }
+            int result = 0;
+            
+            if(Int32.TryParse(txtNumControl.Text, out result))
+                listCita = (new csCitaHandler()).GetListCitaById(result);
         }
 
-        List<csCita> listCita = listCita = (new csCitaHandler()).GetListCitas(idCarrera, fechaInicio, fechaFinal);
-
-        dt = new DataTable();
-        dt.Columns.Add("IdCita");
-        dt.Columns.Add("IdUsuario");
-        dt.Columns.Add("FechaDisponible");
-        dt.Columns.Add("Estado");
-
-        for (int y = 0; y < listCita.Count; y++)
+        if (fechaFinal.ToString("dd/MM/yyyy") != "01/01/0001" || txtNumControl.Text != "")
         {
-            DataRow dr = dt.NewRow();
-            dr["IdCita"] = listCita[y].IdCita.ToString();
-            dr["IdUsuario"] = listCita[y].IdUsuario.ToString();
-            dr["FechaDisponible"] = listCita[y].FechaDisponible.ToString("t");
-            dr["Estado"] = "Pendiente";
+            dt = new DataTable();
+            dt.Columns.Add("IdCita");
+            dt.Columns.Add("IdUsuario");
+            dt.Columns.Add("FechaDisponible");
+            dt.Columns.Add("Estado");
 
-            dt.Rows.Add(dr);
+            for (int y = 0; y < listCita.Count; y++)
+            {
+                DataRow dr = dt.NewRow();
+                dr["IdCita"] = listCita[y].IdCita.ToString();
+                dr["IdUsuario"] = listCita[y].IdUsuario.ToString();
+                dr["FechaDisponible"] = listCita[y].FechaDisponible.ToString();
+                if (listCita[y].Estado == 0)
+                    dr["Estado"] = "Disponible";
+                else if (listCita[y].Estado == 1)
+                    dr["Estado"] = "Ocupado";
+                else if (listCita[y].Estado == 2)
+                    dr["Estado"] = "Expiro";
+                else if (listCita[y].Estado == 3)
+                    dr["Estado"] = "Eliminado";
+
+                dt.Rows.Add(dr);
+            }
+
+            GridView_Citas.DataSource = dt;
+            GridView_Citas.DataBind();
         }
-
-        GridView_Citas.DataSource = dt;
-        GridView_Citas.DataBind();
+        else if(txtNumControl.Text == "")
+        {
+            dt = new DataTable();
+            GridView_Citas.DataSource = dt;
+            GridView_Citas.DataBind();
+        }
     }
 
     protected void btnSalir_Click(object sender, EventArgs e)

@@ -74,20 +74,20 @@ public partial class IndexAlumno : System.Web.UI.Page
                     }
                     else
                     {
-                        //lblPDiaCita.Text = "Fecha: " + Cita.FechaDisponible.ToString("dd / MM / yyyy");
-                        //lblPHoraCita.Text = "Hora: " + Cita.FechaDisponible.ToString("t");
-                        //btnEliminarCita.Visible = true;
-                        //GridViewCitas.Visible = false;
-                        //DropDListMotivos.Visible = false;
+                        lblPDiaCita.Text = "Fecha: " + Cita.FechaDisponible.ToString("dd / MM / yyyy");
+                        lblPHoraCita.Text = "Hora: " + Cita.FechaDisponible.ToString("t");
+                        btnEliminarCita.Visible = true;
+                        GridViewCitas.Visible = false;
+                        DropDListMotivos.Visible = false;
                     }
                 }
                 else
                 {
-                    //lblPDiaCita.Text = "Ningun pendiente.";
-                    //lblPHoraCita.Text = "";
-                    //btnEliminarCita.Visible = false;
-                    //GridViewCitas.Visible = true;
-                    //DropDListMotivos.Visible = true;
+                    lblPDiaCita.Text = "Ningun pendiente.";
+                    lblPHoraCita.Text = "";
+                    btnEliminarCita.Visible = false;
+                    GridViewCitas.Visible = true;
+                    DropDListMotivos.Visible = true;
 
                     List<csCita> listCita = CitaHandler.GetListCitas(Usuario.IdCarrera, DateTime.Now);
 
@@ -141,9 +141,10 @@ public partial class IndexAlumno : System.Web.UI.Page
 
     protected void btnEliminarCita_Click(object sender, EventArgs e)
     {
-        int IdCita = (new csCitaHandler()).GetCita(Convert.ToInt32(Session["IdUsuario"])).IdCita;
-        estadoCita = 3;
+        estadoCita = 1;
+        int IdCita = (new csCitaHandler()).GetCita(Convert.ToInt32(Session["IdUsuario"]), estadoCita).IdCita;
 
+        estadoCita = 3;
         if (!(new csCitaHandler()).Delete(IdCita, estadoCita))
             Response.Redirect("~\\IndexAlumno.aspx?De=ex");
         else
@@ -170,8 +171,8 @@ public partial class IndexAlumno : System.Web.UI.Page
         Cita.FechaAgendada = DateTime.Now;
         Cita.Estado = 1;
 
-        int idMotivo = Convert.ToInt32(DropDListMotivos.SelectedItem.Value);
-        int checkCita = (new csCitaHandler()).CheckCitaAndAddCitaMotivo(Cita, idMotivo);
+        //int idMotivo = Convert.ToInt32(DropDListMotivos.SelectedItem.Value);
+        int checkCita = (new csCitaHandler()).CheckCitaAndAddCita(Cita);//CheckCitaAndAddCitaMotivo(Cita, idMotivo);
 
         if (checkCita == 1)
             Response.Redirect("IndexAlumno.aspx?Cita=ex");

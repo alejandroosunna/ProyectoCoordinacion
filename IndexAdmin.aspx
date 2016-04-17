@@ -7,6 +7,7 @@
                         </div>
                         <br />
                         <input id="date-range-predefined" name="Fecha" type="date" class="h5a-input form-control"/>
+                        Numero Control Alumno: <asp:TextBox ID="txtNumControl" runat="server"></asp:TextBox>
                         <br />
                         <asp:Button ID="btnBuscar" class="waves-effect waves-light btn orange" runat="server" Text="Buscar" OnClick="btnBuscar_Click"/>
                         <div class="panel-body scrolling-table-container">                           
