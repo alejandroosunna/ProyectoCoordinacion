@@ -28,10 +28,11 @@ public partial class Chat : System.Web.UI.Page
     }
 
     [WebMethod]
-    public static string ObtenerUsuario()
+    public static string ObtenerUsuario(string usu)
     {
-        string jsondata;
-        jsondata = JsonConvert.ToString(nombre);
+        csUsuario usuario = (new csUsuarioHandler()).GetUsuario(Convert.ToInt32(usu));
+        string jsondata = usuario.Nombre + usuario.Apellidos;
+        jsondata = JsonConvert.ToString(jsondata);
         return jsondata;
     }
 

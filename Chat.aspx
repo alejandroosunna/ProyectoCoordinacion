@@ -7,6 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title></title>
     <link type="text/css" rel="stylesheet" href="themes/css/ChatStyle.css" />
+    <link type="text/css" rel="stylesheet" href="themes/css/bootstrap.css" />
     <link rel="stylesheet" href="themes/Css/JQueryUI/themes/base/jquery.ui.all.css" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
 
@@ -28,13 +29,23 @@
     
     <script type="text/javascript">
         
+        var audioElement = document.createElement('audio');
+        audioElement.setAttribute('src', 'audio/chat.mp3');
+        $(function () {
+
+            $("#resizable").resizable();
+
+        });
+
+
+
         $(function () {
 
             setScreen(false);
 
             // Declare a proxy to reference the hub. 
             var chatHub = $.connection.chatHub;
-
+          
             registerClientMethods(chatHub);
 
             // Start Hub
@@ -60,12 +71,12 @@
             }
 
         }
-        function getUser() {
+        function getUser(id) {
             $.ajax({
                 type: "Post",
                 contentType: "application/json; charset=utf-8",
                 url: "Chat.aspx/ObtenerUsuario",
-                data: {},
+                data: '{usu: ' + id + '}',
                 dataType: 'json',
                 success: function (data) {
                     var user = $.parseJSON(data.d);
@@ -77,13 +88,18 @@
                 }
             });
         }
+        
         function registerEvents(chatHub) {
-            getUser();
+            getUser(<%=Server.HtmlEncode(Session["IdUsuario"].ToString())%>);
+            $("#txtNickName").val();
             $("#btnStartChat").click(function () {
-
+               
                 var name = $("#txtNickName").val();
                 if (name.length > 0) {
+
+                    
                     chatHub.server.connect(name);
+                    
                 }
                 else {
                     alert("Por favor ingresa tu nombre");
@@ -116,7 +132,6 @@
                 }
             });
 
-
         }
 
         function registerClientMethods(chatHub) {
@@ -129,10 +144,9 @@
                 $('#hdId').val(id);
                 $('#hdUserName').val(userName);
                 $('#spanUser').html(userName);
-
                 // Add All Users
                 for (i = 0; i < allUsers.length; i++) {
-
+                    
                     AddUser(chatHub, allUsers[i].ConnectionId, allUsers[i].UserName);
                 }
 
@@ -161,7 +175,7 @@
                 $('#' + ctrId).remove();
 
 
-                var disc = $('<div class="disconnect">"' + userName + '" logged off.</div>');
+                var disc = $('<div class="disconnect">"' + userName + '" se desconecto.</div>');
 
                 $(disc).hide();
                 $('#divusers').prepend(disc);
@@ -185,9 +199,14 @@
                     createPrivateChatWindow(chatHub, windowId, ctrId, fromUserName);
 
                 }
-
-                $('#' + ctrId).find('#divMessage').append('<div class="message"><span class="userName ">' + fromUserName + '</span>: ' + message + '</div>');
-
+                
+                $('#' + ctrId).find('#divMessage').append('<div class="media-body"> <div class="media"><div class="media-body">' + message + '<br/> <small class="text-muted">' + fromUserName + '</small></div></div></div><br/>');
+                $('#' + ctrId).find('.header').removeClass("read").addClass("unread");
+                $(document).attr('title', fromUserName);
+                audioElement.play();
+              
+                
+                
                 // set scrollbar
                 var height = $('#' + ctrId).find('#divMessage')[0].scrollHeight;
                 $('#' + ctrId).find('#divMessage').scrollTop(height);
@@ -195,7 +214,6 @@
             }
 
         }
-
         function AddUser(chatHub, id, name) {
 
             var userId = $('#hdId').val();
@@ -226,7 +244,9 @@
         }
 
         function AddMessage(userName, message) {
-            $('#divChatWindow').append('<div class="message"><span class="userName">' + userName + '</span>: ' + message + '</div>');
+
+
+            $('#divChatWindow').append('<div class="media-body"> <div class="media"><div class="media-body">' + message + '<br/> <small class="text-muted">' + userName + '</small></div></div></div><br/>');
 
             var height = $('#divChatWindow')[0].scrollHeight;
             $('#divChatWindow').scrollTop(height);
@@ -244,38 +264,60 @@
 
         function createPrivateChatWindow(chatHub, userId, ctrId, userName) {
 
-            var div = '<div id="' + ctrId + '" class="ui-widget-content draggable" rel="0">' +
+            var div = '<div id="' + ctrId + '" class="ui-widget-content draggable resizable" rel="0">' +
                        '<div class="header">' +
-                          '<div  style="float:right;">' +
+                              '<div  style="float:right;">' +
                               '<img id="imgDelete"  style="cursor:pointer;" src="/Img/delete.png"/>' +
+                              '<img id="imgMini" style="cursor:pointer;" class="ui-icon ui-icon-minus"/>'+
                            '</div>' +
                            '<i class="material-icons">account_circle</i>'+
                            '<span class="selText" rel="0">' + userName + '</span>' +
                        '</div>' +
-                       '<div id="divMessage" class="messageArea">' +
-
+                       '<div  class="panel-body">' +
+                       '<ul id="divMessage" class="media-list" style="height: 150px; overflow-y: scroll;" >' +
+                    
+                       '</ul>'+
                        '</div>' +
                        '<div class="buttonBar">' +
                           '<input id="txtPrivateMessage" class="msgText" type="text"   />' +
-                          '<input id="btnSendMessage" class="submitButton button" type="button" value="Enviar"   />' +
+                          '<input id="btnSendMessage" class=" btn btn-warning" type="button" value="Enviar"   />' +
                        '</div>' +
                     '</div>';
 
             var $div = $(div);
 
+            $div.find('.header').click(function () {
+                readd();
+            });
             // DELETE BUTTON IMAGE
             $div.find('#imgDelete').click(function () {
                 $('#' + ctrId).remove();
             });
+            $(function () {
 
+                $div.find('#imgMini').click(function () {
+                    $('#' + ctrId).accordion({
+                        collapsible: true
+                    });
+                });
+
+            });
+
+
+           
+            function readd() {
+                $('#' + ctrId).find('.header').removeClass("unread").addClass("read");
+                $(document).attr('title', "Chat");
+            };
             // Send Button event
             $div.find("#btnSendMessage").click(function () {
-
+                
                 $textBox = $div.find("#txtPrivateMessage");
                 var msg = $textBox.val();
                 if (msg.length > 0) {
-
+                    
                     chatHub.server.sendPrivateMessage(userId, msg);
+                    $('#' + ctrId).find('.header').removeClass("unread").addClass("read");
                     $textBox.val('');
                 }
             });
@@ -284,29 +326,35 @@
             $div.find("#txtPrivateMessage").keypress(function (e) {
                 if (e.which == 13) {
                     $div.find("#btnSendMessage").click();
+                   
                 }
+            });
+
+            $div.find("#txtPrivateMessage").click(function () {
+                readd();
             });
 
             AddDivToContainer($div);
 
         }
-
+     
         function AddDivToContainer($div) {
             $('#divContainer').prepend($div);
 
             $div.draggable({
 
-                handle: ".header",
+                
                 stop: function () {
 
                 }
             });
 
-            ///$div.resizable({
-            ////    stop: function () {
+            //$div.resizable({
 
-            ////    }
-            ////});
+            //    stop: function () {
+
+            //    }
+            //});
 
         }
 
@@ -314,14 +362,10 @@
 </head>
 <body>
     <form id="form1" runat="server">
-    <div id="header">
-        Cuarto de Chat
+     <div id="header">
+        Sala de Chat
     </div>
-    <br />
-    <br />
-    <br />
-
-    <div id="divContainer">
+    <div id="divContainer" class="container-fluid ">
         <div id="divLogin" class="login">
             <div>
                 Tu nombre:<br />
@@ -331,26 +375,40 @@
                 <input id="btnStartChat" type="button" class="submitButton" value="Iniciar Chat" />
             </div>
         </div>
-
-        <div id="divChat" class="chatRoom">
-            <div class="title">
-                Bienvenido [<span id='spanUser'></span>]
+        <div id="divChat" class="row " style="padding-top:40px;">
+            <h3>Sala de Chat Coordinación</h3>
+            <br />
+            <br />
+            <div class="col-md-8 chatRoom">
+            <div class="panel panel-info">
+                <div class="panel-heading" style="background-color:darkorange">Chat de Todos  Bienvenido [<span id='spanUser'></span>]</div>
+                <div class="panel-body">
+                    <ul id="divChatWindow" class="media-list" style="height: 300px;
+	                overflow-y: scroll;" >
+                    
+                    </ul>
+                </div>
+                <div class="panel-footer">
+                    <div class="input-group">
+                        <input id="txtMessage" class="form-control" type="text" placeholder="Ingrese mensaje" />
+                        <span class="input-group-btn">
+                            <button id="btnSendMsg" class="btn btn-warning" type="button">Enviar</button>
+                        </span>
+                    </div>
+                </div>
 
             </div>
-            <div class="content">
-                <div id="divChatWindow" class="chatWindow">
-                </div>
-                <div id="divusers" class="users">
-                </div>
+            <input id="hdId" type="hidden" />
+            <input id="hdUserName" type="hidden" />
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-primary">
+                <div class="panel-heading" style="background-color:darkorange"> Usuarios Online</div>
+                <div id="divusers" class="panel-body " style="cursor: pointer;display: block;">         
             </div>
-            <div class="messageBar">
-                <input class="textbox" type="text" id="txtMessage" />
-                <input id="btnSendMsg" type="button" value="Enviar" class="submitButton" />
             </div>
         </div>
-
-        <input id="hdId" type="hidden" />
-        <input id="hdUserName" type="hidden" />
+        </div>   
     </div>
     </form>
 </body>

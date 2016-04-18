@@ -71,7 +71,11 @@ namespace SIAC
                 var id = Context.ConnectionId;
                 Clients.All.onUserDisconnected(id, item.UserName);
 
+            }else
+            {
+                Connect(item.UserName);
             }
+
 
             return base.OnDisconnected(stopCalled);
         }
