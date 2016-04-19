@@ -18,7 +18,10 @@
                                         <asp:BoundField DataField="FechaDisponible" HeaderText="FechaDisponible" SortExpression="FechaDisponible" />
                                         <asp:BoundField DataField="Estado" HeaderText="Estado" SortExpression="Estado" />
                                        
-                                        <asp:CommandField ShowEditButton="True" />
+                                        <%--<asp:CommandField ShowSelectButton="true" ButtonType="Link" HeaderText="Asistio" />
+                                        <asp:CommandField ShowSelectButton="true" ButtonType="Link" HeaderText="Falto" />--%>
+                                        <asp:ButtonField CommandName="Asistio" HeaderText="Asistio" Text="Asistio" />
+                                        <asp:ButtonField CommandName="Falto" HeaderText="Falto" Text="Falto" />
                                     </Columns>
                                 </asp:GridView>
                                 <%--<asp:SqlDataSource ID="SqlDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:dbProyectoCoordinacion %>" SelectCommand="SELECT [IdCita], [IdUsuario], [FechaAgendada], [FechaDisponible], [Estado], [Comentario] FROM [tbCitas] WHERE (([IdUsuario] IS NOT NULL) AND ([Estado] = @Estado))">

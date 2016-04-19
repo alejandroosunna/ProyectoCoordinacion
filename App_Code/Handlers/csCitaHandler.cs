@@ -54,6 +54,42 @@ public class csCitaHandler : ObjetoBase
         return Citas;
     }
 
+    public csCita GetCitaByIdCita(int IdCita)
+    {
+        csCita Citas = new csCita();
+
+        String ConnectionString = ConfigurationManager.ConnectionStrings["dbProyectoCoordinacion"].ConnectionString;
+        SqlConnection Connection = new SqlConnection(ConnectionString);
+        try
+        {
+            Connection.Open();
+            SqlParameter Data = new SqlParameter("@IdCita", IdCita);
+            Data.DbType = DbType.Int32;
+
+            String Query = "select * from tbCitas where IdCita = @IdCita;";
+
+            SqlCommand Command = new SqlCommand(Query, Connection);
+            Command.Parameters.Add(Data);
+            SqlDataReader DataReader = Command.ExecuteReader();
+
+            if (DataReader.Read())
+            {
+                Citas.LoadEventFromDataReader(DataReader);
+            }
+        }
+        catch (Exception ex)
+        {
+            LogError(ex.Message);
+        }
+        finally
+        {
+            Connection.Close();
+            Connection = null;
+        }
+
+        return Citas;
+    }
+
     public csCita GetCita(int IdUsuario, int estadoCita)
     {
         csCita Citas = new csCita();
@@ -420,24 +456,29 @@ public class csCitaHandler : ObjetoBase
 
         
     }
-    public void UpdateCita(csCita Cita)
+    public bool UpdateCita(csCita Cita)
     {
         String ConnectionString = ConfigurationManager.ConnectionStrings["dbProyectoCoordinacion"].ConnectionString;
         SqlConnection Connection = new SqlConnection(ConnectionString);
 
+        bool error = false;
+
         try
         {
             Connection.Open();
-            String Query = "update tbCitas set IdUsuario = @IdUsuario, FechaAgendada = @FechaAgendada, Disponible = @Disponible, Comentario = @Comentario;";
-            SqlParameter[] Data = new SqlParameter[4];
+            String Query = "update tbCitas set IdUsuario = @IdUsuario, FechaAgendada = @FechaAgendada, Estado = @Estado, Comentario = @Comentario where IdCita = @IdCita;";
+            SqlParameter[] Data = new SqlParameter[5];
             Data[0] = new SqlParameter("@IdUsuario", Cita.IdUsuario);
             Data[0].DbType = DbType.Int32;
             Data[1] = new SqlParameter("@FechaAgendada", Cita.FechaAgendada);
             Data[1].DbType = DbType.DateTime;
-            Data[2] = new SqlParameter("@Disponible", Cita.Estado);
+            Data[2] = new SqlParameter("@Estado", Cita.Estado);
             Data[2].DbType = DbType.Int32;
             Data[3] = new SqlParameter("@Comentario", Cita.Comentario);
             Data[3].DbType = DbType.String;
+            Data[4] = new SqlParameter("@IdCita", Cita.IdCita);
+            Data[4].DbType = DbType.Int32;
+
             SqlCommand Command = new SqlCommand(Query, Connection);
             Command.Parameters.AddRange(Data);
             Command.ExecuteReader();
@@ -445,12 +486,15 @@ public class csCitaHandler : ObjetoBase
         catch (Exception ex)
         {
             LogError(ex.Message);
+            error = true;
         }
         finally
         {
             Connection.Close();
             Connection = null;
         }
+
+        return error;
     }
 
     public bool DeleteCita(int IdCita)
