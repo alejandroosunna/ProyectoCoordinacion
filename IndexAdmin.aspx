@@ -38,7 +38,7 @@
         </div>
         <div class="col s12 m4 l4 center center-align">
             <br />
-        <asp:Button class="waves-effect waves-light btn orange"  ID="btnElinarCitas" runat="server" Text="Eliminar" OnClick="btnElinarCitas_Click"/>                   
+        <%--<asp:Button class="waves-effect waves-light btn orange"  ID="btnElinarCitas" runat="server" Text="Eliminar" OnClick="btnElinarCitas_Click"/>--%>                   
         </div>
     </div>
                         </asp:Content>
