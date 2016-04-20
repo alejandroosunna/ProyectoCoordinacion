@@ -18,3 +18,7 @@
    en System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior, String method)
    en System.Data.SqlClient.SqlCommand.ExecuteReader()
    en csCitaHandler.GetListCitas(Int32 idCarrera, DateTime fechaInicial, DateTime fechaFinal) en c:\Users\Leonardo Durazo\Documents\GitHubVisualStudio\ProyectoCoordinacion\App_Code\Handlers\csCitaHandler.cs:línea 203
+
+19/4/2016 21:16. Error relacionado con la red o específico de la instancia mientras se establecía una conexión con el servidor SQL Server. No se encontró el servidor o éste no estaba accesible. Compruebe que el nombre de la instancia es correcto y que SQL Server está configurado para admitir conexiones remotas. (provider: SQL Network Interfaces, error: 26 - Error al buscar el servidor o instancia especificado)
+
+19/4/2016 21:17. Error relacionado con la red o específico de la instancia mientras se establecía una conexión con el servidor SQL Server. No se encontró el servidor o éste no estaba accesible. Compruebe que el nombre de la instancia es correcto y que SQL Server está configurado para admitir conexiones remotas. (provider: SQL Network Interfaces, error: 26 - Error al buscar el servidor o instancia especificado)

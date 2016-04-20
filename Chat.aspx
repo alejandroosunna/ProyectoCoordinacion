@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title></title>
     <link type="text/css" rel="stylesheet" href="themes/css/ChatStyle.css" />
-    <link type="text/css" rel="stylesheet" href="themes/css/bootstrap.css" />
+    <link type="text/css" rel="stylesheet" href="materialize/css/materialize.css"
     <link rel="stylesheet" href="themes/Css/JQueryUI/themes/base/jquery.ui.all.css" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
 
@@ -227,7 +227,7 @@
             }
             else {
 
-                code = $('<a id="' + id + '" class="user" >' + name + '<a>');
+                code = $('<a id="' + id + '" class="user" >' + name + '<a>' + '<br />');
                 
                 $(code).click(function () {
 
@@ -261,27 +261,27 @@
             createPrivateChatWindow(chatHub, id, ctrId, userName);
 
         }
-
+        
         function createPrivateChatWindow(chatHub, userId, ctrId, userName) {
 
-            var div = '<div id="' + ctrId + '" class="ui-widget-content draggable resizable" rel="0">' +
+            var div = '<div id="' + ctrId + '" class="ui-widget-content draggable white resizable" rel="0">' +
                        '<div class="header">' +
                               '<div  style="float:right;">' +
-                              '<img id="imgDelete"  style="cursor:pointer;" src="/Img/delete.png"/>' +
+                              '<img id="imgDelete"  style="cursor:pointer;" src="/Img/ic_highlight_off_black_24dp_1x.png"/>' +
                               '<img id="imgMini" style="cursor:pointer;" class="ui-icon ui-icon-minus"/>'+
                            '</div>' +
                            '<i class="material-icons">account_circle</i>'+
                            '<span class="selText" rel="0">' + userName + '</span>' +
                        '</div>' +
                        '<div  class="panel-body">' +
-                       '<ul id="divMessage" class="media-list" style="height: 150px; overflow-y: scroll;" >' +
+                       '<ul id="divMessage" class="media-list left-align" style="height: 150px; overflow-y: scroll;" >' +
                     
                        '</ul>'+
                        '</div>' +
-                       '<div class="buttonBar">' +
+                       '<div class="buttonBar center">' +
                           '<input id="txtPrivateMessage" class="msgText" type="text"   />' +
-                          '<input id="btnSendMessage" class=" btn btn-warning" type="button" value="Enviar"   />' +
-                       '</div>' +
+                          '<input id="btnSendMessage" class=" btn orange white-text" type="button" value="Enviar"   />' +
+                       '<br /></div>' +
                     '</div>';
 
             var $div = $(div);
@@ -364,36 +364,42 @@
     <form id="form1" runat="server">
      <div id="header">
         Sala de Chat
+         <div class="right">
+             <a href="Login.aspx" class="black-text"><i class="material-icons black-text">exit_to_app</i> Salir</a>
+         </div>
     </div>
-    <div id="divContainer" class="container-fluid ">
-        <div id="divLogin" class="login">
+    <div id="divContainer" class="container row center center-aling">
+        <br /><br />
+        <div id="divLogin" class="login col s8 m8 l6 offset-m2 offset-s2 offset-l3 center center-aling">
             <div>
                 Tu nombre:<br />
             <input disabled id="txtNickName" type="text" class="textBox" />
             </div>
-            <div id="divButton">
-                <input id="btnStartChat" type="button" class="submitButton" value="Iniciar Chat" />
+            <div id="divButton" class="center center-aling">
+                <input id="btnStartChat" type="button" class="btn orange" value="Iniciar Chat" />
+                <br /><br />
             </div>
         </div>
         <div id="divChat" class="row " style="padding-top:40px;">
             <h3>Sala de Chat Coordinación</h3>
             <br />
             <br />
-            <div class="col-md-8 chatRoom">
+            <div class="col s12 m12 l7 chatRoom striped">
             <div class="panel panel-info">
-                <div class="panel-heading" style="background-color:darkorange">Chat de Todos  Bienvenido [<span id='spanUser'></span>]</div>
+                <div class="panel-heading orange darken-2">Chat de Todos  Bienvenido [<span id='spanUser'></span>]</div>
                 <div class="panel-body">
-                    <ul id="divChatWindow" class="media-list" style="height: 300px;
+                    <ul id="divChatWindow" class="media-list left-align" style="height: 500px;
 	                overflow-y: scroll;" >
                     
                     </ul>
                 </div>
                 <div class="panel-footer">
+                    <br />
                     <div class="input-group">
                         <input id="txtMessage" class="form-control" type="text" placeholder="Ingrese mensaje" />
-                        <span class="input-group-btn">
-                            <button id="btnSendMsg" class="btn btn-warning" type="button">Enviar</button>
-                        </span>
+                        <br /><span class="input-group-btn">                           
+                            <button id="btnSendMsg" class="btn orange darken-1" type="button">Enviar</button>
+                        </span><br /><br />
                     </div>
                 </div>
 
@@ -401,10 +407,11 @@
             <input id="hdId" type="hidden" />
             <input id="hdUserName" type="hidden" />
         </div>
-        <div class="col-md-4">
+        <div class="col s12 l5 m12">
+            <div class="hide-on-large-only"><br /><br /></div>
             <div class="panel panel-primary">
                 <div class="panel-heading" style="background-color:darkorange"> Usuarios Online</div>
-                <div id="divusers" class="panel-body " style="cursor: pointer;display: block;">         
+                <div id="divusers" class="panel-body card-content orange lighten-4" style="cursor: pointer;display: block;height: 200px;overflow-y: scroll;">         
             </div>
             </div>
         </div>
