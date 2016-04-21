@@ -16,22 +16,23 @@ public partial class Chat : System.Web.UI.Page
         {
             Response.Redirect("~\\Login.aspx");
         }
-        nombre = null;
-        csUsuario usuario = (new csUsuarioHandler()).GetUsuario(Convert.ToInt32(Session["IdUsuario"]));
-        nombre = usuario.Nombre + " " + usuario.Apellidos + " (" + usuario.IdUsuario + ")";
-        if (usuario.IdRol == 1)
-        {
-            nombre = "[Coordinador]" + usuario.Nombre +" " +usuario.Apellidos;
-        }
-        usuario = null;
+       
         
     }
 
     [WebMethod]
     public static string ObtenerUsuario(string usu)
     {
+        string jsondata = "";
         csUsuario usuario = (new csUsuarioHandler()).GetUsuario(Convert.ToInt32(usu));
-        string jsondata = usuario.Nombre + usuario.Apellidos;
+        if (usuario.IdRol == 1)
+        {
+            jsondata = usuario.IdCarrera +" "+ "[Coordinador]" + usuario.Nombre + " " + usuario.Apellidos;
+        }else
+        {
+            jsondata = usuario.IdCarrera + " " + usuario.Nombre +" "+ usuario.Apellidos;
+        }
+        
         jsondata = JsonConvert.ToString(jsondata);
         return jsondata;
     }

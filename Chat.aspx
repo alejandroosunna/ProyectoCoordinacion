@@ -20,7 +20,7 @@
     <script src="Scripts/jquery.ui.mouse.js"></script>
     <script src="Scripts/jquery.ui.draggable.js"></script>
     <script src="Scripts/jquery.ui.resizable.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
     <!--Reference the SignalR library. -->
     <script src="Scripts/jquery.signalR-1.0.1.js"></script>
 
@@ -37,7 +37,7 @@
 
         });
 
-
+        
 
         $(function () {
 
@@ -91,30 +91,25 @@
         
         function registerEvents(chatHub) {
             getUser(<%=Server.HtmlEncode(Session["IdUsuario"].ToString())%>);
-            $("#txtNickName").val();
+
             $("#btnStartChat").click(function () {
                
                 var name = $("#txtNickName").val();
                 if (name.length > 0) {
-
-                    
                     chatHub.server.connect(name);
-                    
-                }
-                else {
-                    alert("Por favor ingresa tu nombre");
                 }
 
             });
 
 
             $('#btnSendMsg').click(function () {
-
+                var filtro = $("#txtNickName").val();
+                var filtro = filtro.split(' ');
                 var msg = $("#txtMessage").val();
                 if (msg.length > 0) {
 
                     var userName = $('#hdUserName').val();
-                    chatHub.server.sendMessageToAll(userName, msg);
+                    chatHub.server.sendMessageToAll(userName, msg, filtro[0]);
                     $("#txtMessage").val('');
                 }
             });
@@ -144,48 +139,48 @@
                 $('#hdId').val(id);
                 $('#hdUserName').val(userName);
                 $('#spanUser').html(userName);
+
+               
                 // Add All Users
                 for (i = 0; i < allUsers.length; i++) {
                     
-                    AddUser(chatHub, allUsers[i].ConnectionId, allUsers[i].UserName);
+                    AddUser(chatHub, allUsers[i].ConnectionId, allUsers[i].UserName, allUsers[i].idCarrera);
+                
                 }
 
                 // Add Existing Messages
                 for (i = 0; i < messages.length; i++) {
-
                     AddMessage(messages[i].UserName, messages[i].Message);
                 }
-
-
             }
 
             // On New User Connected
-            chatHub.client.onNewUserConnected = function (id, name) {
-
-                AddUser(chatHub, id, name);
+            chatHub.client.onNewUserConnected = function (id, name, idcarrera) {
+                AddUser(chatHub, id, name, idcarrera);
             }
 
 
             // On User Disconnected
             chatHub.client.onUserDisconnected = function (id, userName) {
 
-                $('#' + id).remove();
+                $('#p' + id).remove();
 
-                var ctrId = 'private_' + id;
+                var ctrId = 'private_p' + id;
                 $('#' + ctrId).remove();
 
-
-                var disc = $('<div class="disconnect">"' + userName + '" se desconecto.</div>');
-
-                $(disc).hide();
-                $('#divusers').prepend(disc);
-                $(disc).fadeIn(200).delay(2000).fadeOut(200);
+                var $toastContent = $('<span>El usuario '+userName+' se desconecto </span>');
+                Materialize.toast($toastContent, 5000);
+                //var disc = $('<div class="disconnect">"' + userName + '" se desconecto.</div>');
+              
+                //$(disc).hide();
+                //$('#divusers').prepend(disc);
+                //$(disc).fadeIn(200).delay(2000).fadeOut(200);
 
             }
 
-            chatHub.client.messageReceived = function (userName, message) {
+            chatHub.client.messageReceived = function (userName, message, idcarrera) {
 
-                AddMessage(userName, message);
+                AddMessage(userName, message, idcarrera);
             }
 
 
@@ -202,11 +197,11 @@
                 
                 $('#' + ctrId).find('#divMessage').append('<div class="media-body"> <div class="media"><div class="media-body">' + message + '<br/> <small class="text-muted">' + fromUserName + '</small></div></div></div><br/>');
                 $('#' + ctrId).find('.header').removeClass("read").addClass("unread");
-                $(document).attr('title', fromUserName);
+                $(document).attr('title', fromUserName + " te ha escrito");
                 audioElement.play();
               
                 
-                
+               
                 // set scrollbar
                 var height = $('#' + ctrId).find('#divMessage')[0].scrollHeight;
                 $('#' + ctrId).find('#divMessage').scrollTop(height);
@@ -214,42 +209,52 @@
             }
 
         }
-        function AddUser(chatHub, id, name) {
+        function AddUser(chatHub, id, name, idCarrera) {
 
             var userId = $('#hdId').val();
            
             var code = "";
+            var filtro = $("#txtNickName").val();
+            var filtro = filtro.split(' ');
+            if (idCarrera == filtro[0]) {
+                if (userId == id) {
 
-            if (userId == id) {
+                    code = $('<div">' + name + "</div>");
 
-                code = $('<div class="loginUser">' + name + "</div>");
+                }
+                else {
+
+                    code = $('<p id="p'+id+'"><a id="' + id + '" class="user" >' + name + '<a></p>');
+
+                    $(code).click(function () {
+
+                        var id = $(this).children('a').attr('id');
+
+                        if (userId != id)
+                            OpenPrivateChatWindow(chatHub, id, name);
+                            var ctrId = 'private_' + id;
+                            $('#' + ctrId).focus();
+                    });
+                }
 
             }
-            else {
-
-                code = $('<a id="' + id + '" class="user" >' + name + '<a>' + '<br />');
-                
-                $(code).click(function () {
-
-                    var id = $(this).attr('id');
-
-                    if (userId != id)
-                        OpenPrivateChatWindow(chatHub, id, name);
-
-                });
-            }
+            
 
             $("#divusers").append(code);
             
         }
 
-        function AddMessage(userName, message) {
+        function AddMessage(userName, message, idcarrera) {
 
+            var filtro = $("#txtNickName").val();
+            var filtro = filtro.split(' ');
+            if (filtro[0] == idcarrera) {
+                $('#divChatWindow').append('<div class="media-body"> <div class="media"><div class="media-body">' + message + '<br/> <small class="text-muted">' + userName + '</small></div></div></div><br/>');
 
-            $('#divChatWindow').append('<div class="media-body"> <div class="media"><div class="media-body">' + message + '<br/> <small class="text-muted">' + userName + '</small></div></div></div><br/>');
-
-            var height = $('#divChatWindow')[0].scrollHeight;
-            $('#divChatWindow').scrollTop(height);
+                var height = $('#divChatWindow')[0].scrollHeight;
+                $('#divChatWindow').scrollTop(height);
+            }
+            
         }
 
         function OpenPrivateChatWindow(chatHub, id, userName) {
@@ -259,6 +264,7 @@
             if ($('#' + ctrId).length > 0) return;
 
             createPrivateChatWindow(chatHub, id, ctrId, userName);
+           
 
         }
         
@@ -318,7 +324,7 @@
                     
                     chatHub.server.sendPrivateMessage(userId, msg);
                     $('#' + ctrId).find('.header').removeClass("unread").addClass("read");
-                    $textBox.val('');
+                    $textBox.val('').focus();
                 }
             });
 
@@ -411,7 +417,7 @@
             <div class="hide-on-large-only"><br /><br /></div>
             <div class="panel panel-primary">
                 <div class="panel-heading" style="background-color:darkorange"> Usuarios Online</div>
-                <div id="divusers" class="panel-body card-content orange lighten-4" style="cursor: pointer;display: block;height: 200px;overflow-y: scroll;">         
+                <div id="divusers" class="panel-body  orange lighten-4" style="cursor: pointer;display: block;height: 200px;overflow-y: scroll;">         
             </div>
             </div>
         </div>
