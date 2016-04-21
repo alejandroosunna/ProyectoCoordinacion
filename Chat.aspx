@@ -165,16 +165,12 @@
 
                 $('#p' + id).remove();
 
-                var ctrId = 'private_p' + id;
+                var ctrId = 'private_' + id;
                 $('#' + ctrId).remove();
 
                 var $toastContent = $('<span>El usuario '+userName+' se desconecto </span>');
                 Materialize.toast($toastContent, 5000);
-                //var disc = $('<div class="disconnect">"' + userName + '" se desconecto.</div>');
               
-                //$(disc).hide();
-                //$('#divusers').prepend(disc);
-                //$(disc).fadeIn(200).delay(2000).fadeOut(200);
 
             }
 
@@ -194,11 +190,24 @@
                     createPrivateChatWindow(chatHub, windowId, ctrId, fromUserName);
 
                 }
+                //Recibe chat.
+                //Si entra al IF signiica que es del usuario que mando, si no es el usuario que recive.
+                if (fromUserName == $('#txtNickName').val()) {
+                    $('#' + ctrId).find('#divMessage').append('<div class="media-body"><div class="media-body" style="background-color:#ffecb3">' + message + '<br/> <small class="text-muted">' + fromUserName + '</small></div></div>');
+                } else {
+                    setInterval(blink, 200);
+                    $('#' + ctrId).find('#divMessage').append('<div class="media-body"><div class="media-body">' + message + '<br/> <small class="text-muted">' + fromUserName + '</small></div></div>');
+                    $(document).attr('title', fromUserName + " te ha escrito");
+                    //$('#' + ctrId).find('.header').removeClass("read").addClass("unread");
+                    audioElement.play();
+                }
+               
+               
+                function blink() {
+                    $('#' + ctrId).find('.header').fadeTo(100, 0.1).fadeTo(200, 1.0);
+                }
                 
-                $('#' + ctrId).find('#divMessage').append('<div class="media-body"> <div class="media"><div class="media-body">' + message + '<br/> <small class="text-muted">' + fromUserName + '</small></div></div></div><br/>');
-                $('#' + ctrId).find('.header').removeClass("read").addClass("unread");
-                $(document).attr('title', fromUserName + " te ha escrito");
-                audioElement.play();
+          
               
                 
                
@@ -238,9 +247,13 @@
                 }
 
             }
+           
+            if ($('#p'+id).length > 0) {
+                console.log('Ya existe');
+            } else {
+                $("#divusers").append(code);
+            }
             
-
-            $("#divusers").append(code);
             
         }
 
@@ -286,7 +299,7 @@
                        '</div>' +
                        '<div class="buttonBar center">' +
                           '<input id="txtPrivateMessage" class="msgText" type="text"   />' +
-                          '<input id="btnSendMessage" class=" btn orange white-text" type="button" value="Enviar"   />' +
+                          '<input id="btnSendMessage" class=" btn orange white-text waves-effect waves-light" type="button" value="Enviar"   />' +
                        '<br /></div>' +
                     '</div>';
 
@@ -309,9 +322,10 @@
 
             });
 
-
+            
            
             function readd() {
+                setTimeout($('#'+ctrId).find('.header').stop(true,true).css("opacity", 1), 10);
                 $('#' + ctrId).find('.header').removeClass("unread").addClass("read");
                 $(document).attr('title', "Chat");
             };
@@ -381,8 +395,8 @@
                 Tu nombre:<br />
             <input disabled id="txtNickName" type="text" class="textBox" />
             </div>
-            <div id="divButton" class="center center-aling">
-                <input id="btnStartChat" type="button" class="btn orange" value="Iniciar Chat" />
+            <div id="divButton" class="center center-align">
+                <input id="btnStartChat" type="button" class="btn orange waves-effect waves-light" value="Iniciar Chat" />
                 <br /><br />
             </div>
         </div>
@@ -404,7 +418,7 @@
                     <div class="input-group">
                         <input id="txtMessage" class="form-control" type="text" placeholder="Ingrese mensaje" />
                         <br /><span class="input-group-btn">                           
-                            <button id="btnSendMsg" class="btn orange darken-1" type="button">Enviar</button>
+                            <button id="btnSendMsg" class="btn orange darken-1 waves-effect waves-light" type="button">Enviar</button>
                         </span><br /><br />
                     </div>
                 </div>

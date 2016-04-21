@@ -18,7 +18,7 @@ namespace SIAC
         {
             var id = Context.ConnectionId;
 
-            var item = ConnectedUsers.FirstOrDefault(x => x.UserName == userName);
+            var item = ConnectedUsers.Find(x => x.UserName == userName);
             if (item != null)
             {
                 ConnectedUsers.Remove(item);
@@ -31,17 +31,15 @@ namespace SIAC
             {
                 ConnectedUsers.Add(new UserDetail { ConnectionId = id, UserName = userName, idCarrera = userName.Split(' ')[0] });
 
+                
                 // send to caller
                 Clients.Caller.onConnected(id, userName, ConnectedUsers, CurrentMessage);
 
                 // send to all except caller client
-                Clients.AllExcept(id).onNewUserConnected(id, userName, ConnectedUsers.Find(x=> x.UserName == userName).idCarrera);
+                Clients.AllExcept(id).onNewUserConnected(id, userName, ConnectedUsers.Find(x => x.UserName == userName).idCarrera);
 
             }
-           
-           
-            
-
+        
 
         }
 
@@ -88,11 +86,16 @@ namespace SIAC
 
                 var id = Context.ConnectionId;
                 Clients.All.onUserDisconnected(id, item.UserName);
-
-            }else
-            {
-                Connect(item.UserName);
             }
+
+            //}else
+            //{
+            //    if (item != null)
+            //    {
+            //        Connect(item.UserName);
+            //    }
+                
+            //}
 
 
             return base.OnDisconnected(stopCalled);
