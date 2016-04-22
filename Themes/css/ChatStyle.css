@@ -142,7 +142,7 @@
 
 .draggable
 {
-    position: absolute;
+    position: fixed;
     border: #5f9482 solid 1px !important;
     width: 250px;
 }
@@ -157,7 +157,7 @@
     .draggable .unread
     {
         cursor: move;
-        background-color: #b18042 !important;
+        background-color: #827362 !important;
         border-bottom: #b1621f solid 1px;
         color: white;
     }

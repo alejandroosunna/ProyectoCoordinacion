@@ -5,9 +5,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title></title>
+    <title>Chat</title>
     <link type="text/css" rel="stylesheet" href="themes/css/ChatStyle.css" />
-    <link type="text/css" rel="stylesheet" href="materialize/css/materialize.css"
+    <link type="text/css" rel="stylesheet" href="materialize/css/materialize.css" />
+   <%-- <link type="text/css" rel="stylesheet" href="materialize/font" />--%>
     <link rel="stylesheet" href="themes/Css/JQueryUI/themes/base/jquery.ui.all.css" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
 
@@ -20,7 +21,8 @@
     <script src="Scripts/jquery.ui.mouse.js"></script>
     <script src="Scripts/jquery.ui.draggable.js"></script>
     <script src="Scripts/jquery.ui.resizable.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
+    <script src="materialize/js/materialize.min.js"></script>
+  <%--  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>--%>
     <!--Reference the SignalR library. -->
     <script src="Scripts/jquery.signalR-1.0.1.js"></script>
 
@@ -89,14 +91,39 @@
             });
         }
         
+        function getCarrera(id) {
+            $.ajax({
+                type: "Post",
+                contentType: "application/json; charset=utf-8",
+                url: "Chat.aspx/ObtenerCarrera",
+                data: '{id: ' + id + '}',
+                dataType: 'json',
+                success: function (data) {
+                    var carrera = $.parseJSON(data.d);
+                    $("#nameCarrera").text(carrera);
+                    console.log(carrera);
+
+                },
+                error: function () {
+                    alert("Ocurrio algún error ");
+                }
+            });
+        }
+
         function registerEvents(chatHub) {
             getUser(<%=Server.HtmlEncode(Session["IdUsuario"].ToString())%>);
-
+           
             $("#btnStartChat").click(function () {
                
                 var name = $("#txtNickName").val();
+                var filtro = $("#txtNickName").val();
+                var filtro = filtro.split(' ');
+                var carrera = filtro[0];
+                getCarrera(carrera);
+                
                 if (name.length > 0) {
                     chatHub.server.connect(name);
+                    
                 }
 
             });
@@ -157,19 +184,33 @@
             // On New User Connected
             chatHub.client.onNewUserConnected = function (id, name, idcarrera) {
                 AddUser(chatHub, id, name, idcarrera);
+                var filtro = $("#txtNickName").val();
+                var filtro = filtro.split(' ');
+                var filtro2 = name.split(' ');
+                if (filtro[0] == filtro2[0]) {
+                    var $toastContent = $('<span>El usuario ' + name + ' se conecto </span>');
+                    Materialize.toast($toastContent, 5000);
+                }
+                
             }
 
-
+            
             // On User Disconnected
             chatHub.client.onUserDisconnected = function (id, userName) {
-
+                var filtro = $("#txtNickName").val();
+                var filtro = filtro.split(' ');
+                var filtro2= userName.split(' ');
                 $('#p' + id).remove();
 
                 var ctrId = 'private_' + id;
                 $('#' + ctrId).remove();
-
-                var $toastContent = $('<span>El usuario '+userName+' se desconecto </span>');
-                Materialize.toast($toastContent, 5000);
+                if (filtro[0] == filtro2[0] && $("#txtNickName").val() != userName) {
+                    var $toastContent = $('<span>El usuario ' + userName + ' se desconecto </span>');
+                    Materialize.toast($toastContent, 5000);
+                } else {
+                    console.log("se desconecto " + userName);
+                }
+                
               
 
             }
@@ -195,10 +236,10 @@
                 if (fromUserName == $('#txtNickName').val()) {
                     $('#' + ctrId).find('#divMessage').append('<div class="media-body"><div class="media-body" style="background-color:#ffecb3">' + message + '<br/> <small class="text-muted">' + fromUserName + '</small></div></div>');
                 } else {
-                    setInterval(blink, 200);
+                    //setInterval(blink, 200);
                     $('#' + ctrId).find('#divMessage').append('<div class="media-body"><div class="media-body">' + message + '<br/> <small class="text-muted">' + fromUserName + '</small></div></div>');
                     $(document).attr('title', fromUserName + " te ha escrito");
-                    //$('#' + ctrId).find('.header').removeClass("read").addClass("unread");
+                    $('#' + ctrId).find('.header').removeClass("read").addClass("unread");
                     audioElement.play();
                 }
                
@@ -239,10 +280,12 @@
 
                         var id = $(this).children('a').attr('id');
 
-                        if (userId != id)
+                        if (userId != id) {
                             OpenPrivateChatWindow(chatHub, id, name);
                             var ctrId = 'private_' + id;
-                            $('#' + ctrId).focus();
+                            $('#' + ctrId).find('#txtPrivateMessage').focus();
+                        }
+                           
                     });
                 }
 
@@ -251,6 +294,7 @@
             if ($('#p'+id).length > 0) {
                 console.log('Ya existe');
             } else {
+               
                 $("#divusers").append(code);
             }
             
@@ -277,23 +321,23 @@
             if ($('#' + ctrId).length > 0) return;
 
             createPrivateChatWindow(chatHub, id, ctrId, userName);
-           
+          
+            $('#' + ctrId).find('#txtPrivateMessage').focus();
 
         }
         
         function createPrivateChatWindow(chatHub, userId, ctrId, userName) {
-
+           
             var div = '<div id="' + ctrId + '" class="ui-widget-content draggable white resizable" rel="0">' +
                        '<div class="header">' +
                               '<div  style="float:right;">' +
                               '<img id="imgDelete"  style="cursor:pointer;" src="/Img/ic_highlight_off_black_24dp_1x.png"/>' +
-                              '<img id="imgMini" style="cursor:pointer;" class="ui-icon ui-icon-minus"/>'+
                            '</div>' +
                            '<i class="material-icons">account_circle</i>'+
                            '<span class="selText" rel="0">' + userName + '</span>' +
                        '</div>' +
                        '<div  class="panel-body">' +
-                       '<ul id="divMessage" class="media-list left-align" style="height: 150px; overflow-y: scroll;" >' +
+                       '<ul id="divMessage" class="media-list left-align" style="height: 170px; overflow-y: scroll;" >' +
                     
                        '</ul>'+
                        '</div>' +
@@ -325,7 +369,7 @@
             
            
             function readd() {
-                setTimeout($('#'+ctrId).find('.header').stop(true,true).css("opacity", 1), 10);
+                //setTimeout($('#'+ctrId).find('.header').stop(true,true).css("opacity", 1), 10);
                 $('#' + ctrId).find('.header').removeClass("unread").addClass("read");
                 $(document).attr('title', "Chat");
             };
@@ -363,7 +407,7 @@
 
             $div.draggable({
 
-                
+                handle: ".header",
                 stop: function () {
 
                 }
@@ -383,7 +427,7 @@
 <body>
     <form id="form1" runat="server">
      <div id="header">
-        Sala de Chat
+        Chat
          <div class="right">
              <a href="Login.aspx" class="black-text"><i class="material-icons black-text">exit_to_app</i> Salir</a>
          </div>
@@ -401,7 +445,7 @@
             </div>
         </div>
         <div id="divChat" class="row " style="padding-top:40px;">
-            <h3>Sala de Chat Coordinación</h3>
+            <h3><SPAN ID="nameCarrera">Sala de chat</SPAN> </h3>
             <br />
             <br />
             <div class="col s12 m12 l7 chatRoom striped">
