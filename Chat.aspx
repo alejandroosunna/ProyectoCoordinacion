@@ -7,6 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>Chat</title>
     <link type="text/css" rel="stylesheet" href="themes/css/ChatStyle.css" />
+    <link type="text/css" rel="stylesheet" href="Themes/css/bubbleChat.css" />
     <link type="text/css" rel="stylesheet" href="materialize/css/materialize.css" />
    <%-- <link type="text/css" rel="stylesheet" href="materialize/font" />--%>
     <link rel="stylesheet" href="themes/Css/JQueryUI/themes/base/jquery.ui.all.css" />
@@ -234,10 +235,10 @@
                 //Recibe chat.
                 //Si entra al IF signiica que es del usuario que mando, si no es el usuario que recive.
                 if (fromUserName == $('#txtNickName').val()) {
-                    $('#' + ctrId).find('#divMessage').append('<div class="media-body"><div class="media-body" style="background-color:#ffecb3">' + message + '<br/> <small class="text-muted">' + fromUserName + '</small></div></div>');
+                    $('#' + ctrId).find('#divMessage').append('<div class="media-body"><div class="bubble bubble--alt" style=" text-align: right;">' + message + '</div></div>');
                 } else {
                     //setInterval(blink, 200);
-                    $('#' + ctrId).find('#divMessage').append('<div class="media-body"><div class="media-body">' + message + '<br/> <small class="text-muted">' + fromUserName + '</small></div></div>');
+                    $('#' + ctrId).find('#divMessage').append('<div class="media-body"><div class="bubble" style=" text-align: left;">' + message + '</div>');
                     $(document).attr('title', fromUserName + " te ha escrito");
                     $('#' + ctrId).find('.header').removeClass("read").addClass("unread");
                     audioElement.play();
@@ -336,15 +337,13 @@
                            '<i class="material-icons">account_circle</i>'+
                            '<span class="selText" rel="0">' + userName + '</span>' +
                        '</div>' +
-                       '<div  class="panel-body">' +
-                       '<ul id="divMessage" class="media-list left-align" style="height: 170px; overflow-y: scroll;" >' +
-                    
-                       '</ul>'+
+                       '<div  id="divMessage" class="panel-body" style="height: 250px; overflow-y: scroll;">' +
+                      
                        '</div>' +
-                       '<div class="buttonBar center">' +
-                          '<input id="txtPrivateMessage" class="msgText" type="text"   />' +
-                          '<input id="btnSendMessage" class=" btn orange white-text waves-effect waves-light" type="button" value="Enviar"   />' +
-                       '<br /></div>' +
+                       '<div class="buttonBar">' +
+                          '<input id="txtPrivateMessage" class="msgText" placeholder="Escribe un texto aquí"  type="text" />' +
+                          '<input id="btnSendMessage" class="btn orange white-text waves-effect waves-light" type="button" value="Enviar"   />' +
+                      '</div>' +
                     '</div>';
 
             var $div = $(div);
@@ -378,7 +377,7 @@
                 
                 $textBox = $div.find("#txtPrivateMessage");
                 var msg = $textBox.val();
-                if (msg.length > 0) {
+                if (msg.length > 0 && !(/^\s+$/.test(msg))) {
                     
                     chatHub.server.sendPrivateMessage(userId, msg);
                     $('#' + ctrId).find('.header').removeClass("unread").addClass("read");
