@@ -6,3 +6,7 @@
    en System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior, String method)
    en System.Data.SqlClient.SqlCommand.ExecuteReader()
    en csCitaHandler.GetListCitas(Int32 idCarrera, DateTime fechaInicial, DateTime fechaFinal) en c:\SitiosWeb\SIAC\App_Code\Handlers\csCitaHandler.cs:línea 203
+
+24/4/2016 13:05. Error relacionado con la red o específico de la instancia mientras se establecía una conexión con el servidor SQL Server. No se encontró el servidor o éste no estaba accesible. Compruebe que el nombre de la instancia es correcto y que SQL Server está configurado para admitir conexiones remotas. (provider: Named Pipes Provider, error: 40 - No se pudo abrir una conexión con SQL Server)
+
+24/4/2016 16:33. Error relacionado con la red o específico de la instancia mientras se establecía una conexión con el servidor SQL Server. No se encontró el servidor o éste no estaba accesible. Compruebe que el nombre de la instancia es correcto y que SQL Server está configurado para admitir conexiones remotas. (provider: Named Pipes Provider, error: 40 - No se pudo abrir una conexión con SQL Server)
