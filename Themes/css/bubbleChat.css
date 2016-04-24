@@ -1,0 +1,87 @@
+﻿
+body {
+   
+}
+.bubble {
+    color: black;
+    font-family:Calibri;
+    font-size:smaller;
+	background-image: linear-gradient(bottom, rgb(239, 239, 235) 25%, rgb(239, 239, 235) 100%);
+background-image: -o-linear-gradient(bottom, rgb(239, 239, 235) 25%, rgb(239, 239, 235) 100%);
+background-image: -moz-linear-gradient(bottom, rgb(239, 239, 235) 25%, rgb(239, 239, 235) 100%);
+background-image: -webkit-linear-gradient(bottom, rgb(239, 239, 235) 25%, rgb(239, 239, 235) 100%);
+background-image: -ms-linear-gradient(bottom, rgb(239, 239, 235) 25%, rgb(239, 239, 235) 100%);
+background-image: -webkit-gradient(
+	linear,
+	left bottom,
+	left top,
+	color-stop(0.25, rgb(239, 239, 235)),
+	color-stop(1, rgb(239, 239, 235))
+);
+	
+	/* vendor rules */
+	border-radius: 20px;
+	/* vendor rules */
+
+	/* vendor rules */
+	box-sizing: border-box;
+	clear: both;
+	float: left;
+	margin-bottom: 10px;
+	padding: 8px 10px;
+	position: relative;
+	text-shadow: 0 1px 1px rgba(255, 255, 255, 0.7);
+	width: auto;
+	max-width: 100%;
+	word-wrap: break-word;
+}
+
+.bubble:before, .bubble:after {
+	border-radius: 20px / 10px;
+	content: '';
+	display: block;
+	position: absolute;
+}
+
+.bubble:before {
+	border: 10px solid transparent;
+	border-bottom-color: rgb(239, 239, 235);
+	bottom: 0;
+	left: -7px;
+	z-index: -2;
+}
+
+.bubble:after {
+	border: 8px solid transparent;
+	border-bottom-color: rgb(239, 239, 235);
+	bottom: 1px;
+	left: -5px;
+}
+
+.bubble--alt {
+	background-image: linear-gradient(bottom, rgb(255, 133, 0) 25%, rgb(255, 133, 0) 100%);
+background-image: -o-linear-gradient(bottom, rgb(255, 133, 0) 25%, rgb(255, 133, 0) 100%);
+background-image: -moz-linear-gradient(bottom, rgb(255, 133, 0) 25%, rgb(255, 133, 0) 100%);
+background-image: -webkit-linear-gradient(bottom, rgb(255, 133, 0) 25%, rgb(255, 133, 0) 100%);
+background-image: -ms-linear-gradient(bottom, rgb(255, 133, 0) 25%, rgb(255, 133, 0) 100%);
+background-image: -webkit-gradient(
+	linear,
+	left bottom,
+	left top,
+	color-stop(0.25, rgb(255, 133, 0)),
+	color-stop(1, rgb(255, 133, 0))
+);
+	float: right;
+}
+
+.bubble--alt:before {
+	border-bottom-color: rgb(255, 133, 0);
+	left: auto;
+	right: -5px;
+}
+
+.bubble--alt:after {
+    border-bottom-color: rgb(255, 133, 0);
+	left: auto;
+	right: -5px;
+}

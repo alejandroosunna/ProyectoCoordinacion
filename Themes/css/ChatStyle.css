@@ -154,7 +154,20 @@
         border-bottom: #5f9482 solid 1px;
         color: white;
     }
-
+    .draggable .unread
+    {
+        cursor: move;
+        background-color: #827362 !important;
+        border-bottom: #b1621f solid 1px;
+        color: white;
+    }
+    .draggable .read
+    {
+        cursor: move;
+        background-color: #fb8c00 !important;
+        border-bottom: #5f9482 solid 1px;
+        color: white;
+    }
     .draggable .selText
     {
         color: black;
