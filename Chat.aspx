@@ -34,6 +34,8 @@
         
         var audioElement = document.createElement('audio');
         audioElement.setAttribute('src', 'audio/chat.mp3');
+        var carrera = <%=Server.HtmlEncode(Session["IdCarrera"].ToString())%>;
+        var rol = <%=Server.HtmlEncode(Session["IdRol"].ToString())%>;
         $(function () {
 
             $("#resizable").resizable();
@@ -117,13 +119,12 @@
             $("#btnStartChat").click(function () {
                
                 var name = $("#txtNickName").val();
-                var filtro = $("#txtNickName").val();
-                var filtro = filtro.split(' ');
-                var carrera = filtro[0];
-                getCarrera(carrera);
+               
+               
+                getCarrera(<%=Server.HtmlEncode(Session["IdCarrera"].ToString())%>);
                 
                 if (name.length > 0) {
-                    chatHub.server.connect(name);
+                    chatHub.server.connect(name, <%=Server.HtmlEncode(Session["IdCarrera"].ToString())%>);
                     
                 }
 
@@ -131,13 +132,13 @@
 
 
             $('#btnSendMsg').click(function () {
-                var filtro = $("#txtNickName").val();
-                var filtro = filtro.split(' ');
+                
                 var msg = $("#txtMessage").val();
-                if (msg.length > 0) {
+                
+                if (msg.length > 0 && rol==1) {
 
                     var userName = $('#hdUserName').val();
-                    chatHub.server.sendMessageToAll(userName, msg, filtro[0]);
+                    chatHub.server.sendMessageToAll(userName, msg, carrera);
                     $("#txtMessage").val('');
                 }
             });
@@ -185,10 +186,8 @@
             // On New User Connected
             chatHub.client.onNewUserConnected = function (id, name, idcarrera) {
                 AddUser(chatHub, id, name, idcarrera);
-                var filtro = $("#txtNickName").val();
-                var filtro = filtro.split(' ');
-                var filtro2 = name.split(' ');
-                if (filtro[0] == filtro2[0]) {
+               
+                if (carrera == idcarrera || rol == 3) {
                     var $toastContent = $('<span>El usuario ' + name + ' se conecto </span>');
                     Materialize.toast($toastContent, 5000);
                 }
@@ -197,15 +196,13 @@
 
             
             // On User Disconnected
-            chatHub.client.onUserDisconnected = function (id, userName) {
-                var filtro = $("#txtNickName").val();
-                var filtro = filtro.split(' ');
-                var filtro2= userName.split(' ');
+            chatHub.client.onUserDisconnected = function (id, userName, idcarrera) {
+           
                 $('#p' + id).remove();
 
                 var ctrId = 'private_' + id;
                 $('#' + ctrId).remove();
-                if (filtro[0] == filtro2[0] && $("#txtNickName").val() != userName) {
+                if (rol==3 || carrera == idcarrera && $("#txtNickName").val() != userName ) {
                     var $toastContent = $('<span>El usuario ' + userName + ' se desconecto </span>');
                     Materialize.toast($toastContent, 5000);
                 } else {
@@ -261,13 +258,11 @@
 
         }
         function AddUser(chatHub, id, name, idCarrera) {
-
+         
             var userId = $('#hdId').val();
-           
+            
             var code = "";
-            var filtro = $("#txtNickName").val();
-            var filtro = filtro.split(' ');
-            if (idCarrera == filtro[0]) {
+            if (rol==3 || idCarrera == carrera) {
                 if (userId == id) {
 
                     code = $('<div">' + name + "</div>");
@@ -304,14 +299,13 @@
 
         function AddMessage(userName, message, idcarrera) {
 
-            var filtro = $("#txtNickName").val();
-            var filtro = filtro.split(' ');
-            if (filtro[0] == idcarrera) {
-                $('#divChatWindow').append('<div class="media-body"> <div class="media"><div class="media-body">' + message + '<br/> <small class="text-muted">' + userName + '</small></div></div></div><br/>');
+            if (rol == 3   || carrera == idcarrera ) {
+                    $('#divChatWindow').append('<div class="media-body"> <div class="media"><div class="media-body">' + message + '<br/> <small class="text-muted">' + userName + '</small></div></div></div><br/>');
 
-                var height = $('#divChatWindow')[0].scrollHeight;
-                $('#divChatWindow').scrollTop(height);
-            }
+                    var height = $('#divChatWindow')[0].scrollHeight;
+                    $('#divChatWindow').scrollTop(height);
+                }
+             
             
         }
 

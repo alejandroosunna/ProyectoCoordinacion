@@ -30,10 +30,10 @@ public partial class Chat : System.Web.UI.Page
         csUsuario usuario = (new csUsuarioHandler()).GetUsuario(Convert.ToInt32(usu));
         if (usuario.IdRol == 1)
         {
-            jsondata = usuario.IdCarrera +" "+usuario.Nombre + " " + usuario.Apellidos + " [Coordinador]" ;
+            jsondata = usuario.Nombre + " " + usuario.Apellidos + " [Coordinador]" ;
         }else
         {
-            jsondata = usuario.IdCarrera + " " + usuario.Nombre +" "+ usuario.Apellidos;
+            jsondata = usuario.Nombre +" "+ usuario.Apellidos;
         }
         
         jsondata = JsonConvert.ToString(jsondata);

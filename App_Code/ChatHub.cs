@@ -14,7 +14,7 @@ namespace SIAC
         static List<UserDetail> ConnectedUsers = new List<UserDetail>();
         static List<MessageDetail> CurrentMessage = new List<MessageDetail>();
 
-        public void Connect(string userName)
+        public void Connect(string userName, string idcarrera)
         {
             var id = Context.ConnectionId;
 
@@ -23,13 +23,13 @@ namespace SIAC
             {
                 ConnectedUsers.Remove(item);
 
-                Clients.All.onUserDisconnected(item.ConnectionId, item.UserName);
+                Clients.All.onUserDisconnected(item.ConnectionId, item.UserName, item.idCarrera);
 
             }
 
             if (ConnectedUsers.Count(x=>x.UserName == userName) ==0)
             {
-                ConnectedUsers.Add(new UserDetail { ConnectionId = id, UserName = userName, idCarrera = userName.Split(' ')[0] });
+                ConnectedUsers.Add(new UserDetail { ConnectionId = id, UserName = userName, idCarrera= idcarrera });
 
                 
                 // send to caller
