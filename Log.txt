@@ -1,1 +1,7 @@
 ﻿
+23/4/2016 21:51. Valor de tiempo de espera caducado. El período de tiempo de espera expiró antes de obtener una conexión del grupo. Esto puede suceder porque todas las conexiones de la agrupación estaban en uso y se alcanzó el máximo tamaño del grupo.   en System.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   en System.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   en System.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   en System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   en System.Data.SqlClient.SqlConnection.Open()
+   en csCitaHandler.AddNewCita(csCita Cita) en c:\SitiosWeb\ProyectoCoordinacion\App_Code\Handlers\csCitaHandler.cs:línea 522

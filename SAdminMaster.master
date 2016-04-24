@@ -1,4 +1,4 @@
-﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="AdminMaster.master.cs" Inherits="AdminMaster" %>
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="SAdminMaster.master.cs" Inherits="SAdminMaster" %>
 
 <!DOCTYPE html>
 
@@ -8,7 +8,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="description" content="A front-end template that helps you build fast, modern mobile web apps."/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <title>Administrador</title>
+    <title>Super Administrador</title>
     
 
 

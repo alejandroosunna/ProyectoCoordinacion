@@ -94,6 +94,45 @@ public class csUsuarioHandler : ObjetoBase
         return Usuario;
     }
 
+    public csUsuario GetUsuario(int IdUsuario, int IdRol)
+    {
+        csUsuario Usuario = new csUsuario();
+        String ConnectionString = ConfigurationManager.ConnectionStrings["dbProyectoCoordinacion"].ConnectionString;
+        SqlConnection Connection = new SqlConnection(ConnectionString);
+        try
+        {
+            Connection.Open();
+
+            SqlParameter[] Data = new SqlParameter[2];
+            Data[0] = new SqlParameter("@IdUsuario", IdUsuario);
+            Data[0].DbType = DbType.Int32;
+            Data[1] = new SqlParameter("@IdRol", IdRol);
+            Data[1].DbType = DbType.Int32;
+
+            String Query = "select * from tbUsuarios where IdUsuario = @IdUsuario and IdRol = @IdRol;";
+
+            SqlCommand Command = new SqlCommand(Query, Connection);
+            Command.Parameters.AddRange(Data);
+            SqlDataReader DataReader = Command.ExecuteReader();
+
+            if (DataReader.Read())
+            {
+                Usuario.LoadEventFromDataReader(DataReader);
+            }
+        }
+        catch (Exception ex)
+        {
+            LogError(ex.Message);
+        }
+        finally
+        {
+            Connection.Close();
+            Connection = null;
+        }
+
+        return Usuario;
+    }
+
     public void AddNewUsuario(csUsuario Usuario)
     {
         String ConnectionString = ConfigurationManager.ConnectionStrings["dbProyectoCoordinacion"].ConnectionString;

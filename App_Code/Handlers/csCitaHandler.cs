@@ -129,6 +129,130 @@ public class csCitaHandler : ObjetoBase
         return Citas;
     }
 
+    public List<csCita> GetListSuperAdmin(DateTime fechaInicial, DateTime fechaFinal)
+    {
+        List<csCita> listCita = new List<csCita>();
+
+        String ConnectionString = ConfigurationManager.ConnectionStrings["dbProyectoCoordinacion"].ConnectionString;
+        SqlConnection Connection = new SqlConnection(ConnectionString);
+        try
+        {
+            Connection.Open();
+            //String Query = "select * from tbCitas where IdAdministrador = @IdAdministrador and Disponible = 1;";
+            //SqlParameter Data = new SqlParameter("@IdUsuario", IdUsuario);
+            //Data.DbType = DbType.Int32;
+            SqlParameter[] Data = new SqlParameter[2];
+            Data[0] = new SqlParameter("@FechaInicial", fechaInicial);
+            Data[0].DbType = DbType.DateTime;
+            Data[1] = new SqlParameter("@FechaFinal", fechaFinal);
+            Data[1].DbType = DbType.DateTime;
+
+            String Query = "select * from tbCitas where FechaDisponible > @FechaInicial and FechaDisponible < @FechaFinal order by IdCoordinador asc, Estado asc, FechaDisponible desc;";
+
+            SqlCommand Command = new SqlCommand(Query, Connection);
+            Command.Parameters.AddRange(Data);
+            SqlDataReader DataReader = Command.ExecuteReader();
+
+            while (DataReader.Read())
+            {
+                csCita Cita = new csCita();
+                Cita.LoadEventFromDataReader(DataReader);
+                listCita.Add(Cita);
+            }
+
+            DataReader.Close();
+        }
+        catch (Exception ex)
+        {
+            LogError(ex.Message + ex.StackTrace);
+        }
+        finally
+        {
+            Connection.Close();
+            Connection = null;
+        }
+
+        return listCita;
+    }
+
+    public int GetListCitaCount(int IdCoordinador)
+    {
+        int countCita = 0;
+
+        String ConnectionString = ConfigurationManager.ConnectionStrings["dbProyectoCoordinacion"].ConnectionString;
+        SqlConnection Connection = new SqlConnection(ConnectionString);
+        try
+        {
+            Connection.Open();
+            //String Query = "select * from tbCitas where IdAdministrador = @IdAdministrador and Disponible = 1;";
+            SqlParameter Data = new SqlParameter("@IdCoordinador", IdCoordinador);
+            Data.DbType = DbType.Int32;
+
+            String Query = "select count(*) as countCita from tbCitas where IdCoordinador = @IdCoordinador;";
+
+            SqlCommand Command = new SqlCommand(Query, Connection);
+            Command.Parameters.Add(Data);
+            SqlDataReader DataReader = Command.ExecuteReader();
+
+            while (DataReader.Read())
+                countCita = (int)CheckDbNull(DataReader["countCita"], TipoDeObjeto.TipoInteger);
+
+            DataReader.Close();
+        }
+        catch (Exception ex)
+        {
+            LogError(ex.Message + ex.StackTrace);
+        }
+        finally
+        {
+            Connection.Close();
+            Connection = null;
+        }
+
+        return countCita;
+    }
+
+    public List<csCita> GetListCitaByIdCoordinador(int IdCoordinador)
+    {
+        List<csCita> listCita = new List<csCita>();
+
+        String ConnectionString = ConfigurationManager.ConnectionStrings["dbProyectoCoordinacion"].ConnectionString;
+        SqlConnection Connection = new SqlConnection(ConnectionString);
+        try
+        {
+            Connection.Open();
+            //String Query = "select * from tbCitas where IdAdministrador = @IdAdministrador and Disponible = 1;";
+            SqlParameter Data = new SqlParameter("@IdCoordinador", IdCoordinador);
+            Data.DbType = DbType.Int32;
+
+            String Query = "select * from tbCitas where IdCoordinador = @IdCoordinador order by FechaDisponible desc, Estado asc;";
+
+            SqlCommand Command = new SqlCommand(Query, Connection);
+            Command.Parameters.Add(Data);
+            SqlDataReader DataReader = Command.ExecuteReader();
+
+            while (DataReader.Read())
+            {
+                csCita Cita = new csCita();
+                Cita.LoadEventFromDataReader(DataReader);
+                listCita.Add(Cita);
+            }
+
+            DataReader.Close();
+        }
+        catch (Exception ex)
+        {
+            LogError(ex.Message + ex.StackTrace);
+        }
+        finally
+        {
+            Connection.Close();
+            Connection = null;
+        }
+
+        return listCita;
+    }
+
     public List<csCita> GetListCitaById(int IdUsuario)
     {
         List<csCita> listCita = new List<csCita>();

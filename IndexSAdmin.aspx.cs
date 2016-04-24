@@ -6,19 +6,24 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-public partial class IndexAdmin : System.Web.UI.Page
+public partial class IndexSAdmin : System.Web.UI.Page
 {
-    List<int> seleccionados = new List<int>();
-
+    csUsuario Usuario;
     DateTime fechaInicio;
     DateTime fechaFinal;
     int idCarrera;
     public DataTable dt;
+    public DataTable dtt;
     public bool result;
 
     protected void Page_Load(object sender, EventArgs e)
     {
+        csUsuarioHandler UsuarioHandler = new csUsuarioHandler();
+        csCitaHandler CitaHandler = new csCitaHandler();
+        csCarreraHandler CarreraHandler = new csCarreraHandler();
         List<csCita> listCita = new List<csCita>();
+        List<int> ListIdCarrera = new List<int>();
+        int IdRol = 2;
 
         if (Request["CitaA"] != null)
         {
@@ -42,7 +47,7 @@ public partial class IndexAdmin : System.Web.UI.Page
             {
                 fechaInicio = Convert.ToDateTime(DateTime.Today.ToString("dd/MM/yyyy") + " 12:00:00 AM");
                 fechaFinal = Convert.ToDateTime(DateTime.Today.ToString("dd/MM/yyyy") + " 11:59:59 PM");
-                idCarrera = (new csUsuarioHandler()).GetUsuario(Convert.ToInt32(Session["IdUsuario"])).IdCarrera;
+                idCarrera = UsuarioHandler.GetUsuario(Convert.ToInt32(Session["IdUsuario"])).IdCarrera;
             }
             else
             {
@@ -50,16 +55,17 @@ public partial class IndexAdmin : System.Web.UI.Page
                 {
                     fechaInicio = Convert.ToDateTime(Convert.ToDateTime(Request["Fecha"]).ToString("dd/MM/yyyy") + " 12:00:00 AM");
                     fechaFinal = Convert.ToDateTime(Convert.ToDateTime(Request["Fecha"]).ToString("dd/MM/yyyy") + " 11:59:59 PM");
-                    idCarrera = (new csUsuarioHandler()).GetUsuario(Convert.ToInt32(Session["IdUsuario"])).IdCarrera;
+                    idCarrera = UsuarioHandler.GetUsuario(Convert.ToInt32(Session["IdUsuario"])).IdCarrera;
                 }
             }
-            
+
             if (fechaFinal.ToString("dd/MM/yyyy") != "01/01/0001" || txtNumControl.Text != "")
             {
-                listCita = (new csCitaHandler()).GetListCitas(idCarrera, fechaInicio, fechaFinal);
-
+                listCita = CitaHandler.GetListSuperAdmin(fechaInicio, fechaFinal);
+                            
                 dt = new DataTable();
                 dt.Columns.Add("IdCita");
+                dt.Columns.Add("Carrera");
                 dt.Columns.Add("IdUsuario");
                 dt.Columns.Add("FechaDisponible");
                 dt.Columns.Add("Estado");
@@ -68,6 +74,11 @@ public partial class IndexAdmin : System.Web.UI.Page
                 {
                     DataRow dr = dt.NewRow();
                     dr["IdCita"] = listCita[y].IdCita.ToString();
+                    Usuario = UsuarioHandler.GetUsuario(listCita[y].IdUsuario, IdRol);
+                    dr["Carrera"] = CarreraHandler.GetCarrera(Usuario.IdCarrera).Nombre;
+                    if(!ListIdCarrera.Contains(Usuario.IdCarrera))
+                        ListIdCarrera.Add(Usuario.IdCarrera);
+                    //(new ObjetoBase()).LogError((new csUsuarioHandler()).GetUsuario(listCita[y].IdUsuario).IdCarrera.ToString());
                     dr["IdUsuario"] = listCita[y].IdUsuario.ToString();
                     dr["FechaDisponible"] = listCita[y].FechaDisponible.ToString();
                     if (listCita[y].Estado == 0)
@@ -82,21 +93,46 @@ public partial class IndexAdmin : System.Web.UI.Page
                     dt.Rows.Add(dr);
                 }
 
+                dtt = new DataTable();
+                dtt.Columns.Add("Carrera");
+                dtt.Columns.Add("Numero de Citas");
+
+                for (int y = 0; y < ListIdCarrera.Count; y++)
+                {
+                    DataRow dr = dtt.NewRow();
+                    csCarrera Carrera = CarreraHandler.GetCarrera(ListIdCarrera[y]);
+                    dr["Carrera"] = Carrera.Nombre;
+                    dr["Numero de Citas"] = CitaHandler.GetListCitaCount(Carrera.IdCarrera);
+
+                    dtt.Rows.Add(dr);
+                }
+
                 GridView_Citas.DataSource = dt;
                 GridView_Citas.DataBind();
+
+                GridView_CountCitas.DataSource = dtt;
+                GridView_CountCitas.DataBind();
             }
         }
         else
         {
-            int result = 0;
-            
-            if(Int32.TryParse(txtNumControl.Text, out result))
-                listCita = (new csCitaHandler()).GetListCitaById(result);
+            int intResult = 0;
+            IdRol = 1;
+            Usuario = new csUsuario();
+
+            if (Int32.TryParse(txtNumControl.Text, out intResult))
+            {
+                Usuario = UsuarioHandler.GetUsuario(intResult, IdRol);
+                listCita = CitaHandler.GetListCitaByIdCoordinador(Usuario.IdCarrera);
+            }
+
+            csCarrera Carrera = CarreraHandler.GetCarrera(Usuario.IdCarrera);
 
             //(new ObjetoBase()).LogError(listCita[0].IdCita.ToString());
 
             dt = new DataTable();
             dt.Columns.Add("IdCita");
+            dt.Columns.Add("Carrera");
             dt.Columns.Add("IdUsuario");
             dt.Columns.Add("FechaDisponible");
             dt.Columns.Add("Estado");
@@ -105,6 +141,9 @@ public partial class IndexAdmin : System.Web.UI.Page
             {
                 DataRow dr = dt.NewRow();
                 dr["IdCita"] = listCita[y].IdCita.ToString();
+                dr["Carrera"] = Carrera.Nombre;
+                if (!ListIdCarrera.Contains(Carrera.IdCarrera))
+                    ListIdCarrera.Add(Carrera.IdCarrera);
                 dr["IdUsuario"] = listCita[y].IdUsuario.ToString();
                 dr["FechaDisponible"] = listCita[y].FechaDisponible.ToString();
                 if (listCita[y].Estado == 0)
@@ -119,16 +158,28 @@ public partial class IndexAdmin : System.Web.UI.Page
                 dt.Rows.Add(dr);
             }
 
+            dtt = new DataTable();
+            dtt.Columns.Add("Carrera");
+            dtt.Columns.Add("Numero de Citas");
+
+            for (int y = 0; y < ListIdCarrera.Count; y++)
+            {
+                DataRow dr = dtt.NewRow();
+                Carrera = CarreraHandler.GetCarrera(ListIdCarrera[y]);
+                dr["Carrera"] = Carrera.Nombre;
+                dr["Numero de Citas"] = CitaHandler.GetListCitaCount(Carrera.IdCarrera);
+
+                dtt.Rows.Add(dr);
+            }
+
             GridView_Citas.DataSource = dt;
             GridView_Citas.DataBind();
+
+            GridView_CountCitas.DataSource = dtt;
+            GridView_CountCitas.DataBind();
         }
     }
 
-    protected void btnSalir_Click(object sender, EventArgs e)
-    {
-        Session["IdUsuario"] = null;
-        Response.Redirect("~\\Login.aspx");
-    }
     protected void GridView_Citas_RowCommand(object sender, GridViewCommandEventArgs e)
     {
         if (e.CommandName == "DeleteRow")
@@ -185,50 +236,6 @@ public partial class IndexAdmin : System.Web.UI.Page
             }
         }
     }
-    protected void btnNuevaCita_Click(object sender, EventArgs e)
-    {
-        Response.Redirect("~\\AgregarCita.aspx");
-    }
-
-    protected void GridView_Citas_SelectedIndexChanged(object sender, EventArgs e)
-    {
-        //GridViewRow row = GridView_Citas.SelectedRow;
-
-        //int id = Convert.ToInt32(GridView_Citas.DataKeys[row.RowIndex].Value);
-
-        //if (!buscarRepetido(id))
-        //{
-        //    seleccionados.Add(id);
-        //}
-    }
-
-    protected void SqlDataSource_Selecting(object sender, SqlDataSourceSelectingEventArgs e)
-    {
-
-    }
-    private bool buscarRepetido(int id)
-    {
-     
-        for (int i = 0; i < seleccionados.Count; i++)
-        {
-            if (seleccionados[i] == id)
-            {
-                seleccionados.Remove(i);
-                return true;
-            }
-        }
-        return false;
-    }
-
-    protected void btnElinarCitas_Click(object sender, EventArgs e)
-    {
-        foreach (var item in seleccionados)
-        {
-            (new csCitaHandler()).DeleteCita(item);
-        }
-
-        Response.Redirect("~\\IndexAdmin.aspx");
-    }
 
     protected void btnBuscar_Click(object sender, EventArgs e)
     {
@@ -261,5 +268,11 @@ public partial class IndexAdmin : System.Web.UI.Page
         //    GridView_Citas.DataSource = dt;
         //    GridView_Citas.DataBind();
         //}
+    }
+
+    protected void btnSalir_Click(object sender, EventArgs e)
+    {
+        Session["IdUsuario"] = null;
+        Response.Redirect("~\\Login.aspx");
     }
 }
