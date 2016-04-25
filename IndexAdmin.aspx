@@ -7,6 +7,7 @@
                         </div>
                         <br />
                         <input id="date-range-predefined" name="Fecha" type="date" class="h5a-input form-control"/>
+                        Numero Control Alumno: <asp:TextBox ID="txtNumControl" runat="server"></asp:TextBox>
                         <br />
                         <asp:Button ID="btnBuscar" class="waves-effect waves-light btn orange" runat="server" Text="Buscar" OnClick="btnBuscar_Click"/>
                         <div class="panel-body scrolling-table-container">                           
@@ -17,7 +18,10 @@
                                         <asp:BoundField DataField="FechaDisponible" HeaderText="FechaDisponible" SortExpression="FechaDisponible" />
                                         <asp:BoundField DataField="Estado" HeaderText="Estado" SortExpression="Estado" />
                                        
-                                        <asp:CommandField ShowEditButton="True" />
+                                        <%--<asp:CommandField ShowSelectButton="true" ButtonType="Link" HeaderText="Asistio" />
+                                        <asp:CommandField ShowSelectButton="true" ButtonType="Link" HeaderText="Falto" />--%>
+                                        <asp:ButtonField CommandName="Asistio" HeaderText="Asistio" Text="Asistio" />
+                                        <asp:ButtonField CommandName="Falto" HeaderText="Falto" Text="Falto" />
                                     </Columns>
                                 </asp:GridView>
                                 <%--<asp:SqlDataSource ID="SqlDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:dbProyectoCoordinacion %>" SelectCommand="SELECT [IdCita], [IdUsuario], [FechaAgendada], [FechaDisponible], [Estado], [Comentario] FROM [tbCitas] WHERE (([IdUsuario] IS NOT NULL) AND ([Estado] = @Estado))">
@@ -34,7 +38,7 @@
         </div>
         <div class="col s12 m4 l4 center center-align">
             <br />
-        <asp:Button class="waves-effect waves-light btn orange"  ID="btnElinarCitas" runat="server" Text="Eliminar" OnClick="btnElinarCitas_Click"/>                   
+        <%--<asp:Button class="waves-effect waves-light btn orange"  ID="btnElinarCitas" runat="server" Text="Eliminar" OnClick="btnElinarCitas_Click"/>--%>                   
         </div>
     </div>
                         </asp:Content>

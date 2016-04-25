@@ -1,4 +1,4 @@
-﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="AdminMaster.master.cs" Inherits="AdminMaster" %>
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="SAdminMaster.master.cs" Inherits="SAdminMaster" %>
 
 <!DOCTYPE html>
 
@@ -8,7 +8,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="description" content="A front-end template that helps you build fast, modern mobile web apps."/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <title>Administrador</title>
+    <title>Super Administrador</title>
     
 
 
@@ -95,6 +95,7 @@
         <nav class="demo-navigation mdl-navigation mdl-color--white">
           <a class="mdl-navigation__link" href="IndexAdmin.aspx"><i class="mdl-color-text--black material-icons" role="presentation">home</i>Resumen</a>
           <%--<a class="mdl-navigation__link" href="Citas.aspx"><i class="mdl-color-text--black material-icons" role="presentation">library_books</i>Citas</a>--%>
+          <a class="mdl-navigation__link" href="Coordinador.aspx"><i class="mdl-color-text--black material-icons" role="presentation">Coodinadores</i></a>
           <a class="mdl-navigation__link" href="Chat.aspx"><i class="mdl-color-text--black material-icons" role="presentation">chat_bubble</i>Chat</a>
           <a class="dropdown-button mdl-navigation__link" href="#!" data-activates="dropdown1"><i class="mdl-color-text--black material-icons">contacts</i>Alumnos</a>
 

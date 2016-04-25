@@ -11,9 +11,7 @@ public partial class AgregarCita : System.Web.UI.Page
     {
         if (Session["IdUsuario"] == null || Convert.ToInt16(Session["IdRol"])==2)
             Response.Redirect("~\\Login.aspx");
-
     }
-
 
     protected void btnSalir_Click(object sender, EventArgs e)
     {
@@ -75,21 +73,33 @@ public partial class AgregarCita : System.Web.UI.Page
         DateTime Date = new DateTime(01 / 01 / 0001);
         DateTime fInicio = xfInicio;
         csCita Cita = new csCita();
+        int day = 0;
+
         try
         {
             for (int i = 1; i <= xdias; i++)
             {
-                for (int j = fInicio.Hour; j < xhoraFinal;)
+                day++;
+                if (fInicio.ToString("dddd", new System.Globalization.CultureInfo("es-Es")) != "sábado" && fInicio.ToString("dddd", new System.Globalization.CultureInfo("es-Es")) != "domingo")
                 {
-                    Cita.IdCoordinador = Convert.ToInt32(Session["IdCarrera"]);
-                    Cita.FechaDisponible = fInicio;
-                    Cita.Estado = 0;
-                    fInicio = fInicio.AddMinutes(xintervalo);
-                    j = fInicio.Hour;
-                    (new csCitaHandler()).AddNewCita(Cita);
+                    for (int j = fInicio.Hour; j < xhoraFinal;)
+                    {
+                        Cita.IdCoordinador = Convert.ToInt32(Session["IdCarrera"]);
+                        Cita.FechaDisponible = fInicio;
+                        Cita.Estado = 0;
+                        fInicio = fInicio.AddMinutes(xintervalo);
+                        j = fInicio.Hour;
+                        (new csCitaHandler()).AddNewCita(Cita);
+                    }
+                    fInicio = xfInicio;
+                    fInicio = fInicio.AddDays(day);
                 }
-                fInicio = xfInicio;
-                fInicio = fInicio.AddDays(i);
+                else
+                {
+                    i--;
+                    fInicio = xfInicio;
+                    fInicio = fInicio.AddDays(day);
+                }
             }
             Response.Redirect("~\\AgregarCita.aspx");
         }
