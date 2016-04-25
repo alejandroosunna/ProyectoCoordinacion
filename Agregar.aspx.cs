@@ -52,31 +52,44 @@ public partial class Agregar : System.Web.UI.Page
     }
     protected void Button1_Click(object sender, EventArgs e)
     {
-        if (FileUpload1.HasFile)
+        
+            if (FileUpload1.HasFile)
+            {
+                try
+                {
+                string ruta = string.Concat((Server.MapPath("~/Temp/" + FileUpload1.FileName)));
+                FileUpload1.PostedFile.SaveAs(ruta);
+                OleDbConnection OleDcon = new OleDbConnection("Provider=Microsoft.Ace.OLEDB.12.0;Data Source =" + ruta + ";Extended Properties=Excel 12.0");
+                OleDbCommand cmd = new OleDbCommand("select * from [Hoja1$]", OleDcon);
+                OleDbDataAdapter objAdapter1 = new OleDbDataAdapter(cmd);
+
+                OleDcon.Open();
+                DbDataReader dr = cmd.ExecuteReader();
+                string con_str = @"Data Source=LUIS\DBSQL;Initial Catalog=dbProyectoCoordinacion;Integrated security=True";
+                
+
+                SqlBulkCopy bulkInsert = new SqlBulkCopy(con_str);
+                bulkInsert.DestinationTableName = "tbUsuarios";
+                bulkInsert.WriteToServer(dr);
+                OleDcon.Close();
+                Array.ForEach(Directory.GetFiles((Server.MapPath("~/Temp/"))), File.Delete);
+                Label1.ForeColor = Color.Green;
+                Label1.Text = " Listo";
+
+                }
+                catch (Exception ex)
+
         {
-            string ruta = string.Concat((Server.MapPath("~/Temp/" + FileUpload1.FileName)));
-            FileUpload1.PostedFile.SaveAs(ruta);
-            OleDbConnection OleDcon = new OleDbConnection("Provider=Microsoft.Ace.OLEDB.12.0;Data Source =" + ruta + ";Extended Properties=Excel 12.0");
-            OleDbCommand cmd = new OleDbCommand("select * from [Hoja1$]", OleDcon);
-            OleDbDataAdapter objAdapter1 = new OleDbDataAdapter(cmd);
-
-            OleDcon.Open();
-            DbDataReader dr = cmd.ExecuteReader();
-            string con_str = @"Data Source=LUIS\DBSQL;Initial Catalog=dbProyectoCoordinacion;Integrated security=True";
-
-            SqlBulkCopy bulkInsert = new SqlBulkCopy(con_str);
-            bulkInsert.DestinationTableName = "tbUsuarios";
-            bulkInsert.WriteToServer(dr);
-            OleDcon.Close();
-            Array.ForEach(Directory.GetFiles((Server.MapPath("~/Temp/"))), File.Delete);
-            Label1.ForeColor = Color.Green;
-            Label1.Text = " Listo";
-
+            Response.Write(@"<script language = 'javascript'>alert('ya existe ese archivo en la base de datos') </script>");
         }
-        else
-        {
-            Label1.ForeColor = Color.Red;
-            Label1.Text = "seleccionar archivo";
-        }
+
+            }
+            else
+            {
+                Label1.ForeColor = Color.Red;
+                Label1.Text = "seleccionar archivo";
+            }
+        
+        
     }
 }
