@@ -12,7 +12,7 @@ public partial class AdminMaster : System.Web.UI.MasterPage
 
         if (Session["IdUsuario"] != null && Session["IdRol"] != null)
         {
-            if (Convert.ToInt32(Session["IdRol"]) == 1)
+            if (Convert.ToInt32(Session["IdRol"]) == 1 )
             {
 
                 bool result = bool.TryParse(Request["IdLogin"], out result);
