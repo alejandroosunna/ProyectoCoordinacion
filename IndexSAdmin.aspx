@@ -37,6 +37,10 @@
                                     <Columns>
                                         <asp:BoundField DataField="Carrera" HeaderText="Carrera" InsertVisible="false" ReadOnly="true" SortExpression="Carrera"/>
                                         <asp:BoundField DataField="Numero de Citas" HeaderText="Numero de Citas" SortExpression="Numero de Citas" />
+                                        <asp:BoundField DataField="Numero de Citas Disponibles" HeaderText="Numero de Citas Disponibles" SortExpression="Numero de Citas Disponibles" />
+                                        <asp:BoundField DataField="Numero de Citas Ocupadas" HeaderText="Numero de Citas Ocupadas" SortExpression="Numero de Citas Ocupadas" />
+                                        <asp:BoundField DataField="Numero de Citas Expiradas/Eliminadas" HeaderText="Numero de Citas Expiradas/Eliminadas" SortExpression="Numero de Citas Expiradas/Eliminadas" />
+                                        <asp:BoundField DataField="Numero de Citas Asistidas" HeaderText="Numero de Citas Asistidas" SortExpression="Numero de Citas Asistidas" />
                                        
                                         <%--<asp:CommandField ShowSelectButton="true" ButtonType="Link" HeaderText="Asistio" />
                                         <asp:CommandField ShowSelectButton="true" ButtonType="Link" HeaderText="Falto" />--%>

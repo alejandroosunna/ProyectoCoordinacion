@@ -175,23 +175,49 @@ public class csCitaHandler : ObjetoBase
         return listCita;
     }
 
-    public int GetListCitaCount(int IdCoordinador)
+    public int GetListCitaCount(int IdCoordinador, DateTime fechaInicial, DateTime fechaFinal, bool todasCitas = false, bool todasCitasT = false, bool disponibleCitas = false, bool disponibleCitasT = false, 
+        bool ocupadaCitas = false, bool ocupadaCitasT = false, bool expiroCitas = false, bool expiroCitasT = false, bool asistioCitas = false, bool asistioCitasT = false)
     {
         int countCita = 0;
-
+        String Query = string.Empty;
         String ConnectionString = ConfigurationManager.ConnectionStrings["dbProyectoCoordinacion"].ConnectionString;
         SqlConnection Connection = new SqlConnection(ConnectionString);
         try
         {
             Connection.Open();
             //String Query = "select * from tbCitas where IdAdministrador = @IdAdministrador and Disponible = 1;";
-            SqlParameter Data = new SqlParameter("@IdCoordinador", IdCoordinador);
-            Data.DbType = DbType.Int32;
 
-            String Query = "select count(*) as countCita from tbCitas where IdCoordinador = @IdCoordinador;";
+            SqlParameter[] Data = new SqlParameter[3];
+            Data[0] = new SqlParameter("@IdCoordinador", IdCoordinador);
+            Data[0].DbType = DbType.Int32;
+            Data[1] = new SqlParameter("@FechaInicial", fechaInicial);
+            Data[1].DbType = DbType.DateTime;
+            Data[2] = new SqlParameter("@FechaFinal", fechaFinal);
+            Data[2].DbType = DbType.DateTime;
+
+            if(todasCitas)
+                Query = "select count(*) as countCita from tbCitas where IdCoordinador = @IdCoordinador and FechaDisponible > @FechaInicial and FechaDisponible < @FechaFinal;";
+            else if(disponibleCitas)
+                Query = "select count(*) as countCita from tbCitas where IdCoordinador = @IdCoordinador and FechaDisponible > @FechaInicial and FechaDisponible < @FechaFinal and Estado = 0;";
+            else if(ocupadaCitas)
+                Query = "select count(*) as countCita from tbCitas where IdCoordinador = @IdCoordinador and FechaDisponible > @FechaInicial and FechaDisponible < @FechaFinal and Estado = 1;";
+            else if(expiroCitas)
+                Query = "select count(*) as countCita from tbCitas where IdCoordinador = @IdCoordinador and FechaDisponible > @FechaInicial and FechaDisponible < @FechaFinal and Estado = 2;";
+            else if(asistioCitas)
+                Query = "select count(*) as countCita from tbCitas where IdCoordinador = @IdCoordinador and FechaDisponible > @FechaInicial and FechaDisponible < @FechaFinal and Estado = 3;";
+            if (todasCitasT)
+                Query = "select count(*) as countCita from tbCitas where IdCoordinador = @IdCoordinador;";
+            else if (disponibleCitasT)
+                Query = "select count(*) as countCita from tbCitas where IdCoordinador = @IdCoordinador and Estado = 0;";
+            else if (ocupadaCitasT)
+                Query = "select count(*) as countCita from tbCitas where IdCoordinador = @IdCoordinador and Estado = 1;";
+            else if (expiroCitasT)
+                Query = "select count(*) as countCita from tbCitas where IdCoordinador = @IdCoordinador and Estado = 2";
+            else if (asistioCitasT)
+                Query = "select count(*) as countCita from tbCitas where IdCoordinador = @IdCoordinador and Estado = 3;";
 
             SqlCommand Command = new SqlCommand(Query, Connection);
-            Command.Parameters.Add(Data);
+            Command.Parameters.AddRange(Data);
             SqlDataReader DataReader = Command.ExecuteReader();
 
             while (DataReader.Read())
@@ -536,7 +562,7 @@ public class csCitaHandler : ObjetoBase
             }
             catch (Exception ex)
             {
-                LogError(ex.Message + ex.StackTrace);
+                LogError(ex.Message + ex.StackTrace + ex.Source);
             }
             finally
             {

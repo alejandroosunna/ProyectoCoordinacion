@@ -96,13 +96,21 @@ public partial class IndexSAdmin : System.Web.UI.Page
                 dtt = new DataTable();
                 dtt.Columns.Add("Carrera");
                 dtt.Columns.Add("Numero de Citas");
+                dtt.Columns.Add("Numero de Citas Disponibles");
+                dtt.Columns.Add("Numero de Citas Ocupadas");
+                dtt.Columns.Add("Numero de Citas Expiradas/Eliminadas");
+                dtt.Columns.Add("Numero de Citas Asistidas");
 
                 for (int y = 0; y < ListIdCarrera.Count; y++)
                 {
                     DataRow dr = dtt.NewRow();
                     csCarrera Carrera = CarreraHandler.GetCarrera(ListIdCarrera[y]);
                     dr["Carrera"] = Carrera.Nombre;
-                    dr["Numero de Citas"] = CitaHandler.GetListCitaCount(Carrera.IdCarrera);
+                    dr["Numero de Citas"] = CitaHandler.GetListCitaCount(Carrera.IdCarrera, fechaInicio, fechaFinal, todasCitas:true);
+                    dr["Numero de Citas Disponibles"] = CitaHandler.GetListCitaCount(Carrera.IdCarrera, fechaInicio, fechaFinal, disponibleCitas:true);
+                    dr["Numero de Citas Ocupadas"] = CitaHandler.GetListCitaCount(Carrera.IdCarrera, fechaInicio, fechaFinal, ocupadaCitas:true);
+                    dr["Numero de Citas Expiradas/Eliminadas"] = CitaHandler.GetListCitaCount(Carrera.IdCarrera, fechaInicio, fechaFinal, expiroCitas:true);
+                    dr["Numero de Citas Asistidas"] = CitaHandler.GetListCitaCount(Carrera.IdCarrera, fechaInicio, fechaFinal, asistioCitas:true);
 
                     dtt.Rows.Add(dr);
                 }
@@ -161,13 +169,24 @@ public partial class IndexSAdmin : System.Web.UI.Page
             dtt = new DataTable();
             dtt.Columns.Add("Carrera");
             dtt.Columns.Add("Numero de Citas");
+            dtt.Columns.Add("Numero de Citas Disponibles");
+            dtt.Columns.Add("Numero de Citas Ocupadas");
+            dtt.Columns.Add("Numero de Citas Expiradas/Eliminadas");
+            dtt.Columns.Add("Numero de Citas Asistidas");
+
+            fechaInicio = DateTime.Now;
+            fechaFinal = DateTime.Now;
 
             for (int y = 0; y < ListIdCarrera.Count; y++)
             {
                 DataRow dr = dtt.NewRow();
                 Carrera = CarreraHandler.GetCarrera(ListIdCarrera[y]);
                 dr["Carrera"] = Carrera.Nombre;
-                dr["Numero de Citas"] = CitaHandler.GetListCitaCount(Carrera.IdCarrera);
+                dr["Numero de Citas"] = CitaHandler.GetListCitaCount(Carrera.IdCarrera, fechaInicio, fechaFinal, todasCitasT:true);
+                dr["Numero de Citas Disponibles"] = CitaHandler.GetListCitaCount(Carrera.IdCarrera, fechaInicio, fechaFinal, disponibleCitasT: true);
+                dr["Numero de Citas Ocupadas"] = CitaHandler.GetListCitaCount(Carrera.IdCarrera, fechaInicio, fechaFinal, ocupadaCitasT: true);
+                dr["Numero de Citas Expiradas/Eliminadas"] = CitaHandler.GetListCitaCount(Carrera.IdCarrera, fechaInicio, fechaFinal, expiroCitasT: true);
+                dr["Numero de Citas Asistidas"] = CitaHandler.GetListCitaCount(Carrera.IdCarrera, fechaInicio, fechaFinal, asistioCitasT: true);
 
                 dtt.Rows.Add(dr);
             }

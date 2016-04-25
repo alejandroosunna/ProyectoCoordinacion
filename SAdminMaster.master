@@ -95,6 +95,7 @@
         <nav class="demo-navigation mdl-navigation mdl-color--white">
           <a class="mdl-navigation__link" href="IndexAdmin.aspx"><i class="mdl-color-text--black material-icons" role="presentation">home</i>Resumen</a>
           <%--<a class="mdl-navigation__link" href="Citas.aspx"><i class="mdl-color-text--black material-icons" role="presentation">library_books</i>Citas</a>--%>
+          <a class="mdl-navigation__link" href="Coordinador.aspx"><i class="mdl-color-text--black material-icons" role="presentation">Coodinadores</i></a>
           <a class="mdl-navigation__link" href="Chat.aspx"><i class="mdl-color-text--black material-icons" role="presentation">chat_bubble</i>Chat</a>
           <a class="dropdown-button mdl-navigation__link" href="#!" data-activates="dropdown1"><i class="mdl-color-text--black material-icons">contacts</i>Alumnos</a>
 
