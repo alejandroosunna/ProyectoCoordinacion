@@ -24,9 +24,12 @@
                                 <br />
                                 
                                <div style="margin-left:20%;margin-top:3%;"> <asp:Button class="waves-effect waves-light btn orange white-text"  ID="btnAgregar" runat="server" Text="Agregar" OnClick="btnAgregar_Click"  /> </div>
-
-                                <asp:FileUpload ID="FileUpload1" runat="server" /><asp:Button ID="Button1" runat="server" Text="Importar" OnClick="Button1_Click" />
+                               
+                                <div style="margin-left:20%;margin-top:3%;">
+                                <asp:FileUpload ID="FileUpload1" class="file-field input-field" runat="server"/>
+                                <asp:Button ID="Button1" runat="server" Text="Importar" OnClick="Button1_Click" class="waves-effect waves-light btn orange white-text"/>
                                 <asp:Label ID="Label1" runat="server"></asp:Label>
+                                </div>
                             </div>
                         </div>
                     </div>
