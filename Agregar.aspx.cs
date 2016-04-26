@@ -62,10 +62,10 @@ public partial class Agregar : System.Web.UI.Page
                 OleDbConnection OleDcon = new OleDbConnection("Provider=Microsoft.Ace.OLEDB.12.0;Data Source =" + ruta + ";Extended Properties=Excel 12.0");
                 OleDbCommand cmd = new OleDbCommand("select * from [Hoja1$]", OleDcon);
                 OleDbDataAdapter objAdapter1 = new OleDbDataAdapter(cmd);
-
+                    //configurar con el apuntador de base de datos indicado
                 OleDcon.Open();
                 DbDataReader dr = cmd.ExecuteReader();
-                string con_str = @"Data Source=LUIS\DBSQL;Initial Catalog=dbProyectoCoordinacion;Integrated security=True";
+                string con_str = @"Data Source=localhost;Initial Catalog=dbProyectoCoordinacion;Integrated security=True";
                 
 
                 SqlBulkCopy bulkInsert = new SqlBulkCopy(con_str);

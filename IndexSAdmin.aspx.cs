@@ -9,6 +9,7 @@ using System.Web.UI.WebControls;
 public partial class IndexSAdmin : System.Web.UI.Page
 {
     csUsuario Usuario;
+    csCarrera Carrera;
     DateTime fechaInicio;
     DateTime fechaFinal;
     int idCarrera;
@@ -23,7 +24,7 @@ public partial class IndexSAdmin : System.Web.UI.Page
         csCarreraHandler CarreraHandler = new csCarreraHandler();
         List<csCita> listCita = new List<csCita>();
         List<int> ListIdCarrera = new List<int>();
-        int IdRol = 2;
+        int IdRol = 1;
 
         if (Request["CitaA"] != null)
         {
@@ -74,10 +75,10 @@ public partial class IndexSAdmin : System.Web.UI.Page
                 {
                     DataRow dr = dt.NewRow();
                     dr["IdCita"] = listCita[y].IdCita.ToString();
-                    Usuario = UsuarioHandler.GetUsuario(listCita[y].IdUsuario, IdRol);
-                    dr["Carrera"] = CarreraHandler.GetCarrera(Usuario.IdCarrera).Nombre;
-                    if(!ListIdCarrera.Contains(Usuario.IdCarrera))
-                        ListIdCarrera.Add(Usuario.IdCarrera);
+                    //Usuario = UsuarioHandler.GetUsuario(listCita[y].IdUsuario, IdRol);
+                    dr["Carrera"] = CarreraHandler.GetCarrera(listCita[y].IdCoordinador).Nombre;
+                    if (!ListIdCarrera.Contains(listCita[y].IdCoordinador))
+                        ListIdCarrera.Add(listCita[y].IdCoordinador);
                     //(new ObjetoBase()).LogError((new csUsuarioHandler()).GetUsuario(listCita[y].IdUsuario).IdCarrera.ToString());
                     dr["IdUsuario"] = listCita[y].IdUsuario.ToString();
                     dr["FechaDisponible"] = listCita[y].FechaDisponible.ToString();

@@ -9,8 +9,15 @@
                         <br />
                         Apellidos: <asp:TextBox ID="txtApellidos" runat="server"></asp:TextBox>
                         <br />
-                        Carrera: <asp:DropDownList runat="server" ID="DropDListCarrera" DataSourceID="SqlDataDropDListCarrera" DataValueField="IdCarrera" DataTextField="Nombre" CssClass="materialboxed input-field orange white-text"></asp:DropDownList>
-                        <br />
+                        Carrera: 
+                            <div class="row container">
+                                <div class="input-field col s12">
+                                    <select id="carreraDrop" runat="server">
+                                    </select>
+                                    <label>Selecciona Carrera</label>
+                                  </div>
+                            </div>                    
+    <br />
                         Numero Control: <asp:TextBox ID="txtNumControl" runat="server"></asp:TextBox>
                         <br />
                         <asp:Button ID="btnAgregar" CssClass="waves-effect waves-light btn orange" runat="server" Text="Agregar" OnClick="btnAgregar_Click"/>
@@ -43,4 +50,9 @@
                             </SelectParameters>--%>
                 </asp:SqlDataSource>
 	</div>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('select').material_select();
+        });
+    </script>
 </asp:Content>
