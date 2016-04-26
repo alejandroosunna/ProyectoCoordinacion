@@ -2,11 +2,19 @@
       
 
 <asp:Content ID="CNTResumen" ContentPlaceHolderID="CPHPrincipal" runat="server"> 
+            <script type="text/javascript">
+                $(document).ready(function () {
+                    $('.datepicker').pickadate({
+                        selectMonths: true, // Creates a dropdown to control month
+                        selectYears: 15 // Creates a dropdown of 15 years to control year
+                    });
+                });
+                </script>
                         <div class="panel-heading section scrollspy">
                           Listado de citas pendientes
                         </div>
                         <br />
-                        <input id="date-range-predefined" name="Fecha" type="date" class="h5a-input form-control"/>
+                        <input id="date-range-predefined" name="Fecha" type="date" class="datepicker h5a-input form-control"/>
                         Numero Control Alumno: <asp:TextBox ID="txtNumControl" runat="server"></asp:TextBox>
                         <br />
                         <asp:Button ID="btnBuscar" class="waves-effect waves-light btn orange" runat="server" Text="Buscar" OnClick="btnBuscar_Click"/>

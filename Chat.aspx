@@ -445,7 +445,7 @@
             <div class="panel panel-info">
                 <div class="panel-heading orange darken-2">Chat de Todos  Bienvenido [<span id='spanUser'></span>]</div>
                 <div class="panel-body">
-                    <ul id="divChatWindow" class="media-list left-align" style="height: 500px;
+                    <ul id="divChatWindow" class="media-list left-align" style="height: 350px;
 	                overflow-y: scroll;" >
                     
                     </ul>
@@ -472,7 +472,11 @@
             </div>
             </div>
         </div>
-        </div>   
+        </div> 
+        <footer>
+            <strong>Leonardo D.
+            </strong>
+        </footer>  
     </div>
     </form>
 </body>

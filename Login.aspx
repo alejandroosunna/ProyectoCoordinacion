@@ -16,7 +16,7 @@
     <!--Navigation-->
     <nav>
         <div class="nav-wrapper orange white-text">
-            <a href="#!" class="brand-logo center">SIAC</a>
+            <a href="#!" class="brand-logo center">Sistema Integral de Apartado de Citas</a>
             <img src="Ithlogo.png" class="circle small hide-on-med-and-down" />
             <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
             <ul class="right hide-on-med-and-down">
