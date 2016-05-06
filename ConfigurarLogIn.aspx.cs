@@ -32,6 +32,7 @@ public partial class _Default : System.Web.UI.Page
                 if (fileextension == extensionesp[i])
                 {
                     extensionOK = true;
+                    break;
                 }
             }
             if (extensionOK)
@@ -51,6 +52,10 @@ public partial class _Default : System.Web.UI.Page
             {
                 Response.Write("<script language='JavaScript'>alert('Tipo de Dato Incorrecto.');</script>");
             }
+        }
+        else
+        {
+            Response.Write("<script language='JavaScript'>alert('No selecciono Archivo.');</script>");
         }
     }
     private void cargarDrop()
@@ -90,28 +95,29 @@ public partial class _Default : System.Web.UI.Page
         }
         catch (Exception exp)
         {
-            Response.Write("<script language='JavaScript'>alert('Error al Eliminar.');</script>");
-            throw;
+            Response.Write("<script language='JavaScript'>alert('Error al Eliminar.')</script>");
         }        
     }
 
     protected void btnOp1_Click(object sender, EventArgs e)
-    {
+    {        
         try
         {
             sel = Path.GetFileName(VistaPrevia.Src);
             if (!sel.Equals("logo_ith-bien.png"))
             {
+                string[] fileDestDel = Directory.GetFiles(Server.MapPath("~/Img/ImgLogIn/Selected/"));
                 string fileToCopy = Server.MapPath("~/Img/ImgLogIn/Resources/") + sel;
                 string fileDest = Server.MapPath("~/Img/ImgLogIn/Selected/" + "opt1" + Path.GetExtension(Server.MapPath("~/Img/ImgLogIn/Resources/") + sel));
+                if (fileDestDel.Length > 0)
+                    File.Delete(fileDestDel[0]);
                 File.Copy(fileToCopy, fileDest, true);
                 Response.Write("<script language='JavaScript'>alert('Imagen Seleccionada en Opcion 1.')</script>");
             }
         }
         catch (Exception ex)
         {
-            Response.Write("<script language='JavaScript'>alert('No se pudo Seleccionar Imagen.');</script>");
-            throw;
+            Response.Write("<script language='JavaScript'>alert('No se pudo Seleccionar Imagen.')</script>");
         }      
     }
 
@@ -122,16 +128,18 @@ public partial class _Default : System.Web.UI.Page
             sel = Path.GetFileName(VistaPrevia.Src);
             if (!sel.Equals("logo_ith-bien.png"))
             {
+                string[] fileDestDel = Directory.GetFiles(Server.MapPath("~/Img/ImgLogIn/Selected/"));
                 string fileToCopy = Server.MapPath("~/Img/ImgLogIn/Resources/") + sel;
                 string fileDest = Server.MapPath("~/Img/ImgLogIn/Selected/" + "opt2" + Path.GetExtension(Server.MapPath("~/Img/ImgLogIn/Resources/") + sel));
+                if (fileDestDel.Length>1)
+                    File.Delete(fileDestDel[1]);
                 File.Copy(fileToCopy, fileDest, true);
-                Response.Write("<script language='JavaScript'>alert('Imagen Seleccionada en Opcion 2.');</script>");
+                Response.Write(@"<script language = 'javascript'>alert('Imagen seleccionada.') </script>");                
             }
         }
         catch (Exception ex)
         {
-            Response.Write("<script language='JavaScript'>alert('No se pudo Seleccionar Imagen.');</script>");
-            throw;
+            Response.Write("<script language='JavaScript'>alert('No se pudo Seleccionar Imagen.')</script>");
         }
     }
 
@@ -142,16 +150,18 @@ public partial class _Default : System.Web.UI.Page
             sel = Path.GetFileName(VistaPrevia.Src);
             if (!sel.Equals("logo_ith-bien.png"))
             {
+                string[] fileDestDel = Directory.GetFiles(Server.MapPath("~/Img/ImgLogIn/Selected/"));
                 string fileToCopy = Server.MapPath("~/Img/ImgLogIn/Resources/") + sel;
                 string fileDest = Server.MapPath("~/Img/ImgLogIn/Selected/" + "opt3" + Path.GetExtension(Server.MapPath("~/Img/ImgLogIn/Resources/") + sel));
+                if (fileDestDel.Length > 2)
+                    File.Delete(fileDestDel[2]);
                 File.Copy(fileToCopy, fileDest, true);
-                Response.Write("<script language='JavaScript'>alert('Imagen Seleccionada en Opcion 3.');</script>");
+                Response.Write("<script language='JavaScript'>alert('Imagen Seleccionada en Opcion 3.')</script>");
             }
         }
         catch (Exception ex)
         {
             Response.Write("<script language='JavaScript'>alert('No se pudo Seleccionar Imagen.');</script>");
-            throw;
         }
     }
 }

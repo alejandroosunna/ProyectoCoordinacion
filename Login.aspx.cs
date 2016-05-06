@@ -13,6 +13,7 @@ public partial class Login : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
+        cargarImg();
         if (Session["IdUsuario"] != null)
         {
             csUsuario Usuario = (new csUsuarioHandler()).GetUsuario(Convert.ToInt32(Session["IdUsuario"]));
@@ -24,7 +25,7 @@ public partial class Login : System.Web.UI.Page
             else if (Usuario.IdRol == 3)
                 Response.Redirect("~\\IndexSAdmin.aspx");
         }
-        cargarImg();
+        
     }
     protected void btnLogin_Click(object sender, EventArgs e)
     {
@@ -66,20 +67,20 @@ public partial class Login : System.Web.UI.Page
         string[] files = Directory.GetFiles(Server.MapPath("~/Img/ImgLogIn/Selected/"));
         if (files.Length > 0)
         {
-            if (files.Length >= 1)
+            if (files.Length == 1)
             {
                 img1.Src = "~/Img/ImgLogIn/Selected/" + Path.GetFileName(files[0]);
             }
-            if (files.Length >= 2)
+            if (files.Length == 2)
             {
                 img1.Src = "~/Img/ImgLogIn/Selected/" + Path.GetFileName(files[0]);
-                img1.Src = "~/Img/ImgLogIn/Selected/" + Path.GetFileName(files[1]);
+                img2.Src = "~/Img/ImgLogIn/Selected/" + Path.GetFileName(files[1]);
             }
-            if (files.Length >= 3)
+            if (files.Length == 3)
             {
                 img1.Src = "~/Img/ImgLogIn/Selected/" + Path.GetFileName(files[0]);
-                img1.Src = "~/Img/ImgLogIn/Selected/" + Path.GetFileName(files[1]);
-                img1.Src = "~/Img/ImgLogIn/Selected/" + Path.GetFileName(files[2]);
+                img2.Src = "~/Img/ImgLogIn/Selected/" + Path.GetFileName(files[1]);
+                img3.Src = "~/Img/ImgLogIn/Selected/" + Path.GetFileName(files[2]);
             }
         }  
     }

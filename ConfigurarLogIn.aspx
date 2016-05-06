@@ -36,13 +36,18 @@
                             <asp:Button ID="btnSelectImg" OnClick="btnSelectImg_Click" CssClass="btn orange white-text" runat="server" Text="Vista Previa" /><br /><br />
                             <asp:Button ID="btnDelete" OnClick="btnDelete_Click" CssClass="btn red darken-2 white-text" runat="server" Text="Eliminar" /><br /><br />
                         </div>
-                    </div>
-                    <asp:UpdatePanel ID="upSubir" runat="server">
-                        <ContentTemplate>
+                    </div>                    
                             <div class="col s12 m12 l8">
                                 <div class="card">
                                     <div class="card-image">
+                                        <asp:UpdatePanel ID="upSubir" runat="server">
+                                        <ContentTemplate>
                                         <img src="logo_ith-bien.png" id="VistaPrevia" runat="server" />
+                                            </ContentTemplate>
+                                        <Triggers>
+                                            <asp:AsyncPostBackTrigger ControlID="btnSelectImg" EventName="Click" />
+                                        </Triggers>
+                                        </asp:UpdatePanel>
                                     </div>
                                     <div class="card-content">
                                         <div class="row">
@@ -61,12 +66,7 @@
                                             </div>
                                     </div>
                                 </div>
-                            </div>
-                    </ContentTemplate>
-                        <Triggers>
-                            <asp:AsyncPostBackTrigger ControlID="btnSelectImg" EventName="Click" />
-                        </Triggers>
-        </asp:UpdatePanel> 
+                            </div>                     
                 </div>            
  </div>
     <script type="text/javascript" lang="javascript">
