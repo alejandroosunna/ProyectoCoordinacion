@@ -7,6 +7,7 @@ using System.Web.UI.WebControls;
 using System.Data;
 using System.Data.SqlClient;
 using System.Configuration;
+using System.IO;
 
 public partial class Login : System.Web.UI.Page
 {
@@ -23,6 +24,7 @@ public partial class Login : System.Web.UI.Page
             else if (Usuario.IdRol == 3)
                 Response.Redirect("~\\IndexSAdmin.aspx");
         }
+        cargarImg();
     }
     protected void btnLogin_Click(object sender, EventArgs e)
     {
@@ -58,5 +60,27 @@ public partial class Login : System.Web.UI.Page
         }
         else
             Response.Write(@"<script language = 'javascript'>alert('Credenciales incorrectas') </script>");
+    }
+    private void cargarImg()
+    {
+        string[] files = Directory.GetFiles(Server.MapPath("~/Img/ImgLogIn/Selected/"));
+        if (files.Length > 0)
+        {
+            if (files.Length == 1)
+            {
+                img1.Src = "~/Img/ImgLogIn/Selected/" + Path.GetFileName(files[0]);
+            }
+            if (files.Length == 2)
+            {
+                img1.Src = "~/Img/ImgLogIn/Selected/" + Path.GetFileName(files[0]);
+                img1.Src = "~/Img/ImgLogIn/Selected/" + Path.GetFileName(files[1]);
+            }
+            if (files.Length == 3)
+            {
+                img1.Src = "~/Img/ImgLogIn/Selected/" + Path.GetFileName(files[0]);
+                img1.Src = "~/Img/ImgLogIn/Selected/" + Path.GetFileName(files[1]);
+                img1.Src = "~/Img/ImgLogIn/Selected/" + Path.GetFileName(files[2]);
+            }
+        }  
     }
 }
