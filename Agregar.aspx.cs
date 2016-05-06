@@ -52,6 +52,7 @@ public partial class Agregar : System.Web.UI.Page
     }
     protected void Button1_Click(object sender, EventArgs e)
     {
+        var idCarrera = Convert.ToInt32(Session["IdCarrera"]);
         
             if (FileUpload1.HasFile)
             {
@@ -60,12 +61,12 @@ public partial class Agregar : System.Web.UI.Page
                 string ruta = string.Concat((Server.MapPath("~/Temp/" + FileUpload1.FileName)));
                 FileUpload1.PostedFile.SaveAs(ruta);
                 OleDbConnection OleDcon = new OleDbConnection("Provider=Microsoft.Ace.OLEDB.12.0;Data Source =" + ruta + ";Extended Properties=Excel 12.0");
-                OleDbCommand cmd = new OleDbCommand("select * from [Hoja1$]", OleDcon);
+                OleDbCommand cmd = new OleDbCommand("select IdUsuario,"+idCarrera+",2,Nombre,Apellidos,Contraseña  from [Hoja1$]", OleDcon);
                 OleDbDataAdapter objAdapter1 = new OleDbDataAdapter(cmd);
                     //configurar con el apuntador de base de datos indicado
                 OleDcon.Open();
                 DbDataReader dr = cmd.ExecuteReader();
-                string con_str = @"Data Source=localhost;Initial Catalog=dbProyectoCoordinacion;Integrated security=True";
+                string con_str = @"Data Source=LUIS\DBSQL;Initial Catalog=dbProyectoCoordinacion;Integrated security=True";
                 
 
                 SqlBulkCopy bulkInsert = new SqlBulkCopy(con_str);
@@ -78,10 +79,12 @@ public partial class Agregar : System.Web.UI.Page
 
                 }
                 catch (Exception ex)
+                {
+                    Response.Write(@"<script language = 'javascript'>alert('Error. Es posible que algunas columnas no coincidan.') </script>");
+                    Array.ForEach(Directory.GetFiles((Server.MapPath("~/Temp/"))), File.Delete);
 
-        {
-            Response.Write(@"<script language = 'javascript'>alert('ya existe ese archivo en la base de datos') </script>");
-        }
+                }
+
 
             }
             else

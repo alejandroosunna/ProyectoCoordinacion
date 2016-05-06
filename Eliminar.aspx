@@ -43,5 +43,6 @@
                             </div>
                         </div>
                     </div>
+                    <asp:Button ID="EliminaT" runat="server" OnClick="EliminaT_Click" class="waves-effect waves-light btn orange white-text" Text="Eliminar todos" />
           </asp:Content>
     
