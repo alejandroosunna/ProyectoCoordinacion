@@ -57,7 +57,7 @@
         <div class="slider">
             <ul class="slides">
                 <li>
-                    <img src="img/alumnos.jpg"> <!-- random image -->
+                    <img id="img1" src="img/alumnos.jpg" runat="server" /> <!-- random image -->
                     <div class="caption center-align">
                         <h3>Alumnos con todo!</h3>
                         <h5 class="light black-text text-lighten-3">;)</h5>
@@ -65,14 +65,14 @@
                 </li>
 
                 <li>
-                    <img src="img/ith.jpeg"> <!-- random image -->
+                    <img src="img/ith.jpeg" id="img2" runat="server" /> <!-- random image -->
                     <div class="caption right-align black-text">
                         <h3>Materias agregadas</h3>
                         <h5 class="light black-text text-lighten-3">:D</h5>
                     </div>
                 </li>
                 <li>
-                    <img src="img/1_4278826.jpg"> <!-- random image -->
+                    <img src="img/1_4278826.jpg" id="img3" runat="server" /> <!-- random image -->
                     <div class="caption center-align black-text">
                         <h3>Nuevo ciclo!</h3>
                         <h5 class="light black-text text-lighten-3">:)</h5>
