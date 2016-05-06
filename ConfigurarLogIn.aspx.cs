@@ -26,7 +26,7 @@ public partial class _Default : System.Web.UI.Page
         if (fupArchivo.HasFile)
         {
             string fileextension = System.IO.Path.GetExtension(fupArchivo.FileName);
-            string[] extensionesp = { ".gif", ".png", ".jpg", ".jpeg" };
+            string[] extensionesp = { ".gif", ".png", ".JPG", ".JPEG" };
             for (int i = 0; i < extensionesp.Length; i++)
             {
                 if (fileextension == extensionesp[i])
@@ -105,7 +105,7 @@ public partial class _Default : System.Web.UI.Page
                 string fileToCopy = Server.MapPath("~/Img/ImgLogIn/Resources/") + sel;
                 string fileDest = Server.MapPath("~/Img/ImgLogIn/Selected/" + "opt1" + Path.GetExtension(Server.MapPath("~/Img/ImgLogIn/Resources/") + sel));
                 File.Copy(fileToCopy, fileDest, true);
-                Response.Write("<script language='JavaScript'>alert('Imagen Seleccionada en Opcion 1.');</script>");
+                Response.Write("<script language='JavaScript'>alert('Imagen Seleccionada en Opcion 1.')</script>");
             }
         }
         catch (Exception ex)

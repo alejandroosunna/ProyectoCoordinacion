@@ -40,8 +40,10 @@ public partial class Coordinador : System.Web.UI.Page
 
         LlenarDrop();
 
-        int IdRol = 1;
+        int IdRol = 3;
         listUsuario = (new csUsuarioHandler()).GetListUsuario(IdRol);
+        IdRol = 1;
+        listUsuario.AddRange((new csUsuarioHandler()).GetListUsuario(IdRol));
 
         dt = new DataTable();
         dt.Columns.Add("IdUsuario");
@@ -63,6 +65,7 @@ public partial class Coordinador : System.Web.UI.Page
         GridView_Coordinadores.DataSource = dt;
         GridView_Coordinadores.DataBind();
     }
+
 
     private void LlenarDrop()
     {
