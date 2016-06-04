@@ -34,7 +34,17 @@
     
     
     
-    
+    <style>
+        #flotante
+        {
+	        position: absolute;
+	        display:none;
+	        font-family:Arial;
+	        font-size:0.8em;
+	        border:1px solid #808080;
+	        background-color:#f1f1f1;
+        }
+    </style>
     
     <script type="text/javascript">
                 $(document).ready(function () {
@@ -52,59 +62,83 @@
                         selectable: true,
                         slotMinutes: 15,
                         events: '/getCitas.ashx',
-                        eventClick: function (calEvent, jsEvent, view) {
-                            Update(calEvent.id, calEvent.date);
+                        eventClick: function (calEvent, jsEvent, view, date) {
+                            
+                            Update(calEvent.id, calEvent.title, calEvent.start);
+                        },
+                        eventMouseover(event, jsEvent, view) {
+                            $("#flotante").html($(this).attr(event.title));
+
+                            // Posicionamos el div flotante y mo lostramos
+
+                            $("#flotante").css({ left: event.pageX + 5, top: event.pageY + 5, display: "block" });
                         }
 
 
                     });
                 });
-                function Update(id, date) {
-
+                function Update(id, numControl, date) {
+                    var formattedDate = new Date(date);
+                    var d = formattedDate.getDate();
+                    var m = formattedDate.getMonth();
+                    m += 1;  // JavaScript months are 0-11
+                    var y = formattedDate.getFullYear();
+                    var h = formattedDate.getHours();
+                    var m = formattedDate.getMinutes();
+                    var btn = "button";
                     
                     var xaccion = "";
                     swal({
-                        title: "Quieres seleccionar esta cita?",
-                        text: "Seleccionaras la cita" + id + "!",
-                        type: "warning",
-                        showCancelButton: true,
-                        confirmButtonColor: "#DD6B55",
-                        confirmButtonText: "Seleccionar!",
-                        closeOnConfirm: false,
-                        closeOnCancel: false
-                    },
-                    function (isConfirm) {
-                        if (isConfirm) {
+                        title: "Cita del alumno " + numControl + " fecha: " + d + "-" + m + "-" + y +" hora: " + (h+7)+":"+m,
+                        text: '<button type="' + btn + '" id="btnA" class="waves-effect light-green accent-4">Asistio</button> ' +
+                              '<button type="' + btn + '" id="btnB" class="waves-effect orange darken-3">Falto</button> ' +
+                              '<button type="' + btn + '" id="btnC" class="waves-effect waves-light">Exit</button>',
+                        html: true,
+                        showConfirmButton: false
+                       
+                    });
+               
+                        $(document).on('click', "#btnA", function() {
                             xaccion = "Asistio";
-                        } else {
-                            xaccion = "Falto";
-                        }
-                        var dataRow = {
-                            'IdCita': id,
-                            'Accion': xaccion
-                        }
-                      
-                        $.ajax({
-                            type: 'POST',
-                            url: "GuardarCita.ashx",
-                            data: dataRow,
-                            dataType: "json",
-                            success: function (response) {
-                                if (response == "true") {
-                                    swal("Correcto!", "Se actualizo la cita", "success");
-                                    location.reload();
-                                } else {
-                                    
-                                    swal("OPSSS!", "no se pudo actualizar la cita "+ id + xaccion, "error");
-                                }
-
-                            },
-                            error: function (response) {
-                                swal("OPSSS!", "Sucedio un error, intentalo de nuevo", "error");
-                            }
+                            Actualiza();
                         });
 
-                    });
+                        $(document).on('click', "#btnB", function () {
+                            xaccion = "Falto";
+                            Actualiza();
+                        });
+
+                        $(document).on('click', "#btnC", function () {
+                            xaccion = "Cancelar";
+                        });
+                       
+                        
+                        function Actualiza() {
+                            var dataRow = {
+                                'IdCita': id,
+                                'Accion': xaccion
+                            }
+                            $.ajax({
+                                type: 'POST',
+                                url: "ActualizarCita.ashx",
+                                data: dataRow,
+                                dataType: "json",
+                                success: function (response) {
+                                    if (response == "1") {
+                                        swal("Correcto!", "Se actualizo la cita", "success", location.reload());
+                                        
+                                    } else {
+                                        swal("OPSSS!", "no se pudo actualizar la cita "+ dataRow.Accion + response , "error");
+                                    }
+
+                                },
+                                error: function (response) {
+                                    swal("OPSSS!", "Sucedio un error, intentalo de nuevo", "error");
+                                }
+                            });
+                        }
+                       
+
 
                 }
              </script>

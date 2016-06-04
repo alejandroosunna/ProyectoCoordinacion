@@ -9,7 +9,7 @@ public class ActualizarCita : IHttpHandler, IRequiresSessionState {
     public void ProcessRequest (HttpContext context) {
         context.Response.ContentType = "text/plain";
         context.Response.Expires = -1;
-        string accion = context.Request.Form["Accion"];
+        string accion = Convert.ToString(context.Request.Form["Accion"]);
         csCitaHandler CitaHandler = new csCitaHandler();
         int idCita = Convert.ToInt32(context.Request.Form["IdCita"]);
         csCita Cita = CitaHandler.GetCitaByIdCita(idCita);
@@ -26,11 +26,19 @@ public class ActualizarCita : IHttpHandler, IRequiresSessionState {
             Cita.Estado = 2;
 
         }
-       
+        int check;
+        bool estado = CitaHandler.UpdateCita(Cita);
+        if (!estado)
+        {
+            check = 1;
+        }else
+        {
+            check = 2;
+        }
         System.Web.Script.Serialization.JavaScriptSerializer oSerializer =
          new System.Web.Script.Serialization.JavaScriptSerializer();
-         string sJSON = oSerializer.Serialize(!CitaHandler.UpdateCita(Cita));
-         context.Response.Write(sJSON);
+        string sJSON = oSerializer.Serialize(check);
+        context.Response.Write(sJSON);
 
     }
 
