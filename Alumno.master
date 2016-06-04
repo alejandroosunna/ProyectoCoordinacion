@@ -1,0 +1,124 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="Alumno.master.cs" Inherits="Alumno" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <meta charset="UTF-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<meta name="description" content=""/>
+	<meta name="author" content=""/>
+    
+	<title>SIAC</title>
+   
+
+      <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+      <!--Import materialize.css-->
+
+<%--      <link type="text/css" rel="stylesheet" href="materialize/css/materialize.min.css"  media="screen,projection"/>--%>
+    <link rel="stylesheet" href="material.min.css"/>
+    <link href="materialize/css/materialize.css" rel="stylesheet" media="screen"/>
+      <!--Let browser know website is optimized for mobile-->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<!-- Materialize CSS -->
+
+    <style type="text/css">
+        .scrolling-table-container {
+            height: 378px;
+            overflow-y: scroll;
+            overflow-x: hidden;
+        }
+    </style>
+</head>
+<body>
+    <!-- Preloader -->
+    
+	<div id="preloader">
+		<div id="status"></div>
+	</div>
+	<header class="header">
+        <div class="navbar-fixed orange darken-1">
+		<nav>
+				<div class="nav-wrapper orange darken-1">
+                    <a href="#!" class="brand-logo">SIAC</a>
+                    <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+                    <ul class="right hide-on-med-and-down">
+                        <li><a href="#Resumen">Inicio</a></li>
+					    <li><a href="#Citas">Citas</a></li>
+					    <li><a href="#Contacto">Contacto</a></li>
+                        <li><a href="Chat.aspx">Chat</a></li>
+                        <li><asp:HyperLink ID="lbl_CerrarSesion_uno" runat="server" NavigateUrl="~/IndexAlumno.aspx?Logout=true">Cerrar sesion</asp:HyperLink></li>
+                    </ul>
+             	
+				    <ul  class="side-nav" id="mobile-demo">
+					    <li><a href="#home">Inicio</a></li>
+					    <li><a href="#Citas">Citas</a></li>
+					    <li><a href="#Contacto">Contacto</a></li>
+                        <li><a href="Chat.aspx">Chat</a></li>
+                        <li><asp:HyperLink ID="lbl_CerrarSesion_dos" runat="server" NavigateUrl="~/IndexAlumno.aspx?Logout=true">Cerrar sesion</asp:HyperLink></li>
+				    </ul>
+				</div>
+		</nav>
+ </div>
+	</header>
+
+	<!-- Navigation end -->
+    <form id="form1" runat="server">
+        <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+     <script type="text/javascript" src="materialize/js/materialize.min.js"></script>
+    <div>
+        <asp:ContentPlaceHolder id="CPHBody" runat="server">
+        
+        </asp:ContentPlaceHolder>
+    </div>
+    </form>
+    <!-- Footer start -->
+
+	<footer id="footer">
+		<div class="container center">
+			<div class="row">
+
+				<div class="container">
+
+					<ul class="social-links">
+						<li><a href="index.html#" class="wow fadeInUp"><i class="fa fa-facebook"></i></a></li>
+						<li><a href="index.html#" class="wow fadeInUp" data-wow-delay=".1s"><i class="fa fa-twitter"></i></a></li>
+						<li><a href="index.html#" class="wow fadeInUp" data-wow-delay=".2s"><i class="fa fa-google-plus"></i></a></li>
+						<li><a href="index.html#" class="wow fadeInUp" data-wow-delay=".4s"><i class="fa fa-pinterest"></i></a></li>
+						<li><a href="index.html#" class="wow fadeInUp" data-wow-delay=".5s"><i class="fa fa-envelope"></i></a></li>
+					</ul>
+
+					<p class="heart">
+                        <span class="fa fa-thumbs-o-up fa-3x animated tada"style="color:#e81d1d;"></span> 
+                    </p>                <%--Modificado--%>
+                    <p class="copyright"">
+                        © 2015  <a href="http://www.ith.mx"style="color:#e81d1d;">ITH</a>
+					</p>            <%--Modificado--%>
+
+				</div>
+
+			</div><!-- .row -->
+		</div><!-- .container -->
+	</footer>
+
+	<!-- Footer end -->
+    <div class="scroll-up">
+		<a href="#home"><i class="fa fa-angle-up"></i></a>
+	</div>
+</body>
+    
+    <script src="../../material.min.js"></script> <!-- Importante-->
+    <script type="text/javascript" src="materialize/js/materialize.min.js"></script>
+    <script type="text/javascript" lang="javascript">// <![CDATA[
+        $(document).ready(function(){
+           
+            $('.button-collapse').sideNav({
+                menuWidth: 300, // Default is 240
+                edge: 'left', // Choose the horizontal origin
+                closeOnClick: true // Closes side-nav on <a> clicks, useful for Angular/Meteor
+            });
+            
+        });
+ 
+   </script>
+</html>
