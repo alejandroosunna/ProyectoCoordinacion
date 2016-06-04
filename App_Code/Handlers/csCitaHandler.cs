@@ -89,7 +89,46 @@ public class csCitaHandler : ObjetoBase
 
         return Citas;
     }
+    public List<csCita> GetCitaApartadas(int IdCoordinador)
+    {
+        List<csCita> listCita = new List<csCita>();
 
+        String ConnectionString = ConfigurationManager.ConnectionStrings["dbProyectoCoordinacion"].ConnectionString;
+        SqlConnection Connection = new SqlConnection(ConnectionString);
+        try
+        {
+            Connection.Open();
+            //String Query = "select * from tbCitas where IdAdministrador = @IdAdministrador and Disponible = 1;";
+            SqlParameter Data = new SqlParameter("@IdCoordinador", IdCoordinador);
+            Data.DbType = DbType.Int32;
+
+            String Query = "select * from tbCitas where IdCoordinador = @IdCoordinador and Estado = 1 order by FechaDisponible desc, Estado asc;";
+
+            SqlCommand Command = new SqlCommand(Query, Connection);
+            Command.Parameters.Add(Data);
+            SqlDataReader DataReader = Command.ExecuteReader();
+
+            while (DataReader.Read())
+            {
+                csCita Cita = new csCita();
+                Cita.LoadEventFromDataReader(DataReader);
+                listCita.Add(Cita);
+            }
+
+            DataReader.Close();
+        }
+        catch (Exception ex)
+        {
+            LogError(ex.Message + ex.StackTrace);
+        }
+        finally
+        {
+            Connection.Close();
+            Connection = null;
+        }
+
+        return listCita;
+    }
     public csCita GetCita(int IdUsuario, int estadoCita)
     {
         csCita Citas = new csCita();

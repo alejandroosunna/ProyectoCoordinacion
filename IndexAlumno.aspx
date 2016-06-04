@@ -43,6 +43,9 @@
     </section>
 
 	<!-- Resumen end -->
+    <div id="fullcalendar" class="container"></div>
+
+
 	<!-- Citas start -->
 
 	<section id="Citas" class="container">
@@ -103,4 +106,74 @@
                             </SelectParameters>
                         </asp:SqlDataSource>
 	</div>
+    
+    <script>
+    $(document).ready(function () {   
+        calendario();     
+    });
+    function calendario() {
+        $('#fullcalendar').fullCalendar({
+            header: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'agendaDay,week,month'
+            },
+            defaultView: 'agendaDay',
+            editable: true,
+            allDaySlot: false,
+            selectable: true,
+            slotMinutes: 15,
+            events: '/getCitas.ashx',
+            eventClick: function (calEvent, jsEvent, view) {
+              
+                Save(calEvent.id, calEvent.date);
+            }
+
+
+        });
+    }
+
+    function Save(id, date) {
+       
+        var dataRow = {
+            'IdCita': id
+        }
+
+        swal({
+            title: "Quieres seleccionar esta cita?",
+            text: "Seleccionaras la cita" + id + "!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Seleccionar!",
+            closeOnConfirm: false
+        },
+        function () {
+            $.ajax({
+                type: 'POST',
+                url: "GuardarCita.ashx",
+                data: dataRow,
+                dataType: "json",
+                success: function (response) {              
+                    if (response == "1") {
+                       
+                        swal("Correcto!", "Seleccionaste la cita :" + id + " con fecha " + date, "success");
+                        location.reload();
+                    }else{
+                        swal("OPSSS!", "no se pudo seleccionar la cita", "error");
+                    }
+                        
+                },
+                error: function (response) {
+                    swal("OPSSS!", "Sucedio un error, intentalo de nuevo", "error");
+                }
+            });
+
+        });
+
+    }
+   
+
+</script>
+
 </asp:Content>

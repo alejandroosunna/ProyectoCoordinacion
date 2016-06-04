@@ -13,7 +13,7 @@ public partial class Login : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-        cargarImg();
+        //cargarImg();
         if (Session["IdUsuario"] != null)
         {
             csUsuario Usuario = (new csUsuarioHandler()).GetUsuario(Convert.ToInt32(Session["IdUsuario"]));

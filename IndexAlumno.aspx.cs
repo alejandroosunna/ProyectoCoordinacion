@@ -5,6 +5,10 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using Newtonsoft;
+using System.Web.Script.Services;
+using Newtonsoft.Json;
+using System.Web.Services;
 
 
 public partial class IndexAlumno : System.Web.UI.Page
@@ -12,7 +16,7 @@ public partial class IndexAlumno : System.Web.UI.Page
     public DataTable dt;
     public int estadoCita;
     public bool result;
-
+    public string sesion;
 
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -88,7 +92,7 @@ public partial class IndexAlumno : System.Web.UI.Page
                     btnEliminarCita.Visible = false;
                     GridViewCitas.Visible = true;
                     //DropDListMotivos.Visible = true;
-
+                    sesion = Session["IdUsuario"].ToString();
                     List<csCita> listCita = CitaHandler.GetListCitas(Usuario.IdCarrera, DateTime.Now);
 
                     dt = new DataTable();
@@ -180,4 +184,22 @@ public partial class IndexAlumno : System.Web.UI.Page
         else if (checkCita == 2)
             Response.Redirect("IndexAlumno.aspx?Cita=pen");
     }
+    [WebMethod]
+    public static string guardarCita(int IdCita)
+    {
+        
+        csCita Cita = new csCita();
+        Cita.IdCita = IdCita;
+        Cita.IdUsuario = Convert.ToInt32(HttpContext.Current.Session["IdUsuario"]);
+        Cita.FechaAgendada = DateTime.Now;
+        Cita.Estado = 1;
+
+        int checkCita = (new csCitaHandler()).CheckCitaAndAddCita(Cita);
+
+
+        return checkCita.ToString();
+
+    }
+   
+   
 }
