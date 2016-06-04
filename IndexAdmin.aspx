@@ -3,13 +3,11 @@
 
 <asp:Content ID="CNTResumen" ContentPlaceHolderID="CPHPrincipal" runat="server"> 
             
-                        <div class="panel-heading section scrollspy">
-                          Listado de citas pendientes
-                        </div>
-                        <br />
-                    
-                        <input id="date-range-predefined" name="Fecha" type="date" class="datepicker h5a-input form-control"/>
-                        Numero Control Alumno: <asp:TextBox ID="txtNumControl" runat="server"></asp:TextBox>
+                     
+                       
+    <div id="fullcalendar"></div>
+    <br />
+     Numero Control Alumno: <asp:TextBox ID="txtNumControl" runat="server"></asp:TextBox>
                         <br />
                         <asp:Button ID="btnBuscar" class="waves-effect waves-light btn orange" runat="server" Text="Buscar" OnClick="btnBuscar_Click"/>
                         <div class="panel-body scrolling-table-container">                           
@@ -33,7 +31,11 @@
                                 </asp:SqlDataSource>--%>
                        
                         </div>
-                        <div id="fullcalendar"></div>
+    
+    
+    
+    
+    
     <script type="text/javascript">
                 $(document).ready(function () {
                    
@@ -51,12 +53,60 @@
                         slotMinutes: 15,
                         events: '/getCitas.ashx',
                         eventClick: function (calEvent, jsEvent, view) {
-
+                            Update(calEvent.id, calEvent.date);
                         }
 
 
                     });
                 });
+                function Update(id, date) {
+
+                    
+                    var xaccion = "";
+                    swal({
+                        title: "Quieres seleccionar esta cita?",
+                        text: "Seleccionaras la cita" + id + "!",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#DD6B55",
+                        confirmButtonText: "Seleccionar!",
+                        closeOnConfirm: false,
+                        closeOnCancel: false
+                    },
+                    function (isConfirm) {
+                        if (isConfirm) {
+                            xaccion = "Asistio";
+                        } else {
+                            xaccion = "Falto";
+                        }
+                        var dataRow = {
+                            'IdCita': id,
+                            'Accion': xaccion
+                        }
+                      
+                        $.ajax({
+                            type: 'POST',
+                            url: "GuardarCita.ashx",
+                            data: dataRow,
+                            dataType: "json",
+                            success: function (response) {
+                                if (response == "true") {
+                                    swal("Correcto!", "Se actualizo la cita", "success");
+                                    location.reload();
+                                } else {
+                                    
+                                    swal("OPSSS!", "no se pudo actualizar la cita "+ id + xaccion, "error");
+                                }
+
+                            },
+                            error: function (response) {
+                                swal("OPSSS!", "Sucedio un error, intentalo de nuevo", "error");
+                            }
+                        });
+
+                    });
+
+                }
              </script>
     <div class="row">
         <div class="col s12 m4 l4 center center-align">

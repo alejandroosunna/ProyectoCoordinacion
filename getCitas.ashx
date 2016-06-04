@@ -16,19 +16,11 @@ public class getCitas : IHttpHandler, IRequiresSessionState {
         IList<csCita> listCita;
         if(Usuario.IdRol == 1 || Usuario.IdRol == 3)
         {
-          listCita  = CitaHandler.GetCitaApartadas(Usuario.IdCarrera);
-        }else 
+            listCita  = CitaHandler.GetCitaApartadas(Usuario.IdCarrera);
+        }else
         {
-          listCita = CitaHandler.GetListCitas(Usuario.IdCarrera, DateTime.Now);
+            listCita = CitaHandler.GetListCitas(Usuario.IdCarrera, DateTime.Now);
         }
-
-
-        //var lista = obtenerCitas(listCita);
-        //var rows = lista.ToArray();
-        //string jsondata = JsonConvert.SerializeObject(rows);
-
-
-
 
         List<Cita> lista = new List<Cita>();
 
@@ -37,10 +29,18 @@ public class getCitas : IHttpHandler, IRequiresSessionState {
             Cita nueva = new Cita()
             {
                 id = item.IdCita,
-                title = "Cita" + item.IdCita,
                 start = item.FechaDisponible.ToString("s"),
                 end = item.FechaDisponible.ToString("s")
             };
+            if(Usuario.IdRol == 2)
+            {
+                nueva.title = "Cita #" + item.IdCita;
+                nueva.color = "#FF8000";
+            }else
+            {
+                nueva.title = item.IdUsuario.ToString();
+                nueva.color = "#01DF01";
+            }
             lista.Add(nueva);
             nueva = null;
         }

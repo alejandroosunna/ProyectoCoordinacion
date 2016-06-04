@@ -20,8 +20,8 @@ public class GuardarCita : IHttpHandler, IRequiresSessionState {
 
          System.Web.Script.Serialization.JavaScriptSerializer oSerializer =
          new System.Web.Script.Serialization.JavaScriptSerializer();
-        string sJSON = oSerializer.Serialize(checkCita);
-        context.Response.Write(sJSON);
+         string sJSON = oSerializer.Serialize(checkCita);
+         context.Response.Write(sJSON);
     }
  
     public bool IsReusable {

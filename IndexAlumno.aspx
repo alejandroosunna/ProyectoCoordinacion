@@ -48,7 +48,7 @@
 
 	<!-- Citas start -->
 
-	<section id="Citas" class="container">
+<%--	<section id="Citas" class="container">
         <div class="row center center-align">
 				<div class="col s12 m10 l10 offset-l1 offset-m1 center center-align">
                     <h5 class="pfblock-title mdl-typography--font-bold">Citas</h5>
@@ -64,7 +64,7 @@
                     </div>
                 </div>
             </div>
-    </section>
+    </section>--%>
 
          
          

@@ -38,53 +38,53 @@ public partial class IndexAdmin : System.Web.UI.Page
         //(new ObjetoBase()).LogError(txtNumControl.Text);
         if (txtNumControl.Text == "")
         {
-            if (Request["Fecha"] == null)
-            {
-                fechaInicio = Convert.ToDateTime(DateTime.Today.ToString("dd/MM/yyyy") + " 12:00:00 AM");
-                fechaFinal = Convert.ToDateTime(DateTime.Today.ToString("dd/MM/yyyy") + " 11:59:59 PM");
-                idCarrera = (new csUsuarioHandler()).GetUsuario(Convert.ToInt32(Session["IdUsuario"])).IdCarrera;
-            }
-            else
-            {
-                if (Request["Fecha"].ToString() != "")
-                {
-                    fechaInicio = Convert.ToDateTime(Convert.ToDateTime(Request["Fecha"]).ToString("dd/MM/yyyy") + " 12:00:00 AM");
-                    fechaFinal = Convert.ToDateTime(Convert.ToDateTime(Request["Fecha"]).ToString("dd/MM/yyyy") + " 11:59:59 PM");
-                    idCarrera = (new csUsuarioHandler()).GetUsuario(Convert.ToInt32(Session["IdUsuario"])).IdCarrera;
-                }
-            }
+            //if (Request["Fecha"] == null)
+            //{
+            //    fechaInicio = Convert.ToDateTime(DateTime.Today.ToString("dd/MM/yyyy") + " 12:00:00 AM");
+            //    fechaFinal = Convert.ToDateTime(DateTime.Today.ToString("dd/MM/yyyy") + " 11:59:59 PM");
+            //    idCarrera = (new csUsuarioHandler()).GetUsuario(Convert.ToInt32(Session["IdUsuario"])).IdCarrera;
+            //}
+            //else
+            //{
+            //    if (Request["Fecha"].ToString() != "")
+            //    {
+            //        fechaInicio = Convert.ToDateTime(Convert.ToDateTime(Request["Fecha"]).ToString("dd/MM/yyyy") + " 12:00:00 AM");
+            //        fechaFinal = Convert.ToDateTime(Convert.ToDateTime(Request["Fecha"]).ToString("dd/MM/yyyy") + " 11:59:59 PM");
+            //        idCarrera = (new csUsuarioHandler()).GetUsuario(Convert.ToInt32(Session["IdUsuario"])).IdCarrera;
+            //    }
+            //}
             
-            if (fechaFinal.ToString("dd/MM/yyyy") != "01/01/0001" || txtNumControl.Text != "")
-            {
-                listCita = (new csCitaHandler()).GetListCitas(idCarrera, fechaInicio, fechaFinal);
+            //if (fechaFinal.ToString("dd/MM/yyyy") != "01/01/0001" || txtNumControl.Text != "")
+            //{
+            //    listCita = (new csCitaHandler()).GetListCitas(idCarrera, fechaInicio, fechaFinal);
 
-                dt = new DataTable();
-                dt.Columns.Add("IdCita");
-                dt.Columns.Add("IdUsuario");
-                dt.Columns.Add("FechaDisponible");
-                dt.Columns.Add("Estado");
+            //    dt = new DataTable();
+            //    dt.Columns.Add("IdCita");
+            //    dt.Columns.Add("IdUsuario");
+            //    dt.Columns.Add("FechaDisponible");
+            //    dt.Columns.Add("Estado");
 
-                for (int y = 0; y < listCita.Count; y++)
-                {
-                    DataRow dr = dt.NewRow();
-                    dr["IdCita"] = listCita[y].IdCita.ToString();
-                    dr["IdUsuario"] = listCita[y].IdUsuario.ToString();
-                    dr["FechaDisponible"] = listCita[y].FechaDisponible.ToString();
-                    if (listCita[y].Estado == 0)
-                        dr["Estado"] = "Disponible";
-                    else if (listCita[y].Estado == 1)
-                        dr["Estado"] = "Ocupado";
-                    else if (listCita[y].Estado == 2)
-                        dr["Estado"] = "Expiro";
-                    else if (listCita[y].Estado == 3)
-                        dr["Estado"] = "Eliminado";
+            //    for (int y = 0; y < listCita.Count; y++)
+            //    {
+            //        DataRow dr = dt.NewRow();
+            //        dr["IdCita"] = listCita[y].IdCita.ToString();
+            //        dr["IdUsuario"] = listCita[y].IdUsuario.ToString();
+            //        dr["FechaDisponible"] = listCita[y].FechaDisponible.ToString();
+            //        if (listCita[y].Estado == 0)
+            //            dr["Estado"] = "Disponible";
+            //        else if (listCita[y].Estado == 1)
+            //            dr["Estado"] = "Ocupado";
+            //        else if (listCita[y].Estado == 2)
+            //            dr["Estado"] = "Expiro";
+            //        else if (listCita[y].Estado == 3)
+            //            dr["Estado"] = "Eliminado";
 
-                    dt.Rows.Add(dr);
-                }
+            //        dt.Rows.Add(dr);
+            //    }
 
-                GridView_Citas.DataSource = dt;
-                GridView_Citas.DataBind();
-            }
+            //    GridView_Citas.DataSource = dt;
+            //    GridView_Citas.DataBind();
+            //}
         }
         else
         {
@@ -136,54 +136,7 @@ public partial class IndexAdmin : System.Web.UI.Page
             (new csCitaHandler()).DeleteCita(Convert.ToInt32(e.CommandArgument));
             Response.Redirect("~\\IndexAdmin.aspx");
         }
-        else if (e.CommandName == "Asistio")
-        {
-            csCitaHandler CitaHandler = new csCitaHandler();
-
-            int index = Convert.ToInt32(e.CommandArgument);
-            //(new ObjetoBase()).LogError(index.ToString());
-            GridViewRow selectedRow = GridView_Citas.Rows[index];
-            TableCell citaObject = selectedRow.Cells[0];
-            int idCita = Convert.ToInt32(citaObject.Text);
-
-            csCita Cita = CitaHandler.GetCitaByIdCita(idCita);
-            Cita.Estado = 3;
-
-            if (CitaHandler.UpdateCita(Cita))
-            {
-                Response.Write(@"<script language = 'javascript'>alert('Cita finalizada con exito.') </script>");
-                Response.Redirect("IndexAdmin.aspx");
-            }
-            else
-            {
-                Response.Write(@"<script language = 'javascript'>alert('Error al finalizar cita.') </script>");
-                Response.Redirect("IndexAdmin.aspx");
-            }
-        }
-        else if (e.CommandName == "Falto")
-        {
-            csCitaHandler CitaHandler = new csCitaHandler();
-
-            int index = Convert.ToInt32(e.CommandArgument);
-            //(new ObjetoBase()).LogError(index.ToString());
-            GridViewRow selectedRow = GridView_Citas.Rows[index];
-            TableCell citaObject = selectedRow.Cells[0];
-            int idCita = Convert.ToInt32(citaObject.Text);
-
-            csCita Cita = CitaHandler.GetCitaByIdCita(idCita);
-            Cita.Estado = 2;
-
-            if (CitaHandler.UpdateCita(Cita))
-            {
-                Response.Write(@"<script language = 'javascript'>alert('Cita finalizada con exito.') </script>");
-                Response.Redirect("IndexAdmin.aspx");
-            }
-            else
-            {
-                Response.Write(@"<script language = 'javascript'>alert('Error al finalizar cita.') </script>");
-                Response.Redirect("IndexAdmin.aspx");
-            }
-        }
+       
     }
     protected void btnNuevaCita_Click(object sender, EventArgs e)
     {
