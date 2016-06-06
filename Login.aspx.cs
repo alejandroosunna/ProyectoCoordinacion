@@ -8,12 +8,21 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Configuration;
 using System.IO;
+using System.Web.UI.HtmlControls;
 
 public partial class Login : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-        //cargarImg();
+        try
+        {
+            cargarNoticias();
+            cargarImg();
+        }
+        catch (Exception)
+        {
+            Response.Write("<script language='JavaScript'>alert('Error al cargar.')</script>");
+        }
         if (Session["IdUsuario"] != null)
         {
             csUsuario Usuario = (new csUsuarioHandler()).GetUsuario(Convert.ToInt32(Session["IdUsuario"]));
@@ -64,24 +73,62 @@ public partial class Login : System.Web.UI.Page
     }
     private void cargarImg()
     {
-        string[] files = Directory.GetFiles(Server.MapPath("~/Img/ImgLogIn/Selected/"));
+        string[] files = Directory.GetFiles(Server.MapPath("~/Img/ImgLogIn/Resources/"));
         if (files.Length > 0)
         {
-            if (files.Length == 1)
+            slides.InnerHtml = "";
+            for (int i = 0; i < files.Length; i++)
             {
-                img1.Src = "~/Img/ImgLogIn/Selected/" + Path.GetFileName(files[0]);
-            }
-            if (files.Length == 2)
-            {
-                img1.Src = "~/Img/ImgLogIn/Selected/" + Path.GetFileName(files[0]);
-                img2.Src = "~/Img/ImgLogIn/Selected/" + Path.GetFileName(files[1]);
-            }
-            if (files.Length == 3)
-            {
-                img1.Src = "~/Img/ImgLogIn/Selected/" + Path.GetFileName(files[0]);
-                img2.Src = "~/Img/ImgLogIn/Selected/" + Path.GetFileName(files[1]);
-                img3.Src = "~/Img/ImgLogIn/Selected/" + Path.GetFileName(files[2]);
+                string img ="~/Img/ImgLogIn/Resources/"+  Path.GetFileName(files[i]);
+                HtmlImage image = new HtmlImage();
+                image.Src = img;
+                image.Attributes.Add("class", "responsive-image");
+                HtmlGenericControl li = new HtmlGenericControl("li");
+                li.Controls.Add(image);
+                slides.Controls.Add(li);
             }
         }  
+    }
+    private void cargarNoticias()
+    {
+        string[] files = Directory.GetFiles(Server.MapPath("~/Img/ImgLogIn/Noticias/"));
+        if (files.Length > 0)
+        {
+            for (int i = 0; i < files.Length; i++)
+            {
+                using (StreamReader reader = new StreamReader(files[i]))
+                {
+                    string linea = reader.ReadToEnd();
+                    string[] contenido = linea.Split('|');
+                    HtmlGenericControl divtitle = new HtmlGenericControl("div");
+                    HtmlGenericControl divbody = new HtmlGenericControl("div");
+                    HtmlGenericControl li = new HtmlGenericControl("li");
+                    HtmlGenericControl head = new HtmlGenericControl("h5");
+                    divtitle.Attributes.Add("class", "collapsible-header");
+                    divbody.Attributes.Add("class", "collapsible-body");
+                    head.InnerText = contenido[0];
+                    divbody.InnerText = contenido[1];
+                    divtitle.Controls.Add(head);
+                    li.Controls.Add(divtitle);
+                    li.Controls.Add(divbody);
+                    noticias.Controls.Add(li);
+                }
+            }
+        }
+        else
+        {
+            HtmlGenericControl divtitle = new HtmlGenericControl("div");
+            HtmlGenericControl divbody = new HtmlGenericControl("div");
+            HtmlGenericControl li = new HtmlGenericControl("li");
+            HtmlGenericControl head = new HtmlGenericControl("h5");
+            divtitle.Attributes.Add("class", "collapsible-header");
+            divbody.Attributes.Add("class", "collapsible-body");
+            head.InnerText = "No hay Avisos o Noticias.";
+            divbody.InnerText = "Sin noticias.";
+            divtitle.Controls.Add(head);
+            li.Controls.Add(divtitle);
+            li.Controls.Add(divbody);
+            noticias.Controls.Add(li);
+        }
     }
 }
