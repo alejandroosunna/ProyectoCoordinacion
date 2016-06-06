@@ -55,22 +55,21 @@
             <div class="container">
                 <br />
         <div class="slider">
-            <ul class="slides">
+            <ul class="slides" id="slides" runat="server">
                 <li>
-                    <img id="img1" src="img/alumnos.jpg" runat="server" /> <!-- random image -->
+                    <img id="img1" src="img/alumnos.jpg" /> <!-- random image -->
                     <div class="caption center-align">
-
                     </div>
                 </li>
 
                 <li>
-                    <img src="img/ith.jpeg" id="img2" runat="server" /> <!-- random image -->
+                    <img src="img/ith.jpeg" /> <!-- random image -->
                     <div class="caption right-align black-text">
 
                     </div>
                 </li>
                 <li>
-                    <img src="img/1_4278826.jpg" id="img3" runat="server" /> <!-- random image -->
+                    <img src="img/1_4278826.jpg" /> <!-- random image -->
                     <div class="caption center-align black-text">
 
                     </div>
@@ -78,6 +77,14 @@
             </ul>
         </div>
     </div><br />
+        <div class="row center">
+            <h4>Noticias</h4>
+            <div class="col s12 m12 l8 offset-l2">
+                <ul runat="server" id="noticias" class="collapsible popout" data-collapsible="accordion">
+
+                </ul>
+            </div>
+        </div>
             <div class="row center-block center centered">
                 <div class="valign-wrapper hide-on-large-only">
                     <div class="col s12 m12 l3 valign">
@@ -193,7 +200,11 @@
             $('.parallax').parallax();
         });
     </script>
+    <script>
+        $(document).ready(function () {
+            $('.collapsible').collapsible();
+        });
+    </script>
     <!--  Final de Scripts-->
-
 </body>
 </html>

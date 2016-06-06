@@ -16,6 +16,8 @@ public partial class _Default : System.Web.UI.Page
         {
             dropImgServer.Items.Clear();
             cargarDrop();
+            dropFiles.Items.Clear();
+            cargarDropNoticia();
         }        
     }
 
@@ -26,7 +28,7 @@ public partial class _Default : System.Web.UI.Page
         if (fupArchivo.HasFile)
         {
             string fileextension = System.IO.Path.GetExtension(fupArchivo.FileName);
-            string[] extensionesp = { ".gif", ".png", ".JPG", ".JPEG" };
+            string[] extensionesp = { ".gif", ".png", ".jpg", ".jpeg",".PNG",".JPG",".JPEG" };
             for (int i = 0; i < extensionesp.Length; i++)
             {
                 if (fileextension == extensionesp[i])
@@ -74,6 +76,20 @@ public partial class _Default : System.Web.UI.Page
         this.archivos = archivos;
     }
 
+    private void cargarDropNoticia()
+    {
+        List<ListItem> archivos = new List<ListItem>();
+        string[] path = Directory.GetFiles(Server.MapPath("~/Img/ImgLogIn/Noticias"));
+        if (path.Length>0)
+        {
+            foreach (string filepath in path)
+            {
+                archivos.Add(new ListItem(Path.GetFileName(filepath), Path.GetFileName(filepath)));
+            }
+            dropFiles.DataSource = archivos;
+            dropFiles.DataBind();
+        }        
+    }
     protected void btnSelectImg_Click(object sender, EventArgs e)
     {
         sel = dropImgServer.Value;
@@ -99,69 +115,62 @@ public partial class _Default : System.Web.UI.Page
         }        
     }
 
-    protected void btnOp1_Click(object sender, EventArgs e)
-    {        
-        try
-        {
-            sel = Path.GetFileName(VistaPrevia.Src);
-            if (!sel.Equals("logo_ith-bien.png"))
-            {
-                string[] fileDestDel = Directory.GetFiles(Server.MapPath("~/Img/ImgLogIn/Selected/"));
-                string fileToCopy = Server.MapPath("~/Img/ImgLogIn/Resources/") + sel;
-                string fileDest = Server.MapPath("~/Img/ImgLogIn/Selected/" + "opt1" + Path.GetExtension(Server.MapPath("~/Img/ImgLogIn/Resources/") + sel));
-                if (fileDestDel.Length > 0)
-                    File.Delete(fileDestDel[0]);
-                File.Copy(fileToCopy, fileDest, true);
-                Response.Write("<script language='JavaScript'>alert('Imagen Seleccionada en Opcion 1.')</script>");
-            }
-        }
-        catch (Exception ex)
-        {
-            Response.Write("<script language='JavaScript'>alert('No se pudo Seleccionar Imagen.')</script>");
-        }      
-    }
-
-    protected void btbOp2_Click(object sender, EventArgs e)
+    protected void btnAgregar_Click(object sender, EventArgs e)
     {
         try
         {
-            sel = Path.GetFileName(VistaPrevia.Src);
-            if (!sel.Equals("logo_ith-bien.png"))
-            {
-                string[] fileDestDel = Directory.GetFiles(Server.MapPath("~/Img/ImgLogIn/Selected/"));
-                string fileToCopy = Server.MapPath("~/Img/ImgLogIn/Resources/") + sel;
-                string fileDest = Server.MapPath("~/Img/ImgLogIn/Selected/" + "opt2" + Path.GetExtension(Server.MapPath("~/Img/ImgLogIn/Resources/") + sel));
-                if (fileDestDel.Length>1)
-                    File.Delete(fileDestDel[1]);
-                File.Copy(fileToCopy, fileDest, true);
-                Response.Write(@"<script language = 'javascript'>alert('Imagen seleccionada.') </script>");                
-            }
+            string datos = txttitulo.Text + "|" + txtCuerpo.Text;
+            DateTime time = DateTime.Now;
+            FileStream archivo;
+            byte[] bytes = System.Text.Encoding.ASCII.GetBytes(datos);
+            archivo = File.Create(Server.MapPath("~/Img/ImgLogIn/Noticias/") + String.Format("{0:dd-MM-yyyy HH-mm}", time) + ".txt");
+            archivo.Write(bytes, 0, bytes.Length);
+            archivo.Flush();
+            archivo.Close();
+            archivo.Dispose();
+            Response.Write("<script language='JavaScript'>alert('Noticia Agregada Correctamente.')</script>");
+            Response.Redirect("~/ConfigurarLogIn.aspx");
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            Response.Write("<script language='JavaScript'>alert('No se pudo Seleccionar Imagen.')</script>");
+            Response.Write("<script language='JavaScript'>alert('Error al Agregar Noticia.')</script>");
         }
     }
 
-    protected void btnOp3_Click(object sender, EventArgs e)
+    protected void btnVistaNoticia_Click(object sender, EventArgs e)
     {
         try
         {
-            sel = Path.GetFileName(VistaPrevia.Src);
-            if (!sel.Equals("logo_ith-bien.png"))
+            using (StreamReader file = new StreamReader(Server.MapPath("~/Img/ImgLogIn/Noticias/") + dropFiles.SelectedValue))
             {
-                string[] fileDestDel = Directory.GetFiles(Server.MapPath("~/Img/ImgLogIn/Selected/"));
-                string fileToCopy = Server.MapPath("~/Img/ImgLogIn/Resources/") + sel;
-                string fileDest = Server.MapPath("~/Img/ImgLogIn/Selected/" + "opt3" + Path.GetExtension(Server.MapPath("~/Img/ImgLogIn/Resources/") + sel));
-                if (fileDestDel.Length > 2)
-                    File.Delete(fileDestDel[2]);
-                File.Copy(fileToCopy, fileDest, true);
-                Response.Write("<script language='JavaScript'>alert('Imagen Seleccionada en Opcion 3.')</script>");
+                string contenido = "";
+                contenido = file.ReadToEnd();
+                string[] dividir = contenido.Split('|');
+                if (dividir.Length > 0)
+                {
+                    tituloSpan.InnerText = dividir[0];
+                    Cuerpo.InnerText = dividir[1];
+                }
             }
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            Response.Write("<script language='JavaScript'>alert('No se pudo Seleccionar Imagen.');</script>");
+            Response.Write("<script language='JavaScript'>alert('Error al Cargar Noticia.')</script>");
+        }
+    }
+
+    protected void btnEliminarNoticia_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            string delete = Server.MapPath("~/Img/ImgLogIn/Noticias/") + dropFiles.SelectedValue;
+            File.Delete(delete);
+            Response.Write("<script language='JavaScript'>alert('Noticia Eliminada.')</script>");
+            Response.Redirect("~/ConfigurarLogIn.aspx");
+        }
+        catch (Exception)
+        {
+            Response.Write("<script language='JavaScript'>alert('Error al Eliminar Noticia.')</script>");
         }
     }
 }
