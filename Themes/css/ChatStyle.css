@@ -9,6 +9,7 @@
     padding: 20px;
     background-color: #fb8c00 !important;
     border-bottom: #5f9482 solid 2px;
+    border-bottom-style:inset;
     color: #1e4638;
     font-size: 24px;
 }

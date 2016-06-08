@@ -27,13 +27,13 @@ namespace SIAC
 
             }
 
-            if (ConnectedUsers.Count(x=>x.UserName == userName) ==0)
+            if (ConnectedUsers.Count(x=>x.UserName == userName) == 0)
             {
                 ConnectedUsers.Add(new UserDetail { ConnectionId = id, UserName = userName, idCarrera= idcarrera });
 
                 
                 // send to caller
-                Clients.Caller.onConnected(id, userName, ConnectedUsers, CurrentMessage);
+                Clients.Caller.onConnected(id, userName, ConnectedUsers, CurrentMessage, idcarrera);
 
                 // send to all except caller client
                 Clients.AllExcept(id).onNewUserConnected(id, userName, ConnectedUsers.Find(x => x.UserName == userName).idCarrera);
@@ -108,7 +108,7 @@ namespace SIAC
         {
             CurrentMessage.Add(new MessageDetail { UserName = userName, Message = message, idCarrera= idcarrera });
 
-            if (CurrentMessage.Count > 100)
+            if (CurrentMessage.Count > 1000)
                 CurrentMessage.RemoveAt(0);
         }
 

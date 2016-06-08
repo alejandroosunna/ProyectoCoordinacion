@@ -102,7 +102,7 @@ public class csCitaHandler : ObjetoBase
             SqlParameter Data = new SqlParameter("@IdCoordinador", IdCoordinador);
             Data.DbType = DbType.Int32;
 
-            String Query = "select * from tbCitas where IdCoordinador = @IdCoordinador and Estado = 1 order by FechaDisponible desc, Estado asc;";
+            String Query = "select * from tbCitas where IdCoordinador = @IdCoordinador and Estado = 1;";
 
             SqlCommand Command = new SqlCommand(Query, Connection);
             Command.Parameters.Add(Data);

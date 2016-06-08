@@ -12,11 +12,11 @@
    <%-- <link type="text/css" rel="stylesheet" href="materialize/font" />--%>
     <link rel="stylesheet" href="themes/Css/JQueryUI/themes/base/jquery.ui.all.css" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
-
+    <link href="Styles/sweetalert.css" rel="stylesheet" />
     <!--Script references. -->
     <!--Reference the jQuery library. -->
     <script src="Scripts/jquery-2.2.0.min.js"></script>
-
+    <script src="Scripts/sweetalert.min.js"></script>
     <script src="Scripts/jquery.ui.core.js"></script>
     <script src="Scripts/jquery.ui.widget.js"></script>
     <script src="Scripts/jquery.ui.mouse.js"></script>
@@ -89,7 +89,7 @@
                     
                 },
                 error: function () {
-                    alert("Ocurrio algún error ");
+                    swal("Opps","Ocurrio algún error","error");
                 }
             });
         }
@@ -108,7 +108,7 @@
 
                 },
                 error: function () {
-                    alert("Ocurrio algún error ");
+                    swal("Ops","Ocurrio algún error", "error");
                 }
             });
         }
@@ -140,6 +140,8 @@
                     var userName = $('#hdUserName').val();
                     chatHub.server.sendMessageToAll(userName, msg, carrera);
                     $("#txtMessage").val('');
+                }else{
+                    swal("NO!", "Solamente el coordinador puede escribir mensajes en el chat global, seleccione su coordinador para hablar", "warning");
                 }
             });
 
@@ -161,7 +163,7 @@
         function registerClientMethods(chatHub) {
 
             // Calls when user successfully logged in
-            chatHub.client.onConnected = function (id, userName, allUsers, messages) {
+            chatHub.client.onConnected = function (id, userName, allUsers, messages, idCarrera) {
 
                 setScreen(true);
 
@@ -179,7 +181,8 @@
 
                 // Add Existing Messages
                 for (i = 0; i < messages.length; i++) {
-                    AddMessage(messages[i].UserName, messages[i].Message);
+                    AddMessage(messages[i].UserName, messages[i].Message, 
+                        messages[i].idCarrera);
                 }
             }
 
@@ -245,11 +248,7 @@
                 function blink() {
                     $('#' + ctrId).find('.header').fadeTo(100, 0.1).fadeTo(200, 1.0);
                 }
-                
-          
-              
-                
-               
+ 
                 // set scrollbar
                 var height = $('#' + ctrId).find('#divMessage')[0].scrollHeight;
                 $('#' + ctrId).find('#divMessage').scrollTop(height);
@@ -262,7 +261,8 @@
             var userId = $('#hdId').val();
             
             var code = "";
-            if (rol==3 || idCarrera == carrera) {
+           
+            if ( rol==3 || idCarrera == carrera) {
                 if (userId == id) {
 
                     code = $('<div">' + name + "</div>");
@@ -299,7 +299,7 @@
 
         function AddMessage(userName, message, idcarrera) {
 
-            if (rol == 3   || carrera == idcarrera ) {
+            if (rol == 3 || carrera == idcarrera) {
                     $('#divChatWindow').append('<div class="media-body"> <div class="media"><div class="media-body">' + message + '<br/> <small class="text-muted">' + userName + '</small></div></div></div><br/>');
 
                     var height = $('#divChatWindow')[0].scrollHeight;
@@ -421,6 +421,7 @@
     <form id="form1" runat="server">
      <div id="header">
         Chat
+         
          <div class="right">
              <a href="Login.aspx" class="black-text"><i class="material-icons black-text">exit_to_app</i> Salir</a>
          </div>
@@ -439,11 +440,12 @@
         </div>
         <div id="divChat" class="row " style="padding-top:40px;">
             <h3><SPAN ID="nameCarrera">Sala de chat</SPAN> </h3>
+            <h6><span>Al seleccionar mas de dos chats, se sobreponen, por lo que debe de moverlos hacia cualquier parte de la página, <br /> esta se ajustastara. </span></h6>
             <br />
             <br />
             <div class="col s12 m12 l7 chatRoom striped">
             <div class="panel panel-info">
-                <div class="panel-heading orange darken-2">Chat de Todos  Bienvenido [<span id='spanUser'></span>]</div>
+                <div class="panel-heading orange darken-2">Chat de Todos Bienvenido [<span id='spanUser'></span>]</div>
                 <div class="panel-body">
                     <ul id="divChatWindow" class="media-list left-align" style="height: 350px;
 	                overflow-y: scroll;" >
@@ -453,7 +455,7 @@
                 <div class="panel-footer">
                     <br />
                     <div class="input-group">
-                        <input id="txtMessage" class="form-control" type="text" placeholder="Ingrese mensaje" />
+                        <input id="txtMessage" class="form-control" type="text" placeholder="Ingrese mensaje (Solo para Coordinador)" />
                         <br /><span class="input-group-btn">                           
                             <button id="btnSendMsg" class="btn orange darken-1 waves-effect waves-light" type="button">Enviar</button>
                         </span><br /><br />
