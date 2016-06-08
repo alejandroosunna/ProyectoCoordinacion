@@ -85,50 +85,50 @@ public partial class IndexAlumno : System.Web.UI.Page
                         //DropDListMotivos.Visible = false;
                     }
                 }
-                //else
-                //{
-                //    lblPDiaCita.Text = "Ningun pendiente.";
-                //    lblPHoraCita.Text = "";
-                //    btnEliminarCita.Visible = false;
-                //    GridViewCitas.Visible = true;
-                //    //DropDListMotivos.Visible = true;
-                //    sesion = Session["IdUsuario"].ToString();
-                //    List<csCita> listCita = CitaHandler.GetListCitas(Usuario.IdCarrera, DateTime.Now);
+                else
+                {
+                    lblPDiaCita.Text = "Ningun pendiente.";
+                    lblPHoraCita.Text = "";
+                    btnEliminarCita.Visible = false;
+                    //    GridViewCitas.Visible = true;
+                    //    //DropDListMotivos.Visible = true;
+                    //    sesion = Session["IdUsuario"].ToString();
+                    //    List<csCita> listCita = CitaHandler.GetListCitas(Usuario.IdCarrera, DateTime.Now);
 
-                //    dt = new DataTable();
-                //    dt.Columns.Add("Apartar");
-                //    dt.Columns.Add("NumeroCita");
-                //    dt.Columns.Add("Hora");
-                //    dt.Columns.Add("Dia");
+                    //    dt = new DataTable();
+                    //    dt.Columns.Add("Apartar");
+                    //    dt.Columns.Add("NumeroCita");
+                    //    dt.Columns.Add("Hora");
+                    //    dt.Columns.Add("Dia");
 
-                //    for (int y = 0; y < listCita.Count; y++)
-                //    {
-                //        DataRow dr = dt.NewRow();
-                //        dr["Apartar"] = listCita[y].IdCita.ToString();
-                //        dr["NumeroCita"] = listCita[y].IdCita.ToString();
-                //        dr["Hora"] = listCita[y].FechaDisponible.ToString("t");
-                //        dr["Dia"] = listCita[y].FechaDisponible.ToString("dd / MM / yyyy");
+                    //    for (int y = 0; y < listCita.Count; y++)
+                    //    {
+                    //        DataRow dr = dt.NewRow();
+                    //        dr["Apartar"] = listCita[y].IdCita.ToString();
+                    //        dr["NumeroCita"] = listCita[y].IdCita.ToString();
+                    //        dr["Hora"] = listCita[y].FechaDisponible.ToString("t");
+                    //        dr["Dia"] = listCita[y].FechaDisponible.ToString("dd / MM / yyyy");
 
-                //        dt.Rows.Add(dr);
-                //    }
+                    //        dt.Rows.Add(dr);
+                    //    }
 
-                //    GridViewCitas.DataSource = dt;
-                //    GridViewCitas.DataBind();
+                    //    GridViewCitas.DataSource = dt;
+                    //    GridViewCitas.DataBind();
 
-                //    //DataTable Dt = new DataTable();
-                //    //DataView Dv = default(DataView);
-                //    //Dv = (DataView)SqlDataDropDListMotivos.Select(DataSourceSelectArguments.Empty);
-                //    //Dt = Dv.ToTable();
-                //    //DropDListMotivos.Items.Clear();
+                    //    //DataTable Dt = new DataTable();
+                    //    //DataView Dv = default(DataView);
+                    //    //Dv = (DataView)SqlDataDropDListMotivos.Select(DataSourceSelectArguments.Empty);
+                    //    //Dt = Dv.ToTable();
+                    //    //DropDListMotivos.Items.Clear();
 
-                //    //for (int i = 0; i < Dt.Rows.Count; i++)
-                //    //{
-                //    //    //DropDListMotivos.Items.Add("op" + i.ToString());
-                //    //    DropDListMotivos.Items.Add(Dt.Rows[i]["Motivo"].ToString());
-                //    //    DropDListMotivos.Items[i].Value = Dt.Rows[i]["IdMotivo"].ToString();
-                //    //    DropDListMotivos.Items[i].Text = Dt.Rows[i]["Motivo"].ToString();
-                //    //}
-                //}
+                    //    //for (int i = 0; i < Dt.Rows.Count; i++)
+                    //    //{
+                    //    //    //DropDListMotivos.Items.Add("op" + i.ToString());
+                    //    //    DropDListMotivos.Items.Add(Dt.Rows[i]["Motivo"].ToString());
+                    //    //    DropDListMotivos.Items[i].Value = Dt.Rows[i]["IdMotivo"].ToString();
+                    //    //    DropDListMotivos.Items[i].Text = Dt.Rows[i]["Motivo"].ToString();
+                    //    //}
+                }
 
             }
             else
@@ -145,8 +145,8 @@ public partial class IndexAlumno : System.Web.UI.Page
 
     protected void btnEliminarCita_Click(object sender, EventArgs e)
     {
-        int IdCita = (new csCitaHandler()).GetCita(Convert.ToInt32(Session["IdUsuario"])).IdCita;
-        estadoCita = 3;
+        int IdCita = (new csCitaHandler()).GetCita(Convert.ToInt32(Session["IdUsuario"]), 1).IdCita;
+        estadoCita = 2;
 
         if (!(new csCitaHandler()).Delete(IdCita, estadoCita))
             Response.Redirect("~\\IndexAlumno.aspx?De=ex");
