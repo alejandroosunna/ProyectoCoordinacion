@@ -33,7 +33,7 @@ namespace SIAC
 
                 
                 // send to caller
-                Clients.Caller.onConnected(id, userName, ConnectedUsers, CurrentMessage);
+                Clients.Caller.onConnected(id, userName, ConnectedUsers, CurrentMessage, idcarrera);
 
                 // send to all except caller client
                 Clients.AllExcept(id).onNewUserConnected(id, userName, ConnectedUsers.Find(x => x.UserName == userName).idCarrera);

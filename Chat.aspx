@@ -163,7 +163,7 @@
         function registerClientMethods(chatHub) {
 
             // Calls when user successfully logged in
-            chatHub.client.onConnected = function (id, userName, allUsers, messages) {
+            chatHub.client.onConnected = function (id, userName, allUsers, messages, idCarrera) {
 
                 setScreen(true);
 
@@ -181,7 +181,8 @@
 
                 // Add Existing Messages
                 for (i = 0; i < messages.length; i++) {
-                    AddMessage(messages[i].UserName, messages[i].Message);
+                    AddMessage(messages[i].UserName, messages[i].Message, 
+                        messages[i].idCarrera);
                 }
             }
 
@@ -247,11 +248,7 @@
                 function blink() {
                     $('#' + ctrId).find('.header').fadeTo(100, 0.1).fadeTo(200, 1.0);
                 }
-                
-          
-              
-                
-               
+ 
                 // set scrollbar
                 var height = $('#' + ctrId).find('#divMessage')[0].scrollHeight;
                 $('#' + ctrId).find('#divMessage').scrollTop(height);
@@ -264,7 +261,8 @@
             var userId = $('#hdId').val();
             
             var code = "";
-            if (rol==3 || idCarrera == carrera) {
+           
+            if ( rol==3 || idCarrera == carrera) {
                 if (userId == id) {
 
                     code = $('<div">' + name + "</div>");
@@ -301,7 +299,7 @@
 
         function AddMessage(userName, message, idcarrera) {
 
-            if (carrera == idcarrera ) {
+            if (rol == 3 || carrera == idcarrera) {
                     $('#divChatWindow').append('<div class="media-body"> <div class="media"><div class="media-body">' + message + '<br/> <small class="text-muted">' + userName + '</small></div></div></div><br/>');
 
                     var height = $('#divChatWindow')[0].scrollHeight;
@@ -442,6 +440,7 @@
         </div>
         <div id="divChat" class="row " style="padding-top:40px;">
             <h3><SPAN ID="nameCarrera">Sala de chat</SPAN> </h3>
+            <h6><span>Al seleccionar mas de dos chats, se sobreponen, por lo que debe de moverlos hacia cualquier parte de la página, <br /> esta se ajustastara. </span></h6>
             <br />
             <br />
             <div class="col s12 m12 l7 chatRoom striped">
