@@ -92,7 +92,6 @@
           <ul id="dropdown1" class="dropdown-content">
                <li><a class="mdl-navigation__link" href="Agregar.aspx"><i class="mdl-color-text--black material-icons" role="presentation">inbox</i>Agregar</a></li>
                <li><a class="mdl-navigation__link" href="Eliminar.aspx"><i class="mdl-color-text--black material-icons" role="presentation">delete</i>Eliminar</a></li>
-             
             </ul>
         <nav class="demo-navigation mdl-navigation mdl-color--white">
           <a class="mdl-navigation__link" href="IndexAdmin.aspx"><i class="mdl-color-text--black material-icons" role="presentation">home</i>Resumen</a>
@@ -115,10 +114,9 @@
               </div>
 
                 </div>
-          
-            </main>
-               </div>
-              <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" style="position: fixed; left: -1000px; height: -1000px;">
+      </main>
+      </div>
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" style="position: fixed; left: -1000px; height: -1000px;">
         <defs>
           <mask id="piemask" maskContentUnits="objectBoundingBox">
             <circle cx=0.5 cy=0.5 r=0.49 fill="white"></circle>
@@ -213,12 +211,13 @@
           </g>
         </defs>
       </svg>
-        <script src="Scripts/sweetalert.min.js"></script>
+      <script src="Scripts/sweetalert.min.js"></script>
     <script src="Scripts/jquery-2.2.0.min.js"></script>
     <script src='http://fullcalendar.io/js/fullcalendar-2.1.1/lib/moment.min.js'></script>
     <script src="http://fullcalendar.io/js/fullcalendar-2.1.1/lib/jquery-ui.custom.min.js"></script>
     <script src='http://fullcalendar.io/js/fullcalendar-2.1.1/fullcalendar.min.js'></script>
-    <script type="text/javascript" src="materialize/js/materialize.min.js"></script>
+    <script src="../../material.min.js"></script>
+
         </form>
 </body>
 </html>
