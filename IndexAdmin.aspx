@@ -84,12 +84,12 @@
                     m += 1;  // JavaScript months are 0-11
                     var y = formattedDate.getFullYear();
                     var h = formattedDate.getHours();
-                    var m = formattedDate.getMinutes();
+                    var min = formattedDate.getMinutes();
                     var btn = "button";
                     
                     var xaccion = "";
                     swal({
-                        title: "Cita del alumno " + numControl + " fecha: " + d + "-" + m + "-" + y +" hora: " + (h+7)+":"+m,
+                        title: "Cita del alumno " + numControl + " fecha: " + d + "-" + m + "-" + y +" hora: " + (h+7)+":"+min,
                         text: '<button type="' + btn + '" id="btnA" class="waves-effect light-green accent-4">Asistio</button> ' +
                               '<button type="' + btn + '" id="btnB" class="waves-effect orange darken-3">Falto</button> ' +
                               '<button type="' + btn + '" id="btnC" class="waves-effect waves-light">Exit</button>',
