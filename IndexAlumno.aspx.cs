@@ -153,6 +153,7 @@ public partial class IndexAlumno : System.Web.UI.Page
         //    Response.Redirect("~\\IndexAlumno.aspx?De=err");
 
         csCita Cita = (new csCitaHandler()).GetCita(Convert.ToInt32(Session["IdUsuario"]), 1);
+        Cita.FechaAgendada = DateTime.Now;
         Cita.IdUsuario = 0;
         Cita.Estado = 0;
 
