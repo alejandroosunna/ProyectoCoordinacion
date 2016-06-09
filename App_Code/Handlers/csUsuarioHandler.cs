@@ -132,7 +132,40 @@ public class csUsuarioHandler : ObjetoBase
 
         return Usuario;
     }
+    public List<csUsuario> ObtenerLista()
+    {
+        List<csUsuario> listUsuario = new List<csUsuario>();
+        String ConnectionString = ConfigurationManager.ConnectionStrings["dbProyectoCoordinacion"].ConnectionString;
+        SqlConnection Connection = new SqlConnection(ConnectionString);
+        try
+        {
+            Connection.Open();
 
+            String Query = "select * from tbUsuarios where IdRol = 2;";
+
+            SqlCommand Command = new SqlCommand(Query, Connection);
+
+            SqlDataReader DataReader = Command.ExecuteReader();
+
+            while (DataReader.Read())
+            {
+                csUsuario Usuario = new csUsuario();
+                Usuario.LoadEventFromDataReader(DataReader);
+                listUsuario.Add(Usuario);
+            }
+        }
+        catch (Exception ex)
+        {
+            LogError(ex.Message);
+        }
+        finally
+        {
+            Connection.Close();
+            Connection = null;
+        }
+
+        return listUsuario;
+    }
     public List<csUsuario> GetListUsuario(int IdRol)
     {
         List<csUsuario> listUsuario = new List<csUsuario>();
