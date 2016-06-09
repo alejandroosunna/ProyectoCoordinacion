@@ -124,21 +124,13 @@
                                 data: dataRow,
                                 dataType: "json",
                                 success: function (response) {
-                                    if (response == "1") {
-                                        swal("Correcto!", "Se actualizo la cita", "success", location.reload());
-                                        
-                                    } else {
-                                        swal("OPSSS!", "no se pudo actualizar la cita "+ dataRow.Accion + response , "error");
-                                    }
-
+                                swal("Correcto!", "Se actualizo la cita", "success", location.reload());
                                 },
                                 error: function (response) {
                                     swal("OPSSS!", "Sucedio un error, intentalo de nuevo", "error");
                                 }
                             });
                         }
-                       
-
 
                 }
              </script>
