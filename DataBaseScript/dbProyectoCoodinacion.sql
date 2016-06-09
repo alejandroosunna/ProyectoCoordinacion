@@ -33,7 +33,11 @@ create table tbCitas(
 	IdUsuario int,
 	FechaAgendada datetime,
 	FechaDisponible datetime,
+<<<<<<< HEAD
 	Estado int default 0, /*0 disponible, 1 ocupada, 2 expiro, 3 elimino*/
+=======
+	Estado int default 0, /*0 disponible, 1 ocupada, 2 expiro o elimino, 3 asistio*/
+>>>>>>> refs/remotes/origin/master
 	Comentario nvarchar(MAX) default '',
 	constraint PK_tbCitas_IdCita primary key (IdCita)
 );

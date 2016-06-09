@@ -5,6 +5,13 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+<<<<<<< HEAD
+=======
+using Newtonsoft;
+using System.Web.Script.Services;
+using Newtonsoft.Json;
+using System.Web.Services;
+>>>>>>> refs/remotes/origin/master
 
 
 public partial class IndexAlumno : System.Web.UI.Page
@@ -12,13 +19,21 @@ public partial class IndexAlumno : System.Web.UI.Page
     public DataTable dt;
     public int estadoCita;
     public bool result;
+<<<<<<< HEAD
    
+=======
+    public string sesion;
+>>>>>>> refs/remotes/origin/master
 
     protected void Page_Load(object sender, EventArgs e)
     {
         if (Session["IdUsuario"] != null && Session["IdRol"] != null)
         {
+<<<<<<< HEAD
             if(Convert.ToInt32(Session["IdRol"]) == 2)
+=======
+            if (Convert.ToInt32(Session["IdRol"]) == 2)
+>>>>>>> refs/remotes/origin/master
             {
                 result = bool.TryParse(Request["Logout"], out result);
                 if (result)
@@ -44,7 +59,11 @@ public partial class IndexAlumno : System.Web.UI.Page
                     if (Request["De"] == "err")
                         Response.Write(@"<script language = 'javascript'>alert('Error al eliminar la cita.') </script>");
                 }
+<<<<<<< HEAD
                 else if(Request["Exp"] != null)
+=======
+                else if (Request["Exp"] != null)
+>>>>>>> refs/remotes/origin/master
                 {
                     result = bool.TryParse(Request["Logout"], out result);
                     if (result)
@@ -74,15 +93,22 @@ public partial class IndexAlumno : System.Web.UI.Page
                     }
                     else
                     {
+<<<<<<< HEAD
                         //lblPDiaCita.Text = "Fecha: " + Cita.FechaDisponible.ToString("dd / MM / yyyy");
                         //lblPHoraCita.Text = "Hora: " + Cita.FechaDisponible.ToString("t");
                         //btnEliminarCita.Visible = true;
+=======
+                        lblPDiaCita.Text = "Fecha: " + Cita.FechaDisponible.ToString("dd / MM / yyyy");
+                        lblPHoraCita.Text = "Hora: " + Cita.FechaDisponible.ToString("t");
+                        btnEliminarCita.Visible = true;
+>>>>>>> refs/remotes/origin/master
                         //GridViewCitas.Visible = false;
                         //DropDListMotivos.Visible = false;
                     }
                 }
                 else
                 {
+<<<<<<< HEAD
                     //lblPDiaCita.Text = "Ningun pendiente.";
                     //lblPHoraCita.Text = "";
                     //btnEliminarCita.Visible = false;
@@ -124,6 +150,49 @@ public partial class IndexAlumno : System.Web.UI.Page
                     //    DropDListMotivos.Items[i].Value = Dt.Rows[i]["IdMotivo"].ToString();
                     //    DropDListMotivos.Items[i].Text = Dt.Rows[i]["Motivo"].ToString();
                     //}
+=======
+                    lblPDiaCita.Text = "Ningun pendiente.";
+                    lblPHoraCita.Text = "";
+                    btnEliminarCita.Visible = false;
+                    //    GridViewCitas.Visible = true;
+                    //    //DropDListMotivos.Visible = true;
+                    //    sesion = Session["IdUsuario"].ToString();
+                    //    List<csCita> listCita = CitaHandler.GetListCitas(Usuario.IdCarrera, DateTime.Now);
+
+                    //    dt = new DataTable();
+                    //    dt.Columns.Add("Apartar");
+                    //    dt.Columns.Add("NumeroCita");
+                    //    dt.Columns.Add("Hora");
+                    //    dt.Columns.Add("Dia");
+
+                    //    for (int y = 0; y < listCita.Count; y++)
+                    //    {
+                    //        DataRow dr = dt.NewRow();
+                    //        dr["Apartar"] = listCita[y].IdCita.ToString();
+                    //        dr["NumeroCita"] = listCita[y].IdCita.ToString();
+                    //        dr["Hora"] = listCita[y].FechaDisponible.ToString("t");
+                    //        dr["Dia"] = listCita[y].FechaDisponible.ToString("dd / MM / yyyy");
+
+                    //        dt.Rows.Add(dr);
+                    //    }
+
+                    //    GridViewCitas.DataSource = dt;
+                    //    GridViewCitas.DataBind();
+
+                    //    //DataTable Dt = new DataTable();
+                    //    //DataView Dv = default(DataView);
+                    //    //Dv = (DataView)SqlDataDropDListMotivos.Select(DataSourceSelectArguments.Empty);
+                    //    //Dt = Dv.ToTable();
+                    //    //DropDListMotivos.Items.Clear();
+
+                    //    //for (int i = 0; i < Dt.Rows.Count; i++)
+                    //    //{
+                    //    //    //DropDListMotivos.Items.Add("op" + i.ToString());
+                    //    //    DropDListMotivos.Items.Add(Dt.Rows[i]["Motivo"].ToString());
+                    //    //    DropDListMotivos.Items[i].Value = Dt.Rows[i]["IdMotivo"].ToString();
+                    //    //    DropDListMotivos.Items[i].Text = Dt.Rows[i]["Motivo"].ToString();
+                    //    //}
+>>>>>>> refs/remotes/origin/master
                 }
 
             }
@@ -141,8 +210,13 @@ public partial class IndexAlumno : System.Web.UI.Page
 
     protected void btnEliminarCita_Click(object sender, EventArgs e)
     {
+<<<<<<< HEAD
         int IdCita = (new csCitaHandler()).GetCita(Convert.ToInt32(Session["IdUsuario"])).IdCita;
         estadoCita = 3;
+=======
+        int IdCita = (new csCitaHandler()).GetCita(Convert.ToInt32(Session["IdUsuario"]), 1).IdCita;
+        estadoCita = 2;
+>>>>>>> refs/remotes/origin/master
 
         if (!(new csCitaHandler()).Delete(IdCita, estadoCita))
             Response.Redirect("~\\IndexAlumno.aspx?De=ex");
@@ -152,6 +226,7 @@ public partial class IndexAlumno : System.Web.UI.Page
 
     public void enviarCorrreo()
     {
+<<<<<<< HEAD
         //string name = txtName.Text;
         //string email = txtEmail.Text;
         //string msg = txtMesg.Text;
@@ -180,4 +255,37 @@ public partial class IndexAlumno : System.Web.UI.Page
         else if (checkCita == 2)
             Response.Redirect("IndexAlumno.aspx?Cita=pen");
     }
+=======
+        string name = txtName.Text;
+        string email = txtEmail.Text;
+        string msg = txtMesg.Text;
+
+        if (new Emailhtml().enviarcorreo(name, email, msg))
+            Response.Write(@"<script language = 'javascript'>alert('Correo enviado') </script>");
+        else
+            Response.Write(@"<script language = 'javascript'>alert('Correo no enviado') </script>");
+    }
+
+    //protected void GridViewCitas_SelectedIndexChanged(object sender, EventArgs e)
+    //{
+    //    csCita Cita = new csCita();
+    //    Cita.IdCita = Convert.ToInt32(GridViewCitas.DataKeys[GridViewCitas.SelectedRow.RowIndex].Value);
+    //    Cita.IdUsuario = Convert.ToInt32(Session["IdUsuario"]);
+    //    Cita.FechaAgendada = DateTime.Now;
+    //    Cita.Estado = 1;
+
+    //    //int idMotivo = Convert.ToInt32(DropDListMotivos.SelectedItem.Value);
+    //    int checkCita = (new csCitaHandler()).CheckCitaAndAddCita(Cita); //CheckCitaAndAddCitaMotivo(Cita, idMotivo);
+
+    //    if (checkCita == 1)
+    //        Response.Redirect("IndexAlumno.aspx?Cita=ex");
+    //    else if (checkCita == 0)
+    //        Response.Redirect("IndexAlumno.aspx?Cita=err");
+    //    else if (checkCita == 2)
+    //        Response.Redirect("IndexAlumno.aspx?Cita=pen");
+    //}
+  
+   
+   
+>>>>>>> refs/remotes/origin/master
 }

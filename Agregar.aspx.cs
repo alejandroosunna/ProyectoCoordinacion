@@ -4,6 +4,15 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+<<<<<<< HEAD
+=======
+using System.Data;
+using System.Data.SqlClient;
+using System.Data.OleDb;
+using System.Data.Common;
+using System.IO;
+using System.Drawing;
+>>>>>>> refs/remotes/origin/master
 
 public partial class Agregar : System.Web.UI.Page
 {
@@ -44,4 +53,52 @@ public partial class Agregar : System.Web.UI.Page
         Session["IdAdministrador"] = null;
         Response.Redirect("~\\Login.aspx");
     }
+<<<<<<< HEAD
+=======
+    protected void Button1_Click(object sender, EventArgs e)
+    {
+        var idCarrera = Convert.ToInt32(Session["IdCarrera"]);
+        
+            if (FileUpload1.HasFile)
+            {
+                try
+                {
+                string ruta = string.Concat((Server.MapPath("~/Temp/" + FileUpload1.FileName)));
+                FileUpload1.PostedFile.SaveAs(ruta);
+                OleDbConnection OleDcon = new OleDbConnection("Provider=Microsoft.Ace.OLEDB.12.0;Data Source =" + ruta + ";Extended Properties=Excel 12.0");
+                OleDbCommand cmd = new OleDbCommand("select IdUsuario,"+idCarrera+",2,Nombre,Apellidos,Contraseña  from [Hoja1$]", OleDcon);
+                OleDbDataAdapter objAdapter1 = new OleDbDataAdapter(cmd);
+                    //configurar con el apuntador de base de datos indicado
+                OleDcon.Open();
+                DbDataReader dr = cmd.ExecuteReader();
+                string con_str = @"Data Source=LUIS\DBSQL;Initial Catalog=dbProyectoCoordinacion;Integrated security=True";
+                
+
+                SqlBulkCopy bulkInsert = new SqlBulkCopy(con_str);
+                bulkInsert.DestinationTableName = "tbUsuarios";
+                bulkInsert.WriteToServer(dr);
+                OleDcon.Close();
+                Array.ForEach(Directory.GetFiles((Server.MapPath("~/Temp/"))), File.Delete);
+                Label1.ForeColor = Color.Green;
+                Label1.Text = " Listo";
+
+                }
+                catch (Exception ex)
+                {
+                    Response.Write(@"<script language = 'javascript'>alert('Error al subir archivo.') </script>");
+
+
+                }
+
+
+            }
+            else
+            {
+                Label1.ForeColor = Color.Red;
+                Label1.Text = "seleccionar archivo";
+            }
+        
+        
+    }
+>>>>>>> refs/remotes/origin/master
 }

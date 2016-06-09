@@ -14,6 +14,7 @@ namespace SIAC
         static List<UserDetail> ConnectedUsers = new List<UserDetail>();
         static List<MessageDetail> CurrentMessage = new List<MessageDetail>();
 
+<<<<<<< HEAD
         public void Connect(string userName)
         {
             var id = Context.ConnectionId;
@@ -40,6 +41,50 @@ namespace SIAC
 
             // Broad cast message
             Clients.All.messageReceived(userName, message);
+=======
+        public void Connect(string userName, string idcarrera)
+        {
+            var id = Context.ConnectionId;
+
+            var item = ConnectedUsers.Find(x => x.UserName == userName);
+            if (item != null)
+            {
+                ConnectedUsers.Remove(item);
+
+                Clients.All.onUserDisconnected(item.ConnectionId, item.UserName, item.idCarrera);
+
+            }
+
+            if (ConnectedUsers.Count(x=>x.UserName == userName) == 0)
+            {
+                ConnectedUsers.Add(new UserDetail { ConnectionId = id, UserName = userName, idCarrera= idcarrera });
+
+                
+                // send to caller
+                Clients.Caller.onConnected(id, userName, ConnectedUsers, CurrentMessage, idcarrera);
+
+                // send to all except caller client
+                Clients.AllExcept(id).onNewUserConnected(id, userName, ConnectedUsers.Find(x => x.UserName == userName).idCarrera);
+
+            }
+        
+
+        }
+
+        public void SendMessageToAll(string userName, string message, string idcarrera)
+        {
+            var id = Context.ConnectionId;
+            if(ConnectedUsers.Count(x=> x.ConnectionId == id) == 1)
+            {
+                // store last 100 messages in cache
+                AddMessageinCache(userName, message, idcarrera);
+
+                // Broad cast message
+                Clients.All.messageReceived(userName, message, idcarrera);
+            }
+          
+          
+>>>>>>> refs/remotes/origin/master
         }
 
         public void SendPrivateMessage(string toUserId, string message)
@@ -70,20 +115,43 @@ namespace SIAC
 
                 var id = Context.ConnectionId;
                 Clients.All.onUserDisconnected(id, item.UserName);
+<<<<<<< HEAD
 
             }
 
+=======
+            }
+
+            //}else
+            //{
+            //    if (item != null)
+            //    {
+            //        Connect(item.UserName);
+            //    }
+                
+            //}
+
+
+>>>>>>> refs/remotes/origin/master
             return base.OnDisconnected(stopCalled);
         }
 
 
         #region private Messages
 
+<<<<<<< HEAD
         private void AddMessageinCache(string userName, string message)
         {
             CurrentMessage.Add(new MessageDetail { UserName = userName, Message = message });
 
             if (CurrentMessage.Count > 100)
+=======
+        private void AddMessageinCache(string userName, string message, string idcarrera)
+        {
+            CurrentMessage.Add(new MessageDetail { UserName = userName, Message = message, idCarrera= idcarrera });
+
+            if (CurrentMessage.Count > 1000)
+>>>>>>> refs/remotes/origin/master
                 CurrentMessage.RemoveAt(0);
         }
 

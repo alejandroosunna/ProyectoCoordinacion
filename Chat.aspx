@@ -5,6 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<<<<<<< HEAD
     <title></title>
     <link type="text/css" rel="stylesheet" href="themes/css/ChatStyle.css" />
     <link rel="stylesheet" href="themes/Css/JQueryUI/themes/base/jquery.ui.all.css" />
@@ -14,12 +15,31 @@
     <!--Reference the jQuery library. -->
     <script src="Scripts/jquery-2.2.0.min.js"></script>
 
+=======
+    <title>Chat</title>
+    <link type="text/css" rel="stylesheet" href="themes/css/ChatStyle.css" />
+    <link type="text/css" rel="stylesheet" href="Themes/css/bubbleChat.css" />
+    <link type="text/css" rel="stylesheet" href="materialize/css/materialize.css" />
+   <%-- <link type="text/css" rel="stylesheet" href="materialize/font" />--%>
+    <link rel="stylesheet" href="themes/Css/JQueryUI/themes/base/jquery.ui.all.css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+    <link href="Styles/sweetalert.css" rel="stylesheet" />
+    <!--Script references. -->
+    <!--Reference the jQuery library. -->
+    <script src="Scripts/jquery-2.2.0.min.js"></script>
+    <script src="Scripts/sweetalert.min.js"></script>
+>>>>>>> refs/remotes/origin/master
     <script src="Scripts/jquery.ui.core.js"></script>
     <script src="Scripts/jquery.ui.widget.js"></script>
     <script src="Scripts/jquery.ui.mouse.js"></script>
     <script src="Scripts/jquery.ui.draggable.js"></script>
     <script src="Scripts/jquery.ui.resizable.js"></script>
+<<<<<<< HEAD
 
+=======
+    <script src="materialize/js/materialize.min.js"></script>
+  <%--  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>--%>
+>>>>>>> refs/remotes/origin/master
     <!--Reference the SignalR library. -->
     <script src="Scripts/jquery.signalR-1.0.1.js"></script>
 
@@ -28,13 +48,32 @@
     
     <script type="text/javascript">
         
+<<<<<<< HEAD
+=======
+        var audioElement = document.createElement('audio');
+        audioElement.setAttribute('src', 'audio/chat.mp3');
+        var carrera = <%=Server.HtmlEncode(Session["IdCarrera"].ToString())%>;
+        var rol = <%=Server.HtmlEncode(Session["IdRol"].ToString())%>;
+        $(function () {
+
+            $("#resizable").resizable();
+
+        });
+
+        
+
+>>>>>>> refs/remotes/origin/master
         $(function () {
 
             setScreen(false);
 
             // Declare a proxy to reference the hub. 
             var chatHub = $.connection.chatHub;
+<<<<<<< HEAD
 
+=======
+          
+>>>>>>> refs/remotes/origin/master
             registerClientMethods(chatHub);
 
             // Start Hub
@@ -60,12 +99,20 @@
             }
 
         }
+<<<<<<< HEAD
         function getUser() {
+=======
+        function getUser(id) {
+>>>>>>> refs/remotes/origin/master
             $.ajax({
                 type: "Post",
                 contentType: "application/json; charset=utf-8",
                 url: "Chat.aspx/ObtenerUsuario",
+<<<<<<< HEAD
                 data: {},
+=======
+                data: '{usu: ' + id + '}',
+>>>>>>> refs/remotes/origin/master
                 dataType: 'json',
                 success: function (data) {
                     var user = $.parseJSON(data.d);
@@ -73,6 +120,7 @@
                     
                 },
                 error: function () {
+<<<<<<< HEAD
                     alert("Ocurrio algún error ");
                 }
             });
@@ -87,12 +135,52 @@
                 }
                 else {
                     alert("Por favor ingresa tu nombre");
+=======
+                    swal("Opps","Ocurrio algún error","error");
+                }
+            });
+        }
+        
+        function getCarrera(id) {
+            $.ajax({
+                type: "Post",
+                contentType: "application/json; charset=utf-8",
+                url: "Chat.aspx/ObtenerCarrera",
+                data: '{id: ' + id + '}',
+                dataType: 'json',
+                success: function (data) {
+                    var carrera = $.parseJSON(data.d);
+                    $("#nameCarrera").text(carrera);
+                    console.log(carrera);
+
+                },
+                error: function () {
+                    swal("Ops","Ocurrio algún error", "error");
+                }
+            });
+        }
+
+        function registerEvents(chatHub) {
+            getUser(<%=Server.HtmlEncode(Session["IdUsuario"].ToString())%>);
+           
+            $("#btnStartChat").click(function () {
+               
+                var name = $("#txtNickName").val();
+               
+               
+                getCarrera(<%=Server.HtmlEncode(Session["IdCarrera"].ToString())%>);
+                
+                if (name.length > 0) {
+                    chatHub.server.connect(name, <%=Server.HtmlEncode(Session["IdCarrera"].ToString())%>);
+                    
+>>>>>>> refs/remotes/origin/master
                 }
 
             });
 
 
             $('#btnSendMsg').click(function () {
+<<<<<<< HEAD
 
                 var msg = $("#txtMessage").val();
                 if (msg.length > 0) {
@@ -100,6 +188,18 @@
                     var userName = $('#hdUserName').val();
                     chatHub.server.sendMessageToAll(userName, msg);
                     $("#txtMessage").val('');
+=======
+                
+                var msg = $("#txtMessage").val();
+                
+                if (msg.length > 0 && rol==1) {
+
+                    var userName = $('#hdUserName').val();
+                    chatHub.server.sendMessageToAll(userName, msg, carrera);
+                    $("#txtMessage").val('');
+                }else{
+                    swal("NO!", "Solamente el coordinador puede escribir mensajes en el chat global, seleccione su coordinador para hablar", "warning");
+>>>>>>> refs/remotes/origin/master
                 }
             });
 
@@ -116,13 +216,20 @@
                 }
             });
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> refs/remotes/origin/master
         }
 
         function registerClientMethods(chatHub) {
 
             // Calls when user successfully logged in
+<<<<<<< HEAD
             chatHub.client.onConnected = function (id, userName, allUsers, messages) {
+=======
+            chatHub.client.onConnected = function (id, userName, allUsers, messages, idCarrera) {
+>>>>>>> refs/remotes/origin/master
 
                 setScreen(true);
 
@@ -130,14 +237,24 @@
                 $('#hdUserName').val(userName);
                 $('#spanUser').html(userName);
 
+<<<<<<< HEAD
                 // Add All Users
                 for (i = 0; i < allUsers.length; i++) {
 
                     AddUser(chatHub, allUsers[i].ConnectionId, allUsers[i].UserName);
+=======
+               
+                // Add All Users
+                for (i = 0; i < allUsers.length; i++) {
+                    
+                    AddUser(chatHub, allUsers[i].ConnectionId, allUsers[i].UserName, allUsers[i].idCarrera);
+                
+>>>>>>> refs/remotes/origin/master
                 }
 
                 // Add Existing Messages
                 for (i = 0; i < messages.length; i++) {
+<<<<<<< HEAD
 
                     AddMessage(messages[i].UserName, messages[i].Message);
                 }
@@ -172,6 +289,46 @@
             chatHub.client.messageReceived = function (userName, message) {
 
                 AddMessage(userName, message);
+=======
+                    AddMessage(messages[i].UserName, messages[i].Message, 
+                        messages[i].idCarrera);
+                }
+            }
+
+            // On New User Connected
+            chatHub.client.onNewUserConnected = function (id, name, idcarrera) {
+                AddUser(chatHub, id, name, idcarrera);
+               
+                if (carrera == idcarrera || rol == 3) {
+                    var $toastContent = $('<span>El usuario ' + name + ' se conecto </span>');
+                    Materialize.toast($toastContent, 5000);
+                }
+                
+            }
+
+            
+            // On User Disconnected
+            chatHub.client.onUserDisconnected = function (id, userName, idcarrera) {
+           
+                $('#p' + id).remove();
+
+                var ctrId = 'private_' + id;
+                $('#' + ctrId).remove();
+                if (rol==3 || carrera == idcarrera && $("#txtNickName").val() != userName ) {
+                    var $toastContent = $('<span>El usuario ' + userName + ' se desconecto </span>');
+                    Materialize.toast($toastContent, 5000);
+                } else {
+                    console.log("se desconecto " + userName);
+                }
+                
+              
+
+            }
+
+            chatHub.client.messageReceived = function (userName, message, idcarrera) {
+
+                AddMessage(userName, message, idcarrera);
+>>>>>>> refs/remotes/origin/master
             }
 
 
@@ -185,9 +342,29 @@
                     createPrivateChatWindow(chatHub, windowId, ctrId, fromUserName);
 
                 }
+<<<<<<< HEAD
 
                 $('#' + ctrId).find('#divMessage').append('<div class="message"><span class="userName ">' + fromUserName + '</span>: ' + message + '</div>');
 
+=======
+                //Recibe chat.
+                //Si entra al IF signiica que es del usuario que mando, si no es el usuario que recive.
+                if (fromUserName == $('#txtNickName').val()) {
+                    $('#' + ctrId).find('#divMessage').append('<div class="media-body"><div class="bubble bubble--alt" style=" text-align: right;">' + message + '</div></div>');
+                } else {
+                    //setInterval(blink, 200);
+                    $('#' + ctrId).find('#divMessage').append('<div class="media-body"><div class="bubble" style=" text-align: left;">' + message + '</div>');
+                    $(document).attr('title', fromUserName + " te ha escrito");
+                    $('#' + ctrId).find('.header').removeClass("read").addClass("unread");
+                    audioElement.play();
+                }
+               
+               
+                function blink() {
+                    $('#' + ctrId).find('.header').fadeTo(100, 0.1).fadeTo(200, 1.0);
+                }
+ 
+>>>>>>> refs/remotes/origin/master
                 // set scrollbar
                 var height = $('#' + ctrId).find('#divMessage')[0].scrollHeight;
                 $('#' + ctrId).find('#divMessage').scrollTop(height);
@@ -195,6 +372,7 @@
             }
 
         }
+<<<<<<< HEAD
 
         function AddUser(chatHub, id, name) {
 
@@ -230,6 +408,59 @@
 
             var height = $('#divChatWindow')[0].scrollHeight;
             $('#divChatWindow').scrollTop(height);
+=======
+        function AddUser(chatHub, id, name, idCarrera) {
+         
+            var userId = $('#hdId').val();
+            
+            var code = "";
+           
+            if ( rol==3 || idCarrera == carrera) {
+                if (userId == id) {
+
+                    code = $('<div">' + name + "</div>");
+
+                }
+                else {
+
+                    code = $('<p id="p'+id+'"><a id="' + id + '" class="user" >' + name + '<a></p>');
+
+                    $(code).click(function () {
+
+                        var id = $(this).children('a').attr('id');
+
+                        if (userId != id) {
+                            OpenPrivateChatWindow(chatHub, id, name);
+                            var ctrId = 'private_' + id;
+                            $('#' + ctrId).find('#txtPrivateMessage').focus();
+                        }
+                           
+                    });
+                }
+
+            }
+           
+            if ($('#p'+id).length > 0) {
+                console.log('Ya existe');
+            } else {
+               
+                $("#divusers").append(code);
+            }
+            
+            
+        }
+
+        function AddMessage(userName, message, idcarrera) {
+
+            if (rol == 3 || carrera == idcarrera) {
+                    $('#divChatWindow').append('<div class="media-body"> <div class="media"><div class="media-body">' + message + '<br/> <small class="text-muted">' + userName + '</small></div></div></div><br/>');
+
+                    var height = $('#divChatWindow')[0].scrollHeight;
+                    $('#divChatWindow').scrollTop(height);
+                }
+             
+            
+>>>>>>> refs/remotes/origin/master
         }
 
         function OpenPrivateChatWindow(chatHub, id, userName) {
@@ -239,6 +470,7 @@
             if ($('#' + ctrId).length > 0) return;
 
             createPrivateChatWindow(chatHub, id, ctrId, userName);
+<<<<<<< HEAD
 
         }
 
@@ -248,10 +480,24 @@
                        '<div class="header">' +
                           '<div  style="float:right;">' +
                               '<img id="imgDelete"  style="cursor:pointer;" src="/Img/delete.png"/>' +
+=======
+          
+            $('#' + ctrId).find('#txtPrivateMessage').focus();
+
+        }
+        
+        function createPrivateChatWindow(chatHub, userId, ctrId, userName) {
+           
+            var div = '<div id="' + ctrId + '" class="ui-widget-content draggable white resizable" rel="0">' +
+                       '<div class="header">' +
+                              '<div  style="float:right;">' +
+                              '<img id="imgDelete"  style="cursor:pointer;" src="/Img/ic_highlight_off_black_24dp_1x.png"/>' +
+>>>>>>> refs/remotes/origin/master
                            '</div>' +
                            '<i class="material-icons">account_circle</i>'+
                            '<span class="selText" rel="0">' + userName + '</span>' +
                        '</div>' +
+<<<<<<< HEAD
                        '<div id="divMessage" class="messageArea">' +
 
                        '</div>' +
@@ -259,14 +505,30 @@
                           '<input id="txtPrivateMessage" class="msgText" type="text"   />' +
                           '<input id="btnSendMessage" class="submitButton button" type="button" value="Enviar"   />' +
                        '</div>' +
+=======
+                       '<div  id="divMessage" class="panel-body" style="height: 250px; overflow-y: scroll;">' +
+                      
+                       '</div>' +
+                       '<div class="buttonBar">' +
+                          '<input id="txtPrivateMessage" class="msgText" placeholder="Escribe un texto aquí"  type="text" />' +
+                          '<input id="btnSendMessage" class="btn orange white-text waves-effect waves-light" type="button" value="Enviar"   />' +
+                      '</div>' +
+>>>>>>> refs/remotes/origin/master
                     '</div>';
 
             var $div = $(div);
 
+<<<<<<< HEAD
+=======
+            $div.find('.header').click(function () {
+                readd();
+            });
+>>>>>>> refs/remotes/origin/master
             // DELETE BUTTON IMAGE
             $div.find('#imgDelete').click(function () {
                 $('#' + ctrId).remove();
             });
+<<<<<<< HEAD
 
             // Send Button event
             $div.find("#btnSendMessage").click(function () {
@@ -277,6 +539,35 @@
 
                     chatHub.server.sendPrivateMessage(userId, msg);
                     $textBox.val('');
+=======
+            $(function () {
+
+                $div.find('#imgMini').click(function () {
+                    $('#' + ctrId).accordion({
+                        collapsible: true
+                    });
+                });
+
+            });
+
+            
+           
+            function readd() {
+                //setTimeout($('#'+ctrId).find('.header').stop(true,true).css("opacity", 1), 10);
+                $('#' + ctrId).find('.header').removeClass("unread").addClass("read");
+                $(document).attr('title', "Chat");
+            };
+            // Send Button event
+            $div.find("#btnSendMessage").click(function () {
+                
+                $textBox = $div.find("#txtPrivateMessage");
+                var msg = $textBox.val();
+                if (msg.length > 0 && !(/^\s+$/.test(msg))) {
+                    
+                    chatHub.server.sendPrivateMessage(userId, msg);
+                    $('#' + ctrId).find('.header').removeClass("unread").addClass("read");
+                    $textBox.val('').focus();
+>>>>>>> refs/remotes/origin/master
                 }
             });
 
@@ -284,6 +575,7 @@
             $div.find("#txtPrivateMessage").keypress(function (e) {
                 if (e.which == 13) {
                     $div.find("#btnSendMessage").click();
+<<<<<<< HEAD
                 }
             });
 
@@ -291,6 +583,20 @@
 
         }
 
+=======
+                   
+                }
+            });
+
+            $div.find("#txtPrivateMessage").click(function () {
+                readd();
+            });
+
+            AddDivToContainer($div);
+
+        }
+     
+>>>>>>> refs/remotes/origin/master
         function AddDivToContainer($div) {
             $('#divContainer').prepend($div);
 
@@ -302,11 +608,20 @@
                 }
             });
 
+<<<<<<< HEAD
             ///$div.resizable({
             ////    stop: function () {
 
             ////    }
             ////});
+=======
+            //$div.resizable({
+
+            //    stop: function () {
+
+            //    }
+            //});
+>>>>>>> refs/remotes/origin/master
 
         }
 
@@ -314,6 +629,7 @@
 </head>
 <body>
     <form id="form1" runat="server">
+<<<<<<< HEAD
     <div id="header">
         Cuarto de Chat
     </div>
@@ -323,10 +639,23 @@
 
     <div id="divContainer">
         <div id="divLogin" class="login">
+=======
+     <div id="header">
+        Chat
+         
+         <div class="right">
+             <a href="Login.aspx" class="black-text"><i class="material-icons black-text">exit_to_app</i> Salir</a>
+         </div>
+    </div>
+    <div id="divContainer" class="container row center center-aling">
+        <br /><br />
+        <div id="divLogin" class="login col s8 m8 l6 offset-m2 offset-s2 offset-l3 center center-aling">
+>>>>>>> refs/remotes/origin/master
             <div>
                 Tu nombre:<br />
             <input disabled id="txtNickName" type="text" class="textBox" />
             </div>
+<<<<<<< HEAD
             <div id="divButton">
                 <input id="btnStartChat" type="button" class="submitButton" value="Iniciar Chat" />
             </div>
@@ -351,6 +680,54 @@
 
         <input id="hdId" type="hidden" />
         <input id="hdUserName" type="hidden" />
+=======
+            <div id="divButton" class="center center-align">
+                <input id="btnStartChat" type="button" class="btn orange waves-effect waves-light" value="Iniciar Chat" />
+                <br /><br />
+            </div>
+        </div>
+        <div id="divChat" class="row " style="padding-top:40px;">
+            <h3><SPAN ID="nameCarrera">Sala de chat</SPAN> </h3>
+            <h6><span>Al seleccionar mas de dos chats, se sobreponen, por lo que debe de moverlos hacia cualquier parte de la página, <br /> esta se ajustastara. </span></h6>
+            <br />
+            <br />
+            <div class="col s12 m12 l7 chatRoom striped">
+            <div class="panel panel-info">
+                <div class="panel-heading orange darken-2">Chat de Todos Bienvenido [<span id='spanUser'></span>]</div>
+                <div class="panel-body">
+                    <ul id="divChatWindow" class="media-list left-align" style="height: 350px;
+	                overflow-y: scroll;" >
+                    
+                    </ul>
+                </div>
+                <div class="panel-footer">
+                    <br />
+                    <div class="input-group">
+                        <input id="txtMessage" class="form-control" type="text" placeholder="Ingrese mensaje (Solo para Coordinador)" />
+                        <br /><span class="input-group-btn">                           
+                            <button id="btnSendMsg" class="btn orange darken-1 waves-effect waves-light" type="button">Enviar</button>
+                        </span><br /><br />
+                    </div>
+                </div>
+
+            </div>
+            <input id="hdId" type="hidden" />
+            <input id="hdUserName" type="hidden" />
+        </div>
+        <div class="col s12 l5 m12">
+            <div class="hide-on-large-only"><br /><br /></div>
+            <div class="panel panel-primary">
+                <div class="panel-heading" style="background-color:darkorange"> Usuarios Online</div>
+                <div id="divusers" class="panel-body  orange lighten-4" style="cursor: pointer;display: block;height: 200px;overflow-y: scroll;">         
+            </div>
+            </div>
+        </div>
+        </div> 
+        <footer>
+            <strong>Leonardo D.
+            </strong>
+        </footer>  
+>>>>>>> refs/remotes/origin/master
     </div>
     </form>
 </body>

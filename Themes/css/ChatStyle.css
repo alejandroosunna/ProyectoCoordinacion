@@ -9,6 +9,10 @@
     padding: 20px;
     background-color: #fb8c00 !important;
     border-bottom: #5f9482 solid 2px;
+<<<<<<< HEAD
+=======
+    border-bottom-style:inset;
+>>>>>>> refs/remotes/origin/master
     color: #1e4638;
     font-size: 24px;
 }
@@ -154,7 +158,24 @@
         border-bottom: #5f9482 solid 1px;
         color: white;
     }
+<<<<<<< HEAD
 
+=======
+    .draggable .unread
+    {
+        cursor: move;
+        background-color: #827362 !important;
+        border-bottom: #b1621f solid 1px;
+        color: white;
+    }
+    .draggable .read
+    {
+        cursor: move;
+        background-color: #fb8c00 !important;
+        border-bottom: #5f9482 solid 1px;
+        color: white;
+    }
+>>>>>>> refs/remotes/origin/master
     .draggable .selText
     {
         color: black;

@@ -17,10 +17,17 @@
                         </div>
                         <div class="panel-body center center-align" style="margin-left:15%">
                             <div class="table-responsive">
+<<<<<<< HEAD
                                 <asp:TextBox ID="txtFecha" class="datepicker" placeholder="Fecha Inicio" runat="server"></asp:TextBox>
                                 <br />                                
                                  <div class="input-field col s6">
                                   <asp:TextBox ID="txtHora" runat="server" placeholder="Hora hh:mm" MaxLength="5" TextMode="Number"></asp:TextBox>
+=======
+                                <asp:TextBox ID="txtFecha" type="date" placeholder="Fecha Inicio" runat="server"></asp:TextBox>
+                                <br />                                
+                                 <div class="input-field col s6">
+                                  <asp:TextBox ID="txtHora" runat="server" placeholder="Hora hh:mm" MaxLength="5" TextMode="Time"></asp:TextBox>
+>>>>>>> refs/remotes/origin/master
                                 </div>
                                 <br />
 
@@ -48,10 +55,17 @@
                             <div class="table-responsive">
                                 <asp:Label ID="Label3" runat="server" Text="Hora Inicio"></asp:Label>
                                 
+<<<<<<< HEAD
                                 <asp:TextBox ID="txtHora0" runat="server" placeholder="Hora hh:mm" MaxLength="5" TextMode="Number"></asp:TextBox>
                                 
                                 <asp:Label ID="Label4" runat="server" Text="Hora Fin"></asp:Label>
                                 <asp:TextBox ID="txtHora1" runat="server" placeholder="Hora hh:mm" MaxLength="5" TextMode="Number"></asp:TextBox>
+=======
+                                <asp:TextBox ID="txtHora0" runat="server" placeholder="Hora hh:mm" MaxLength="5" TextMode="Time"></asp:TextBox>
+                                
+                                <asp:Label ID="Label4" runat="server" Text="Hora Fin"></asp:Label>
+                                <asp:TextBox ID="txtHora1" runat="server" placeholder="Hora hh:mm" MaxLength="5" TextMode="Time" Type="time"></asp:TextBox>
+>>>>>>> refs/remotes/origin/master
                                 <asp:Label ID="Label5" runat="server" Text="Intervalo"></asp:Label>
                                 <asp:TextBox ID="txtIntervalo" runat="server" placeholder="Hora hh:mm" MaxLength="2" TextMode="Number">15</asp:TextBox>
                                 

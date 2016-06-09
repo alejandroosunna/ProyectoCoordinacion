@@ -12,7 +12,11 @@ public partial class AdminMaster : System.Web.UI.MasterPage
 
         if (Session["IdUsuario"] != null && Session["IdRol"] != null)
         {
+<<<<<<< HEAD
             if (Convert.ToInt32(Session["IdRol"]) == 1)
+=======
+            if (Convert.ToInt32(Session["IdRol"]) == 1 )
+>>>>>>> refs/remotes/origin/master
             {
 
                 bool result = bool.TryParse(Request["IdLogin"], out result);
@@ -26,11 +30,22 @@ public partial class AdminMaster : System.Web.UI.MasterPage
                 {
                     csUsuario Usuario = (new csUsuarioHandler()).GetUsuario(Convert.ToInt32(Session["IdUsuario"]));                    
                     lblNombre.Text = "Coordinador: " + Usuario.Nombre + " " + Usuario.Apellidos + ".";
+<<<<<<< HEAD
 
                 }
             }
             else
                 Response.Redirect("~\\IndexAlumno.aspx");
+=======
+                }
+            }
+            else if (Convert.ToInt32(Session["IdRol"]) == 3)
+                Response.Redirect("~\\IndexSAdmin.aspx");
+            else if(Convert.ToInt32(Session["IdRol"]) == 2)
+                Response.Redirect("~\\IndexAlumno.aspx");
+            else
+                Response.Redirect("~\\Login.aspx");
+>>>>>>> refs/remotes/origin/master
         }
         else
             Response.Redirect("~\\Login.aspx");

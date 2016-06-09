@@ -10,7 +10,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>Administrador</title>
     
+<<<<<<< HEAD
 
+=======
+    <link href="ithicon.ico" rel="shortcut icon" type="image/png">
+>>>>>>> refs/remotes/origin/master
 
     <!-- Tile icon for Win8 (144x144 + tile color) -->
     <meta name="msapplication-TileImage" content="images/touch/ms-touch-icon-144x144-precomposed.png"/>
@@ -27,6 +31,11 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
     <link rel="stylesheet" href="material.min.css"/>
 <%--    <link rel="stylesheet" href="NavBar.css">--%>
+<<<<<<< HEAD
+=======
+    <link href="Styles/sweetalert.css" rel="stylesheet" />
+    <link type="text/css" rel="stylesheet" href="Content/fullcalendar.css"  />
+>>>>>>> refs/remotes/origin/master
     <link rel="stylesheet" href="materialize/css/styles.css"/>
      <link href="materialize/css/materialize.css" rel="stylesheet" media="screen"/>
     <style>
@@ -94,10 +103,16 @@
             </ul>
         <nav class="demo-navigation mdl-navigation mdl-color--white">
           <a class="mdl-navigation__link" href="IndexAdmin.aspx"><i class="mdl-color-text--black material-icons" role="presentation">home</i>Resumen</a>
+<<<<<<< HEAD
             <a class="mdl-navigation__link" href="Citas.aspx"><i class="mdl-color-text--black material-icons" role="presentation">library_books</i>Citas</a>
           <a class="mdl-navigation__link" href="Chat.aspx"><i class="mdl-color-text--black material-icons" role="presentation">chat_bubble</i>Chat</a>
           <a class="dropdown-button mdl-navigation__link" href="#!" data-activates="dropdown1"><i class="mdl-color-text--black material-icons">contacts</i>Alumnos</a>
           
+=======
+          <%--<a class="mdl-navigation__link" href="Citas.aspx"><i class="mdl-color-text--black material-icons" role="presentation">library_books</i>Citas</a>--%>
+          <a class="mdl-navigation__link" href="Chat.aspx"><i class="mdl-color-text--black material-icons" role="presentation">chat_bubble</i>Chat</a>
+          <a class="dropdown-button mdl-navigation__link" href="#!" data-activates="dropdown1"><i class="mdl-color-text--black material-icons">contacts</i>Alumnos</a>
+>>>>>>> refs/remotes/origin/master
 
         </nav>
       </div>
@@ -212,7 +227,19 @@
           </g>
         </defs>
       </svg>
+<<<<<<< HEAD
      <script src="../../material.min.js"></script> <!-- Importante-->
         </form>
 </body>
 </html>
+=======
+        <script src="Scripts/sweetalert.min.js"></script>
+    <script src="Scripts/jquery-2.2.0.min.js"></script>
+    <script src='http://fullcalendar.io/js/fullcalendar-2.1.1/lib/moment.min.js'></script>
+    <script src="http://fullcalendar.io/js/fullcalendar-2.1.1/lib/jquery-ui.custom.min.js"></script>
+    <script src='http://fullcalendar.io/js/fullcalendar-2.1.1/fullcalendar.min.js'></script>
+    <script type="text/javascript" src="materialize/js/materialize.min.js"></script>
+        </form>
+</body>
+</html>
+>>>>>>> refs/remotes/origin/master
