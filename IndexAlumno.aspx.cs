@@ -145,10 +145,19 @@ public partial class IndexAlumno : System.Web.UI.Page
 
     protected void btnEliminarCita_Click(object sender, EventArgs e)
     {
-        int IdCita = (new csCitaHandler()).GetCita(Convert.ToInt32(Session["IdUsuario"]), 1).IdCita;
-        estadoCita = 2;
+        //int IdCita = (new csCitaHandler()).GetCita(Convert.ToInt32(Session["IdUsuario"]), 1).IdCita;
+        //estadoCita = 2;
+        //if (!(new csCitaHandler()).Delete(IdCita, estadoCita))
+        //    Response.Redirect("~\\IndexAlumno.aspx?De=ex");
+        //else
+        //    Response.Redirect("~\\IndexAlumno.aspx?De=err");
 
-        if (!(new csCitaHandler()).Delete(IdCita, estadoCita))
+        csCita Cita = (new csCitaHandler()).GetCita(Convert.ToInt32(Session["IdUsuario"]), 1);
+        Cita.FechaAgendada = DateTime.Now;
+        Cita.IdUsuario = 0;
+        Cita.Estado = 0;
+
+        if(!(new csCitaHandler()).UpdateCita(Cita))
             Response.Redirect("~\\IndexAlumno.aspx?De=ex");
         else
             Response.Redirect("~\\IndexAlumno.aspx?De=err");
